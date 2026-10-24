@@ -1,0 +1,254 @@
+{
+  "SIN": {
+    "city": "Singapore",
+    "region": "Origin",
+    "lat": 1.3644,
+    "lon": 103.9915
+  },
+  "JFK": {
+    "city": "New York",
+    "region": "Americas",
+    "lat": 40.6413,
+    "lon": -73.7781
+  },
+  "LAX": {
+    "city": "Los Angeles",
+    "region": "Americas",
+    "lat": 33.9416,
+    "lon": -118.4085
+  },
+  "SFO": {
+    "city": "San Francisco",
+    "region": "Americas",
+    "lat": 37.6213,
+    "lon": -122.379
+  },
+  "SEA": {
+    "city": "Seattle",
+    "region": "Americas",
+    "lat": 47.4502,
+    "lon": -122.3088
+  },
+  "LHR": {
+    "city": "London",
+    "region": "Europe",
+    "lat": 51.47,
+    "lon": -0.4543
+  },
+  "CDG": {
+    "city": "Paris",
+    "region": "Europe",
+    "lat": 49.0097,
+    "lon": 2.5479
+  },
+  "FRA": {
+    "city": "Frankfurt",
+    "region": "Europe",
+    "lat": 50.0379,
+    "lon": 8.5622
+  },
+  "MUC": {
+    "city": "Munich",
+    "region": "Europe",
+    "lat": 48.3538,
+    "lon": 11.7861
+  },
+  "IST": {
+    "city": "Istanbul",
+    "region": "Europe",
+    "lat": 41.2753,
+    "lon": 28.7519
+  },
+  "BRU": {
+    "city": "Brussels",
+    "region": "Europe",
+    "lat": 50.901,
+    "lon": 4.4844
+  },
+  "MAD": {
+    "city": "Madrid",
+    "region": "Europe",
+    "lat": 40.4983,
+    "lon": -3.5676
+  },
+  "FCO": {
+    "city": "Rome",
+    "region": "Europe",
+    "lat": 41.8003,
+    "lon": 12.2389
+  },
+  "BCN": {
+    "city": "Barcelona",
+    "region": "Europe",
+    "lat": 41.2974,
+    "lon": 2.0833
+  },
+  "MXP": {
+    "city": "Milan",
+    "region": "Europe",
+    "lat": 45.6306,
+    "lon": 8.7281
+  },
+  "MAN": {
+    "city": "Manchester",
+    "region": "Europe",
+    "lat": 53.3537,
+    "lon": -2.275
+  },
+  "ZRH": {
+    "city": "Zurich",
+    "region": "Europe",
+    "lat": 47.4582,
+    "lon": 8.5555
+  },
+  "CPH": {
+    "city": "Copenhagen",
+    "region": "Europe",
+    "lat": 55.618,
+    "lon": 12.6508
+  },
+  "AMS": {
+    "city": "Amsterdam",
+    "region": "Europe",
+    "lat": 52.3105,
+    "lon": 4.7683
+  },
+  "SYD": {
+    "city": "Sydney",
+    "region": "Southwest Pacific",
+    "lat": -33.9399,
+    "lon": 151.1753
+  },
+  "MEL": {
+    "city": "Melbourne",
+    "region": "Southwest Pacific",
+    "lat": -37.669,
+    "lon": 144.841
+  },
+  "BNE": {
+    "city": "Brisbane",
+    "region": "Southwest Pacific",
+    "lat": -27.3842,
+    "lon": 153.1175
+  },
+  "PER": {
+    "city": "Perth",
+    "region": "Southwest Pacific",
+    "lat": -31.9385,
+    "lon": 115.9672
+  },
+  "ADL": {
+    "city": "Adelaide",
+    "region": "Southwest Pacific",
+    "lat": -34.945,
+    "lon": 138.5306
+  },
+  "AKL": {
+    "city": "Auckland",
+    "region": "Southwest Pacific",
+    "lat": -37.0082,
+    "lon": 174.785
+  },
+  "CHC": {
+    "city": "Christchurch",
+    "region": "Southwest Pacific",
+    "lat": -43.4894,
+    "lon": 172.532
+  },
+  "HND": {
+    "city": "Tokyo Haneda",
+    "region": "North Asia",
+    "lat": 35.5494,
+    "lon": 139.7798
+  },
+  "KIX": {
+    "city": "Osaka",
+    "region": "North Asia",
+    "lat": 34.432,
+    "lon": 135.2304
+  },
+  "ICN": {
+    "city": "Seoul",
+    "region": "North Asia",
+    "lat": 37.4602,
+    "lon": 126.4407
+  },
+  "PEK": {
+    "city": "Beijing",
+    "region": "North Asia",
+    "lat": 40.0799,
+    "lon": 116.6031
+  },
+  "PVG": {
+    "city": "Shanghai",
+    "region": "North Asia",
+    "lat": 31.1443,
+    "lon": 121.8083
+  },
+  "HKG": {
+    "city": "Hong Kong",
+    "region": "North Asia",
+    "lat": 22.308,
+    "lon": 113.9185
+  },
+  "TPE": {
+    "city": "Taipei",
+    "region": "North Asia",
+    "lat": 25.0797,
+    "lon": 121.2342
+  },
+  "DEL": {
+    "city": "Delhi",
+    "region": "West Asia & Africa",
+    "lat": 28.5562,
+    "lon": 77.1
+  },
+  "BOM": {
+    "city": "Mumbai",
+    "region": "West Asia & Africa",
+    "lat": 19.0896,
+    "lon": 72.8656
+  },
+  "MLE": {
+    "city": "Malé",
+    "region": "West Asia & Africa",
+    "lat": 4.1918,
+    "lon": 73.529
+  },
+  "JNB": {
+    "city": "Johannesburg",
+    "region": "West Asia & Africa",
+    "lat": -26.1337,
+    "lon": 28.242
+  },
+  "CPT": {
+    "city": "Cape Town",
+    "region": "West Asia & Africa",
+    "lat": -33.9715,
+    "lon": 18.6021
+  },
+  "BKK": {
+    "city": "Bangkok",
+    "region": "Southeast Asia",
+    "lat": 13.69,
+    "lon": 100.7501
+  },
+  "DPS": {
+    "city": "Bali",
+    "region": "Southeast Asia",
+    "lat": -8.7482,
+    "lon": 115.1675
+  },
+  "KUL": {
+    "city": "Kuala Lumpur",
+    "region": "Southeast Asia",
+    "lat": 2.7456,
+    "lon": 101.7072
+  },
+  "NRT": {
+    "city": "Tokyo Narita",
+    "region": "North Asia",
+    "lat": 35.772,
+    "lon": 140.3929
+  }
+}

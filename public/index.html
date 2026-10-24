@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miles Maximiser</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Miles Maximiser <span id="version" class="ver"></span></h1>
+      <p class="sub">KrisFlyer miles earned per SGD on Singapore Airlines and Star Alliance flights from Singapore.</p>
+    </div>
+    <button type="button" id="cal-open" class="cal-open" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/></svg>
+      Sales calendar
+    </button>
+  </header>
+
+  <section class="controls" aria-label="Settings">
+    <fieldset class="carriers">
+      <legend>Airlines</legend>
+      <div id="carrier-chips" class="chips"></div>
+    </fieldset>
+    <label>Cabin
+      <select id="cabin">
+        <option value="all">Economy + Premium Economy</option>
+        <option value="economy">Economy</option>
+        <option value="premium">Premium Economy</option>
+      </select>
+    </label>
+    <label>Region
+      <select id="region"><option value="all">All regions</option></select>
+    </label>
+    <label>Sort by
+      <select id="sort">
+        <option value="milesPerSgd">Miles per SGD (best first)</option>
+        <option value="miles">Total miles</option>
+        <option value="priceSgd">Price (lowest first)</option>
+      </select>
+    </label>
+    <label class="check"><input type="checkbox" id="roundtrip" checked> Round trip</label>
+    <label class="check"><input type="checkbox" id="priced-only"> Priced only</label>
+    <button type="button" id="reset" class="ghost">Reset my edits</button>
+  </section>
+
+
+  <section id="live" class="live" hidden aria-label="Live pricing">
+    <strong>Live prices</strong>
+    <label>Depart <input type="date" id="out-date"></label>
+    <label>Return <input type="date" id="in-date"></label>
+    <span class="hint">Tap ↻ on a row to fetch the lowest fare on that airline (1 SerpApi search).</span>
+  </section>
+
+  <section id="best" class="best" aria-live="polite"></section>
+
+  <div class="views" role="group" aria-label="View">
+    <button type="button" data-view="table" aria-pressed="true">Table</button>
+    <button type="button" data-view="map" aria-pressed="false">Map</button>
+    <button type="button" data-view="plan" aria-pressed="false">Planner</button>
+  </div>
+
+  <section id="plan-view" class="plan-view" hidden aria-label="Miles goal planner">
+    <form id="plan-form" class="plan-form">
+      <label>Miles I want to earn
+        <input type="number" id="plan-target" min="1000" step="1000" value="50000" inputmode="numeric" required>
+      </label>
+      <label>Up to how many trips
+        <select id="plan-trips">
+          <option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option><option>6</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" id="plan-distinct" checked> Different destinations</label>
+      <button type="submit" class="primary">Find cheapest combinations</button>
+    </form>
+    <p class="hint">Each trip is one ticket from the table (return unless "Round trip" is off). Combinations use as few trips as needed —
+      none includes a trip you could drop and still hit the target. Uses the airline, cabin, region, class and price settings above;
+      unpriced routes are skipped.</p>
+    <div id="plan-results" aria-live="polite"></div>
+  </section>
+
+  <section id="map-view" class="map-view" hidden aria-label="Route map"></section>
+
+  <div class="table-wrap" id="table-view">
+    <table>
+      <thead>
+        <tr>
+          <th>Destination</th>
+          <th>Airline</th>
+          <th>Cabin</th>
+          <th class="num">Distance</th>
+          <th class="num">Earn</th>
+          <th class="num">Miles</th>
+          <th class="num">Price (SGD)</th>
+          <th class="num">Miles / SGD</th>
+          <th class="num">¢ / mile</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <footer id="sources"></footer>
+
+  <script src="vendor/d3-array.min.js"></script>
+  <script src="vendor/d3-geo.min.js"></script>
+  <script src="vendor/topojson-client.min.js"></script>
+  <script src="map.js"></script>
+  <script src="calendar.js"></script>
+  <script src="planner.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

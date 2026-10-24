@@ -1,0 +1,522 @@
+[
+  {
+    "carrier": "SQ",
+    "to": "JFK",
+    "via": [],
+    "price": {
+      "economy": 1447,
+      "premium": 1768
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "LAX",
+    "via": [],
+    "price": {
+      "economy": 988,
+      "premium": 2088
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "SFO",
+    "via": [],
+    "price": {
+      "economy": 985,
+      "premium": 1988
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "SEA",
+    "via": [],
+    "price": {
+      "economy": 990,
+      "premium": 2358
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "LHR",
+    "via": [],
+    "price": {
+      "economy": 988,
+      "premium": 3128
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "CDG",
+    "via": [],
+    "price": {
+      "economy": 914,
+      "premium": 2398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "FRA",
+    "via": [],
+    "price": {
+      "economy": 776,
+      "premium": 2398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MUC",
+    "via": [],
+    "price": {
+      "economy": 797,
+      "premium": 2398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "IST",
+    "via": [],
+    "price": {
+      "economy": 832,
+      "premium": 2108
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "BRU",
+    "via": [],
+    "price": {
+      "economy": 866,
+      "premium": 2398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MAD",
+    "via": [],
+    "price": {
+      "economy": 988,
+      "premium": 2498
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "FCO",
+    "via": [],
+    "price": {
+      "economy": 993,
+      "premium": 2388
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "BCN",
+    "via": [],
+    "price": {
+      "economy": 1078,
+      "premium": 2498
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MXP",
+    "via": [],
+    "price": {
+      "economy": 1082,
+      "premium": 2538
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MAN",
+    "via": [],
+    "price": {
+      "economy": 1124,
+      "premium": 2588
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "ZRH",
+    "via": [],
+    "price": {
+      "economy": 1133,
+      "premium": 2898
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "CPH",
+    "via": [],
+    "price": {
+      "economy": 1221,
+      "premium": 2628
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "AMS",
+    "via": [],
+    "price": {
+      "economy": 1314,
+      "premium": 2398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "SYD",
+    "via": [],
+    "price": {
+      "economy": 558,
+      "premium": 2088
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MEL",
+    "via": [],
+    "price": {
+      "economy": 657,
+      "premium": 2138
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "BNE",
+    "via": [],
+    "price": {
+      "economy": 687,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "PER",
+    "via": [],
+    "price": {
+      "economy": 543,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "ADL",
+    "via": [],
+    "price": {
+      "economy": 804,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "AKL",
+    "via": [],
+    "price": {
+      "economy": 981,
+      "premium": 3838
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "CHC",
+    "via": [],
+    "price": {
+      "economy": 1007,
+      "premium": 3818
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "HND",
+    "via": [],
+    "price": {
+      "economy": 752,
+      "premium": 2418
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "KIX",
+    "via": [],
+    "price": {
+      "economy": 670,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "ICN",
+    "via": [],
+    "price": {
+      "economy": 539,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "PEK",
+    "via": [],
+    "price": {
+      "economy": 361,
+      "premium": 1368
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "PVG",
+    "via": [],
+    "price": {
+      "economy": 396,
+      "premium": 1398
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "HKG",
+    "via": [],
+    "price": {
+      "economy": 256,
+      "premium": 1008
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "TPE",
+    "via": [],
+    "price": {
+      "economy": 388,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "DEL",
+    "via": [],
+    "price": {
+      "economy": 345,
+      "premium": 1008
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "BOM",
+    "via": [],
+    "price": {
+      "economy": 293,
+      "premium": 988
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "MLE",
+    "via": [],
+    "price": {
+      "economy": 682,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "JNB",
+    "via": [],
+    "price": {
+      "economy": 996,
+      "premium": 2758
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "CPT",
+    "via": [],
+    "price": {
+      "economy": 1217,
+      "premium": 2828
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": "sq-promo-2026-08"
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "BKK",
+    "via": [],
+    "price": {
+      "economy": 258,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "DPS",
+    "via": [],
+    "price": {
+      "economy": 270,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  },
+  {
+    "carrier": "SQ",
+    "to": "KUL",
+    "via": [],
+    "price": {
+      "economy": 118,
+      "premium": null
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10",
+      "premium": null
+    }
+  }
+]

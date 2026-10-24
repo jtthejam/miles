@@ -1,0 +1,299 @@
+{
+  "_about": "Typical yearly sale windows, inferred from 2023–2026 sales. Dates are MM-DD; a window whose end is before its start wraps over New Year. tier: small | large | main (one main per airline). market: where the sale was run; 'Singapore' means bookings departing Singapore.",
+  "brand": {
+    "SQ": {
+      "light": "#00266b",
+      "dark": "#8fa6e6"
+    },
+    "TK": {
+      "light": "#c70a0c",
+      "dark": "#ff5c5c"
+    },
+    "LH": {
+      "light": "#05164d",
+      "dark": "#8c9bd9"
+    },
+    "LX": {
+      "light": "#e30613",
+      "dark": "#ff5a63"
+    },
+    "NH": {
+      "light": "#13448f",
+      "dark": "#7fa3e8"
+    },
+    "CA": {
+      "light": "#e60012",
+      "dark": "#ff5a5f"
+    },
+    "NZ": {
+      "light": "#000000",
+      "dark": "#ffffff"
+    }
+  },
+  "fairs": [
+    {
+      "name": "NATAS Travel fair",
+      "start": "03-27",
+      "end": "03-29",
+      "basis": "27–29 Mar 2026, Singapore EXPO",
+      "url": "https://www.tripzilla.com/natas-march-2026/25841"
+    },
+    {
+      "name": "NATAS Holidays fair",
+      "start": "08-21",
+      "end": "08-23",
+      "basis": "21–23 Aug 2026, Singapore EXPO",
+      "url": "https://littlebigreddot.com/natas-holidays-2026-singapore-expo/"
+    },
+    {
+      "name": "SIA Time To Fly fair",
+      "start": "10-23",
+      "end": "10-25",
+      "basis": "23–25 Oct 2026, Suntec",
+      "url": "https://www.singaporeair.com/en_UK/sg/plan-travel/local-promotions/sg-timetofly/"
+    }
+  ],
+  "sales": [
+    {
+      "carrier": "SQ",
+      "name": "March sale",
+      "tier": "large",
+      "start": "03-04",
+      "end": "03-16",
+      "basis": "4–16 Mar 2026, travel to Oct",
+      "url": "https://www.greatdeals.com.sg/2026/03/03/singapore-airlines-march-2026-sale-asia-europe-australia-usa",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "NATAS Travel fair deals",
+      "tier": "small",
+      "start": "03-27",
+      "end": "03-29",
+      "basis": "SIA was Strategic Airline Partner at NATAS Travel, 27–29 Mar 2026",
+      "url": "https://www.tripzilla.com/natas-march-2026/25841",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "Mid-year network sale",
+      "tier": "large",
+      "start": "07-14",
+      "end": "08-09",
+      "basis": "14 Jul – 9 Aug 2026, travel to May next year",
+      "url": "https://www.moneydigest.sg/singapore-airlines-launches-fare-sale-with-return-flights-from-s208-book-by-9-august-2026/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "NATAS Holidays promo",
+      "tier": "large",
+      "start": "08-21",
+      "end": "09-10",
+      "basis": "21 Aug – 10 Sep 2026, travel to Jul next year",
+      "url": "https://suitesmile.com/blog/2026/08/20/singapore-airlines-promo-fares-aug-sep-2026/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "Great Fares",
+      "tier": "small",
+      "start": "09-29",
+      "end": "10-07",
+      "basis": "Book by 7 Oct 2026, travel to Mar next year",
+      "url": "https://www.misslobang.com/article/singapore-airlines-great-fares-s198-sep-oct-2026",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "Time To Fly",
+      "tier": "main",
+      "start": "10-23",
+      "end": "10-30",
+      "basis": "23–30 Oct 2026, travel Jan–Sep next year; SIA's biggest promotion of the year",
+      "url": "https://www.moneydigest.sg/singapore-airlines-just-dropped-over-200000-discounted-return-tickets-to-78-destinations/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "SQ",
+      "name": "Year-end / New Year sale",
+      "tier": "large",
+      "start": "12-23",
+      "end": "01-18",
+      "basis": "23 Dec 2025 – 18 Jan 2026, travel to Oct",
+      "url": "https://www.singaporeair.com/en_UK/sg/plan-travel/local-promotions/offers/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "TK",
+      "name": "Europe promo fares",
+      "tier": "small",
+      "start": "02-10",
+      "end": "03-10",
+      "basis": "SIN–Europe deals posted 12 Feb 2024, 25 Feb 2025, 25 Feb 2026 (Mar–Jun travel)",
+      "url": "https://suitesmile.com/blog/tag/turkish-airlines/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "TK",
+      "name": "Autumn Europe deals",
+      "tier": "small",
+      "start": "09-15",
+      "end": "10-31",
+      "basis": "SIN–Europe deals posted 19 Sep 2024 and 27 Oct 2023 (Oct–Dec travel)",
+      "url": "https://suitesmile.com/blog/tag/turkish-airlines/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "TK",
+      "name": "Sales Fest",
+      "tier": "small",
+      "start": "10-23",
+      "end": "11-03",
+      "market": "Brazil",
+      "basis": "Published 23 Oct 2025, book by 3 Nov, travel Nov–Mar",
+      "url": "https://diariodoturismo.com.br/sales-fest-turkish-airlines-tem-descontos-para-destinos-internacionais/"
+    },
+    {
+      "carrier": "TK",
+      "name": "Friday Flyday + Travel Tuesday",
+      "tier": "main",
+      "start": "11-27",
+      "end": "12-12",
+      "market": "North America",
+      "basis": "Annual sale: Friday Flyday 27 Nov – 4 Dec, Travel Tuesday 5–12 Dec 2025 (Canada), travel Jan–Apr",
+      "url": "https://www.travelpulse.ca/news/airlines-airports/turkish-airlines-launches-friday-flyday-and-travel-tuesday-sales-for-canadians"
+    },
+    {
+      "carrier": "TK",
+      "name": "Miles&Smiles award sale",
+      "tier": "small",
+      "start": "12-10",
+      "end": "12-27",
+      "basis": "30% award discounts with book-by ~25–27 Dec in 2022 and 2023 (miles, not cash fares)",
+      "url": "https://suitesmile.com/blog/tag/turkish-airlines/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "LH",
+      "name": "Black Friday sale",
+      "tier": "main",
+      "start": "11-27",
+      "end": "12-03",
+      "market": "Europe",
+      "basis": "Book 27 Nov – 3 Dec 2025, travel 12 Jan – 31 May 2026; selected countries, early presale for Travel ID members",
+      "url": "https://www.lufthansa.com/xx/en/local-page/black-friday"
+    },
+    {
+      "carrier": "LX",
+      "name": "Black Friday sale",
+      "tier": "main",
+      "start": "11-27",
+      "end": "12-03",
+      "market": "Europe",
+      "basis": "Book 27 Nov – 3 Dec 2025, travel 12 Jan – 31 May 2026; selected countries",
+      "url": "https://www.swiss.com/xx/en/local-page/black-friday"
+    },
+    {
+      "carrier": "NH",
+      "name": "Lunar New Year sale",
+      "tier": "large",
+      "start": "01-20",
+      "end": "02-04",
+      "basis": "Book by 4 Feb 2026, travel Apr–Sep; Tokyo from S$575",
+      "url": "https://www.lemon8-app.com/@lobangqueen/7599486280640102928?region=sg",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "NH",
+      "name": "ANA × DBS promo code",
+      "tier": "small",
+      "start": "03-01",
+      "end": "04-30",
+      "basis": "1 Mar – 30 Apr 2026; 15% off Narita / 5% off Haneda Economy",
+      "url": "https://www.ana.co.jp/en/sg/plan-book/promotions/ana-dbs/032026/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "NH",
+      "name": "International time sale",
+      "tier": "small",
+      "start": "06-10",
+      "end": "06-16",
+      "market": "Japan",
+      "basis": "10–16 Jun 2025, travel Aug 2025 – Feb 2026 (departures from Japan)",
+      "url": "https://tetsudo-ch.com/13003220.html"
+    },
+    {
+      "carrier": "NH",
+      "name": "HELLO BLUE SALE",
+      "tier": "main",
+      "start": "10-09",
+      "end": "10-15",
+      "basis": "9–15 Oct 2026, travel to Sep next year; Economy S$750–999",
+      "url": "https://www.ana.co.jp/en/sg/plan-book/promotions/hellobluesale/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "CA",
+      "name": "Summer flash sale",
+      "tier": "small",
+      "start": "05-24",
+      "end": "05-26",
+      "market": "North America",
+      "basis": "Posted 24 May 2025, book by 26 May, travel Jun–Aug",
+      "url": "https://slickdeals.net/f/18337258-summer-flash-sale-airfare-discounts-on-air-china-book-by-may-26-2025"
+    },
+    {
+      "carrier": "CA",
+      "name": "Double 11 (Singles' Day)",
+      "tier": "main",
+      "start": "11-01",
+      "end": "11-11",
+      "market": "North America",
+      "basis": "Book by 11 Nov 2025, 10% off flights to China, travel 17 Nov – 30 Apr; start date approximate",
+      "url": "https://slickdeals.net/f/18784873-air-china-double-11-special-singles-day-10-off-flights-to-china-book-by-november-11-2025"
+    },
+    {
+      "carrier": "CA",
+      "name": "Cyber Week",
+      "tier": "large",
+      "start": "11-24",
+      "end": "12-05",
+      "market": "North America",
+      "basis": "Book 24 Nov – 5 Dec 2025, 6–15% off flights to Asia",
+      "url": "https://slickdeals.net/f/18848974-air-china-cyber-week-bfcmtt-airfares-to-asia-from-us-canada-book-by-december-5-2025"
+    },
+    {
+      "carrier": "NZ",
+      "name": "New Year sale",
+      "tier": "main",
+      "start": "01-07",
+      "end": "01-20",
+      "market": "New Zealand",
+      "basis": "Launched 7 Jan 2025, 'one of its biggest ever sales', 27 international destinations; end date approximate",
+      "url": "https://www.airnewzealandnewsroom.com/press-release-2025-back-to-work-blues-air-new-zealand-new-year-sale-turns-daydreams-into-departures"
+    },
+    {
+      "carrier": "NZ",
+      "name": "Singapore promo fares",
+      "tier": "large",
+      "start": "08-26",
+      "end": "09-10",
+      "basis": "Book by 10 Sep 2026; Auckland from S$983 Economy, S$2,352 Premium Economy",
+      "url": "https://suitesmile.com/blog/2026/08/26/air-new-zealand-promo-fares-singapore-aug-2026/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "NZ",
+      "name": "Adventure Beyond sale",
+      "tier": "large",
+      "start": "09-08",
+      "end": "09-22",
+      "market": "New Zealand",
+      "basis": "8–22 Sep 2025, 40 international destinations incl. Singapore, Tokyo, New York",
+      "url": "https://www.newstalkzb.co.nz/lifestyle/air-nz-adventure-beyond-sale-discounted-flights-to-new-york-tokyo-london-and-more"
+    }
+  ],
+  "none": {}
+}

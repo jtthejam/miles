@@ -1,0 +1,412 @@
+{
+  "_source": "KrisFlyer mileage accrual levels on Singapore Airlines and Partner airlines, updated 8 Aug 2025 (KFOALLevels.pdf). Partner chart lists Premium Economy and Economy in one column; Premium Economy booking classes are assigned per airline. Sale-fare booking classes per airline are in saleFare (stated = published by the airline, assumed = not published).",
+  "SQ": {
+    "name": "Singapore Airlines",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "E",
+            "Y"
+          ]
+        },
+        {
+          "pct": 75,
+          "classes": [
+            "H",
+            "M",
+            "W"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "K",
+            "N",
+            "Q",
+            "V",
+            "G"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 125,
+          "classes": [
+            "S",
+            "T"
+          ]
+        },
+        {
+          "pct": 100,
+          "classes": [
+            "R",
+            "L",
+            "P"
+          ]
+        }
+      ]
+    },
+    "saleFare": {
+      "economy": {
+        "class": "K",
+        "family": "Economy Lite (K/V)",
+        "confidence": "stated",
+        "basis": "SIA promo fares book into K and V; Economy Lite (V, K) earns 50%.",
+        "url": "https://agent360.singaporeair.com/content/dam/agent360/web-assets/pdf/local/hk/SEA_promotion_29Jul-12Aug25.pdf"
+      },
+      "premium": {
+        "class": "R",
+        "family": "Premium Economy Lite (R)",
+        "confidence": "stated",
+        "basis": "SIA Premium Economy Lite is class R and earns 100%; promo fare rules list R.",
+        "url": "https://www.singaporeair.com/en_UK/flying-withus/fare-types/"
+      }
+    }
+  },
+  "TK": {
+    "name": "Turkish Airlines",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "A",
+            "B",
+            "E",
+            "H",
+            "M",
+            "O",
+            "Q",
+            "S",
+            "Y"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "L",
+            "T"
+          ]
+        },
+        {
+          "pct": 25,
+          "classes": [
+            "V"
+          ]
+        }
+      ],
+      "premium": []
+    },
+    "note": "No Premium Economy cabin. All routes connect in Istanbul.",
+    "saleFare": {
+      "economy": {
+        "class": "V",
+        "family": "EcoFly",
+        "confidence": "assumed",
+        "basis": "Turkish doesn't publish sale-fare classes; its lowest EcoFly classes include T, L and V. V (25%) assumed as the conservative case.",
+        "url": "https://www.turkishairlines.com/en-int/flights/fly-different/economy-class/more-information-on-economy-class-that-suits-you/"
+      }
+    }
+  },
+  "LH": {
+    "name": "Lufthansa",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "Y"
+          ]
+        },
+        {
+          "pct": 75,
+          "classes": [
+            "M",
+            "U",
+            "H"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "Q",
+            "V",
+            "W",
+            "S"
+          ]
+        },
+        {
+          "pct": 10,
+          "classes": [
+            "T"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 100,
+          "classes": [
+            "G",
+            "E",
+            "N"
+          ]
+        }
+      ]
+    },
+    "note": "Singapore–Munich LH768/769 was a seasonal weekly flight, 7 May – 23 Oct 2026. Lufthansa City flights do not earn.",
+    "saleFare": {
+      "economy": {
+        "class": "V",
+        "family": "Economy Light",
+        "confidence": "assumed",
+        "basis": "Lufthansa doesn't publish sale-fare classes; a 50% class (Q/V/W/S) assumed."
+      },
+      "premium": {
+        "class": "N",
+        "family": "Premium Economy (lowest)",
+        "confidence": "assumed",
+        "basis": "Premium Economy G/E/N all earn 100% on international flights."
+      }
+    }
+  },
+  "LX": {
+    "name": "SWISS",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "Y"
+          ]
+        },
+        {
+          "pct": 75,
+          "classes": [
+            "M",
+            "U",
+            "H"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "Q",
+            "V",
+            "W",
+            "S"
+          ]
+        },
+        {
+          "pct": 10,
+          "classes": [
+            "T"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 100,
+          "classes": [
+            "G",
+            "E",
+            "N"
+          ]
+        }
+      ]
+    },
+    "note": "Lufthansa Group. Nonstop Singapore–Zurich.",
+    "saleFare": {
+      "economy": {
+        "class": "V",
+        "family": "Economy Light",
+        "confidence": "assumed",
+        "basis": "SWISS doesn't publish sale-fare classes; a 50% class (Q/V/W/S) assumed."
+      },
+      "premium": {
+        "class": "N",
+        "family": "Premium Economy (lowest)",
+        "confidence": "assumed",
+        "basis": "Premium Economy G/E/N all earn 100% on international flights."
+      }
+    }
+  },
+  "NH": {
+    "name": "ANA",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "M",
+            "N",
+            "Y"
+          ]
+        },
+        {
+          "pct": 75,
+          "classes": [
+            "H",
+            "Q",
+            "U"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "K",
+            "L",
+            "S",
+            "T",
+            "V",
+            "W"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 125,
+          "classes": [
+            "E",
+            "G"
+          ]
+        }
+      ]
+    },
+    "note": "Rates apply to flights departing on or after 21 May 2025.",
+    "saleFare": {
+      "economy": {
+        "class": "K",
+        "family": "Light / Value",
+        "confidence": "assumed",
+        "basis": "ANA doesn't publish sale-fare classes; K is its deepest discount class (excluded from the ANA×DBS code), earning 50%.",
+        "url": "https://www.ana.co.jp/en/sg/plan-book/promotions/ana-dbs/032026/"
+      },
+      "premium": {
+        "class": "G",
+        "family": "Premium Economy",
+        "confidence": "assumed",
+        "basis": "ANA Premium Economy classes E/G both earn 125%."
+      }
+    }
+  },
+  "CA": {
+    "name": "Air China",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 110,
+          "classes": [
+            "G"
+          ]
+        },
+        {
+          "pct": 100,
+          "classes": [
+            "Y",
+            "B",
+            "M",
+            "U",
+            "E"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "H",
+            "Q",
+            "V"
+          ]
+        }
+      ],
+      "premium": []
+    },
+    "note": "Booking classes not listed in the chart (e.g. K, L) earn nothing. Premium Economy not modelled on Singapore routes.",
+    "saleFare": {
+      "economy": {
+        "class": "Q",
+        "family": "Discount Economy",
+        "confidence": "assumed",
+        "basis": "Air China doesn't publish sale-fare classes; lowest earning tier (H/Q/V, 50%) assumed. Unlisted classes earn nothing."
+      }
+    }
+  },
+  "NZ": {
+    "name": "Air New Zealand",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "H",
+            "M",
+            "Q",
+            "Y"
+          ]
+        },
+        {
+          "pct": 100,
+          "classes": [
+            "V",
+            "W",
+            "T"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "L",
+            "S"
+          ],
+          "onlyTo": [
+            "AKL"
+          ]
+        },
+        {
+          "pct": 10,
+          "classes": [
+            "G",
+            "K"
+          ],
+          "onlyTo": [
+            "AKL"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 110,
+          "classes": [
+            "A",
+            "E",
+            "O",
+            "U"
+          ]
+        }
+      ]
+    },
+    "note": "L, S, G, K earn only on Singapore–Auckland. Cheapest sale fares may book into G/K (10%).",
+    "saleFare": {
+      "economy": {
+        "class": "K",
+        "family": "Economy Global Saver Max",
+        "confidence": "stated",
+        "basis": "Most Air NZ Singapore promo Economy fares book into K: 10% to Auckland only, nothing to other cities.",
+        "url": "https://suitesmile.com/blog/2026/08/26/air-new-zealand-promo-fares-singapore-aug-2026/"
+      },
+      "premium": {
+        "class": "O",
+        "family": "Premium Economy Global Saver (O/A)",
+        "confidence": "assumed",
+        "basis": "Promo class not stated; Global Saver (O, A) earns 110%.",
+        "url": "https://www.airnewzealand.com.sg/what-is-my-booking-class"
+      }
+    }
+  }
+}
