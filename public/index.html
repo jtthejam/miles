@@ -46,11 +46,29 @@
   </section>
 
 
-  <section id="live" class="live" hidden aria-label="Live pricing">
-    <strong>Live prices</strong>
-    <label>Depart <input type="date" id="out-date"></label>
-    <label>Return <input type="date" id="in-date"></label>
-    <span class="hint">Tap ↻ on a row to fetch the lowest fare on that airline (1 SerpApi search).</span>
+  <section id="live" class="live" aria-label="Live pricing">
+    <div class="live-row">
+      <strong>Live prices</strong>
+      <span id="live-status" class="live-status"></span>
+      <span id="live-dates" class="live-dates" hidden>
+        <label>Depart <input type="date" id="out-date"></label>
+        <label>Return <input type="date" id="in-date"></label>
+      </span>
+      <button type="button" id="key-toggle" class="ghost small"></button>
+    </div>
+    <form id="key-form" class="key-form" hidden autocomplete="off">
+      <p class="key-why">For reliable live prices, add a free <b>SerpApi</b> key (250 searches/month).
+        <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noopener">Get a key</a> ·
+        <a href="https://serpapi.com/manage-api-key" target="_blank" rel="noopener">find your key</a>.
+        Without one, the app uses <b>fast-flights</b>, a free unofficial Google Flights scraper that can stop working at any time.</p>
+      <div class="key-row">
+        <input type="password" id="key-input" placeholder="Paste your SerpApi API key" spellcheck="false" aria-label="SerpApi API key">
+        <button type="submit" class="primary">Save key</button>
+        <button type="button" id="key-later" class="ghost">Not now</button>
+      </div>
+      <p class="hint">Saved only on this computer (<code>.local/config.json</code>, not committed to git). You can also set the <code>SERPAPI_KEY</code> environment variable.</p>
+      <p id="key-msg" class="key-msg" role="status"></p>
+    </form>
   </section>
 
   <section id="best" class="best" aria-live="polite"></section>

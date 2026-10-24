@@ -275,4 +275,21 @@ label.cls .letter { font-weight: 600; }
 label.cls .caret { font-size: 9px; opacity: .7; }
 label.cls select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
 
+/* Live prices + SerpApi key prompt */
+.live { flex-direction: column; align-items: stretch; }
+.live-row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.live-status { font-size: 13px; color: var(--muted); }
+.live-dates { display: inline-flex; gap: 10px; flex-wrap: wrap; }
+button.small { font-size: 13px; padding: 5px 10px; margin-left: auto; }
+.key-form { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.key-why { margin: 0 0 8px; font-size: 13px; }
+.key-why a { color: var(--accent); }
+.key-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.key-row input { flex: 1 1 260px; font: inherit; font-size: 14px; color: var(--text); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; }
+.key-form .hint { margin: 6px 0 0; }
+.key-msg { margin: 6px 0 0; font-size: 13px; min-height: 1em; }
+.key-msg.ok { color: #1b7f3b; }
+.key-msg.err { color: #c0392b; }
+
 [hidden] { display: none !important; }

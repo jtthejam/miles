@@ -7,6 +7,7 @@ const path = require('node:path');
 const data = require('./data');
 const { buildRows } = require('./lib/calc');
 const live = require('./lib/live');
+const settings = require('./lib/settings');
 const { version } = require('./package.json');
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -35,6 +36,7 @@ async function handleApi(url, res) {
         sources: data.sources,
         salesCalendar: data.salesCalendar,
         liveEnabled: live.enabled(),
+        live: live.status(),
       });
     case '/api/routes':
       return sendJson(res, 200, {
@@ -64,6 +66,38 @@ async function handleApi(url, res) {
   }
 }
 
+// Only the machine running the server may change settings (the key is a secret on this computer).
+const isLoopback = (req) => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
+
+function readBody(req, limit = 4096) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (c) => { body += c; if (body.length > limit) { reject(new Error('Body too large')); req.destroy(); } });
+    req.on('end', () => resolve(body));
+    req.on('error', reject);
+  });
+}
+
+async function handleSettings(req, res) {
+  if (!isLoopback(req)) return sendJson(res, 403, { error: 'Settings can only be changed from this computer' });
+  if (req.headers['content-type']?.split(';')[0] !== 'application/json' && req.method === 'POST') {
+    return sendJson(res, 415, { error: 'Expected application/json' }); // blocks simple cross-site form posts
+  }
+  try {
+    if (req.method === 'POST') {
+      const { key } = parseJson(await readBody(req));
+      settings.saveSerpApiKey(String(key || '').trim());
+    } else if (req.method === 'DELETE') {
+      settings.clearSerpApiKey();
+    } else {
+      return sendJson(res, 405, { error: 'Method not allowed' });
+    }
+    return sendJson(res, 200, { live: live.status() });
+  } catch (e) {
+    return sendJson(res, 400, { error: e.message });
+  }
+}
+
 function serveStatic(url, res) {
   const rel = url.pathname === '/' ? 'index.html' : url.pathname.slice(1);
   const file = path.normalize(path.join(PUBLIC_DIR, rel));
@@ -77,14 +111,19 @@ function serveStatic(url, res) {
 
 const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  if (url.pathname === '/api/settings/serpapi') return handleSettings(req, res);
   if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
   if (url.pathname.startsWith('/api/')) return handleApi(url, res);
   serveStatic(url, res);
 });
 
 if (require.main === module) {
-  server.listen(PORT, () => {
-    console.log(`Miles Maximiser v${version} on http://localhost:${PORT}` + (live.enabled() ? ' (live pricing on)' : ''));
+  live.checkFastFlights().then(() => {
+    server.listen(PORT, process.env.HOST || '127.0.0.1', () => {
+      const st = live.status();
+      const how = st.provider === 'serpapi' ? 'SerpApi' : st.provider === 'fast-flights' ? 'fast-flights (no SerpApi key)' : 'off';
+      console.log(`Miles Maximiser v${version} on http://localhost:${PORT} — live prices: ${how}`);
+    });
   });
 }
 

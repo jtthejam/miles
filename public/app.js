@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-SG');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const CABIN_LABEL = { economy: 'Economy', premium: 'Premium Eco' };
-const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2' };
+const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed' };
 
 let meta = null;
 let rows = [];
@@ -120,13 +120,11 @@ async function init() {
     `<p>Accrual: ${esc(meta.accrualSource)} Distances are great-circle miles summed per segment flown; PPS/Elite bonuses not included.</p>` +
     `<p>Miles Maximiser v${esc(meta.version)}</p>`;
 
-  if (meta.liveEnabled) {
-    $('live').hidden = false;
-    const d = new Date(); d.setDate(d.getDate() + 60);
-    $('out-date').value = d.toISOString().slice(0, 10);
-    d.setDate(d.getDate() + 7);
-    $('in-date').value = d.toISOString().slice(0, 10);
-  }
+  const d = new Date(); d.setDate(d.getDate() + 60);
+  $('out-date').value = d.toISOString().slice(0, 10);
+  d.setDate(d.getDate() + 7);
+  $('in-date').value = d.toISOString().slice(0, 10);
+  initLive();
 
   ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', render));
   $('roundtrip').addEventListener('change', refresh);
@@ -189,7 +187,7 @@ function render() {
 
   $('rows').innerHTML = list.map((r) => {
     const route = ['SIN', ...r.via, r.code].join(' → ');
-    const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest fare">↻</button>` : '';
+    const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for the dates above (${meta.live.provider})">↻</button>` : '';
     const flags = [
       !r.eligible ? r.ineligibleReason : '',
       r.seasonal ? 'Seasonal service' : '',
@@ -254,6 +252,59 @@ $('rows').addEventListener('change', (e) => {
   refresh();
 });
 
+// ---------- Live prices: SerpApi key prompt, fast-flights fallback ----------
+
+function renderLive() {
+  const st = meta.live;
+  meta.liveEnabled = !!st.provider;
+  const status = {
+    serpapi: `via <b>SerpApi</b>${st.serpApiKey === 'env' ? ' (key from SERPAPI_KEY)' : ''}${st.fastFlights ? ' · fast-flights as backup' : ''}`,
+    'fast-flights': 'via <b>fast-flights</b> (free, unofficial — may stop working)',
+  }[st.provider] || 'off — add a SerpApi key or install fast-flights (<code>pip install fast-flights</code>)';
+  $('live-status').innerHTML = status;
+  $('live-dates').hidden = !st.provider;
+  $('key-toggle').hidden = st.serpApiKey === 'env';
+  $('key-toggle').textContent = st.serpApiKey ? 'Remove SerpApi key' : 'Add SerpApi key';
+  if (st.serpApiKey) $('key-form').hidden = true;
+}
+
+function initLive() {
+  renderLive();
+  // Prompt for a key on load until the user saves one or says "Not now".
+  if (!meta.live.serpApiKey && !store.get(KEYS.keyPrompt, false)) $('key-form').hidden = false;
+
+  $('key-toggle').addEventListener('click', async () => {
+    if (!meta.live.serpApiKey) { $('key-form').hidden = !$('key-form').hidden; $('key-input').focus(); return; }
+    if (!confirm('Remove the saved SerpApi key from this computer?')) return;
+    const res = await fetch('/api/settings/serpapi', { method: 'DELETE' });
+    const out = await res.json();
+    if (out.live) { meta.live = out.live; renderLive(); render(); }
+  });
+  $('key-later').addEventListener('click', () => { store.set(KEYS.keyPrompt, true); $('key-form').hidden = true; });
+  $('key-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const msg = $('key-msg');
+    msg.textContent = 'Saving…'; msg.className = 'key-msg';
+    try {
+      const res = await fetch('/api/settings/serpapi', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: $('key-input').value.trim() }),
+      });
+      const out = await res.json();
+      if (!res.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      meta.live = out.live;
+      $('key-input').value = '';
+      msg.textContent = 'Saved. Tap ↻ on any row to fetch its current price.';
+      msg.className = 'key-msg ok';
+      renderLive(); render();
+      $('key-form').hidden = false; // keep the confirmation visible briefly
+      setTimeout(() => { $('key-form').hidden = true; msg.textContent = ''; }, 2500);
+    } catch (err) {
+      msg.textContent = err.message; msg.className = 'key-msg err';
+    }
+  });
+}
+
 $('rows').addEventListener('click', async (e) => {
   const btn = e.target.closest('button.refresh');
   if (!btn) return;
@@ -263,6 +314,7 @@ $('rows').addEventListener('click', async (e) => {
     const q = new URLSearchParams({ carrier, dest, cabin, outbound: $('out-date').value, inbound: $('in-date').value });
     const res = await (await fetch(`/api/live?${q}`)).json();
     if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares found for those dates`);
+    if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     overrides[btn.dataset.key] = res.lowest;
     store.set(KEYS.prices, overrides);
     await refresh();

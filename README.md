@@ -1,4 +1,4 @@
-# Miles Maximiser v1.6.0
+# Miles Maximiser v1.7.0
 
 Small Node.js web app that ranks Economy and Premium Economy flights from Singapore by **KrisFlyer miles earned per SGD spent**, across Singapore Airlines and selected Star Alliance partners.
 
@@ -66,13 +66,16 @@ The Earn column shows ✓ (published) or ≈ (assumed). If your own quote books 
 
 `data/fares.*.json` hold the **lowest advertised return fares** (SGD, all-in); sources and dates are in `data/sources.json` and shown in the page footer. Rows without a price still show miles — type in a quote or use live pricing. Edits are saved in your browser.
 
-## Live prices (optional)
+## Live prices
 
-```bash
-SERPAPI_KEY=your_key npm start
-```
+Tap ↻ on a row to fetch the current lowest fare on that airline for the dates in the Live prices bar. Results are cached for 6 hours.
 
-A ↻ button appears beside each price and fetches the lowest Google Flights fare on that row's airline for the chosen dates. Results are cached for 6 hours (free tier: 250 searches/month).
+| Provider | When it's used | Setup |
+|---|---|---|
+| **SerpApi** (recommended) | You've added a key | Free key (250 searches/month) at [serpapi.com](https://serpapi.com/users/sign_up). Paste it when the app asks, or set `SERPAPI_KEY`. |
+| **fast-flights** | No key, or SerpApi fails (e.g. quota used) | `pip install -r requirements.txt` (Python 3.9+). Free, but it's an unofficial Google Flights scraper and can break without notice. |
+
+The saved key lives in `.local/config.json` on the machine running the server (gitignored, never sent to the browser). The server listens on `127.0.0.1`; set `HOST=0.0.0.0` to open it on your network. Use `PYTHON=/path/to/python` if `python3` isn't the interpreter with fast-flights installed.
 
 ## API
 
@@ -80,7 +83,8 @@ A ↻ button appears beside each price and fetches the lowest Google Flights far
 |---|---|
 | `GET /api/meta` | Version, carriers + accrual tables, sources, live pricing status |
 | `GET /api/routes?tiers={"SQ:economy":"75-HMW"}&roundTrip=true&overrides={"CA:PEK:economy":420}` | Ranked rows |
-| `GET /api/live?carrier=TK&dest=LHR&cabin=economy&outbound=2027-03-01&inbound=2027-03-10` | Live lowest fare |
+| `GET /api/live?carrier=TK&dest=LHR&cabin=economy&outbound=2027-03-01&inbound=2027-03-10` | Live lowest fare (SerpApi, else fast-flights) |
+| `POST /api/settings/serpapi` `{"key": "…"}` / `DELETE` | Save / remove the SerpApi key (local machine only) |
 
 ## Limits
 

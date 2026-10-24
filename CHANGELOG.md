@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.7.0 — 2026-10-24
+
+### Added
+- **SerpApi key prompt**: on first load the app asks for a free SerpApi key (250 searches/month), with links to sign up and find the key. "Not now" hides the prompt; "Add / Remove SerpApi key" in the Live prices bar manages it.
+- Key is saved only on the computer running the server (`.local/config.json`, mode 600, gitignored) and is never sent to the browser. `SERPAPI_KEY` env var still works and takes precedence.
+- **fast-flights fallback**: with no key, live prices come from fast-flights (free, unofficial Google Flights scraper, `pip install fast-flights`). With a key, fast-flights is the backup if SerpApi fails (e.g. monthly quota used up).
+- Live prices bar always shows which provider is in use; ↻ buttons appear whenever a provider is available.
+
+### Changed
+- Server now listens on `127.0.0.1` by default (set `HOST=0.0.0.0` to expose it on your network). Settings can only be changed from the same machine.
+
+### Technical
+- `scripts/ff_quote.py` (fast-flights helper, called by the Node server), `lib/settings.js`, `requirements.txt`.
+- New tests cover provider selection, SerpApi→fast-flights fallback, key validation/permissions and the settings endpoint (fast-flights simulated).
+
 ## v1.6.0 — 2026-10-24
 
 ### Changed
