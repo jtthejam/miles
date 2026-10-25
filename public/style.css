@@ -47,7 +47,10 @@ button.ghost { background: transparent; }
 
 .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
 table { width: 100%; border-collapse: collapse; min-width: 720px; }
-th, td { padding: 9px 12px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+th, td { padding: 9px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+/* Outer cells keep 12px so text lines up with the cards above; inner padding is tighter so the table fits its box. */
+th:first-child, td:first-child { padding-left: 12px; }
+th:last-child, td:last-child { padding-right: 12px; }
 th { font-size: 12px; font-weight: 600; color: var(--muted); position: sticky; top: 0; background: var(--surface); }
 tbody tr:last-child td { border-bottom: 0; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }

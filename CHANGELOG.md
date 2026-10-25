@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.8.1 — 2026-10-25
+
+### Fixed
+- Table no longer runs past the right edge of the cards above it. Its natural width matched the page width in Chromium on Linux, so the wider system fonts on macOS and Windows pushed it about 16px over. Inner cell padding is now 8px (was 12px); the first and last columns keep 12px so text still lines up with the cards. The table now fits with 40–75px to spare.
+
 ## v1.8.0 — 2026-10-25
 
 ### Added
