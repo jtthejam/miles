@@ -83,6 +83,16 @@ Tap ↻ on a row to fetch the current lowest fare on that airline. Results are c
 
 The saved key lives in `.local/config.json` on the machine running the server (gitignored, never sent to the browser). The server listens on `127.0.0.1`; set `HOST=0.0.0.0` to open it on your network. Use `PYTHON=/path/to/python` if `python3` isn't the interpreter with fast-flights installed.
 
+## Free prices from Google Flights (no key)
+
+1. Open **Live prices → Free prices from Google Flights** and drag **Send to Miles Maximiser** to your bookmarks bar.
+2. Tap **G** on a row. Google Flights opens filtered to that airline, cabin, SGD and your dates.
+3. Optionally open **Date grid** (7 × 7 nearby dates), then click the bookmark. The cheapest price within your dates ± flexibility is saved to the row, with its dates.
+
+Keep Google's airline filter on one airline: miles depend on who flies you, so the app refuses pages without it. Lufthansa City flights are skipped (no KrisFlyer miles). If Google changes its page, the bookmark may stop working until `public/bookmarklet.js` is updated.
+
+The server can't fetch the date grid itself: Google requires a per-request BotGuard token that only a real browser session produces.
+
 ## API
 
 | Endpoint | Purpose |

@@ -66,6 +66,18 @@
       <button type="button" id="key-toggle" class="ghost small"></button>
     </div>
     <p id="date-hint" class="hint date-hint" hidden></p>
+    <details id="gf-help" class="gf-help">
+      <summary>Free prices from Google Flights (no key, uses the date grid)</summary>
+      <ol>
+        <li>Drag <a id="gf-bookmarklet" class="bookmarklet" href="#">Send to Miles Maximiser</a> to your bookmarks bar (once).</li>
+        <li>Tap <span class="gf-sample">G</span> on a row. Google Flights opens filtered to that airline, cabin and your dates.</li>
+        <li>Optionally open <b>Date grid</b> to compare nearby dates, then click the bookmark. The cheapest price within your dates
+          (± flexibility) is saved to the row.</li>
+      </ol>
+      <p class="hint">The bookmark only reads the prices shown on the page and opens this app with them; it sends nothing elsewhere.
+        If Google changes its page, it may stop working until the app is updated. Keep the airline filter set to one airline: miles depend on who flies you.</p>
+    </details>
+    <p id="gf-msg" class="gf-msg" role="status" hidden></p>
     <form id="key-form" class="key-form" hidden autocomplete="off">
       <p class="key-why">For reliable live prices, add a free <b>SerpApi</b> key (250 searches/month).
         <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noopener">Get a key</a> ·
@@ -136,6 +148,7 @@
   <script src="vendor/topojson-client.min.js"></script>
   <script src="map.js"></script>
   <script src="calendar.js"></script>
+  <script src="gflink.js"></script>
   <script src="planner.js"></script>
   <script src="app.js"></script>
 </body>

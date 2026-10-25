@@ -1,0 +1,302 @@
+{
+ "_note": "Real bookmarklet payload from Google Flights, SIN-LHR Lufthansa-only Economy, 2026-12-01/08, date grid open. Captured 2026-10-25.",
+ "v": 1,
+ "href": "https://www.google.com/travel/flights/search?tfs=CBwQAhoiEgoyMDI2LTEyLTAxMgJMSGoHCAESA1NJTnIHCAESA0xIUhoiEgoyMDI2LTEyLTA4MgJMSGoHCAESA0xIUnIHCAESA1NJTkABSAFwAYIBCwj___________8BmAEB&tfu=EgYIABAAGAA&hl=en&gl=sg&curr=SGD",
+ "grid": [
+  [
+   "1,267",
+   "Nov 28",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Nov 29",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,305",
+   "Nov 30",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 1",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 2",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 3",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,125",
+   "Dec 4",
+   "Dec 5",
+   "SGD"
+  ],
+  [
+   "1,455",
+   "Nov 28",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,385",
+   "Nov 29",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,455",
+   "Nov 30",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,209",
+   "Dec 1",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Dec 2",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Dec 3",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,125",
+   "Dec 4",
+   "Dec 6",
+   "SGD"
+  ],
+  [
+   "1,279",
+   "Nov 28",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,209",
+   "Nov 29",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,279",
+   "Nov 30",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,034",
+   "Dec 1",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 2",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 3",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,099",
+   "Dec 4",
+   "Dec 7",
+   "SGD"
+  ],
+  [
+   "1,305",
+   "Nov 28",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Nov 29",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,279",
+   "Nov 30",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,034",
+   "Dec 1",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 2",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 3",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,099",
+   "Dec 4",
+   "Dec 8",
+   "SGD"
+  ],
+  [
+   "1,267",
+   "Nov 28",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Nov 29",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,305",
+   "Nov 30",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 1",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 2",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 3",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,125",
+   "Dec 4",
+   "Dec 9",
+   "SGD"
+  ],
+  [
+   "1,305",
+   "Nov 28",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Nov 29",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,305",
+   "Nov 30",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,059",
+   "Dec 1",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 2",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,085",
+   "Dec 3",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,125",
+   "Dec 4",
+   "Dec 10",
+   "SGD"
+  ],
+  [
+   "1,525",
+   "Nov 28",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,385",
+   "Nov 29",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,455",
+   "Nov 30",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,209",
+   "Dec 1",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Dec 2",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,235",
+   "Dec 3",
+   "Dec 11",
+   "SGD"
+  ],
+  [
+   "1,275",
+   "Dec 4",
+   "Dec 11",
+   "SGD"
+  ]
+ ],
+ "list": []
+}

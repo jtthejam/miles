@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.10.0 — 2026-10-25
+
+### Added
+- **Google Flights links**: a **G** button on every row opens Google Flights already filtered to that airline, cabin, SGD and your travel dates (or ~60 days out for 7 nights).
+- **"Send to Miles Maximiser" bookmarklet** (Live prices → "Free prices from Google Flights"): drag it to your bookmarks bar once. On a Google Flights page, click it and the app saves the cheapest price to the matching row, with its dates. Free, no SerpApi key, no searches used.
+  - With **Date grid** open it reads all 49 departure × return cells and keeps the cheapest within your dates ± flexibility. Here departure and return vary independently, since the grid prices every pair.
+  - Without the grid it uses the results list for the page's dates.
+  - The route, airline and cabin come from the Google Flights page address, so prices go to the right row even if you change dates on Google.
+- Lufthansa results that include **Lufthansa City Airlines** flights are skipped: they earn no KrisFlyer miles (KrisFlyer chart note 7). For the date grid, which can't show the operator, the app adds a reminder.
+
+### Safeguards
+- Refuses pages without a one-airline filter (prices could be on any airline), non-SGD prices, one-way or multi-city searches, departures not from Singapore, and airlines not in the app. Each case explains what to change.
+- The bookmarklet only reads price labels and the page address, and opens this app with them. It sends nothing anywhere else.
+
+### Changed
+- Price box is narrower (68px) so the table still fits its box with the new button.
+
+### Why not call the date grid from the server?
+Tested 2026-10-25: Google's date-grid request (`GetCalendarGrid`) now carries a per-request BotGuard token (`x-goog-batchexecute-bgr`). Without it, or with a token from a different request, Google rejects it (status 13). Only a real browser session produces a valid token, so the grid is read from the page you're viewing instead.
+
+### Technical
+- `public/gflink.js` (browser + Node): `tfs` protobuf encoder (byte-identical to fast-flights 3.1.0), tolerant decoder (handles Google's rewritten URLs: url-safe base64, extra fields, unpacked passengers), import interpretation.
+- `public/bookmarklet.js`: bookmarklet source; the app inlines its own address. Google writes a non-breaking space after "SGD", and the date grid is drawn on a canvas with zero-size labelled cells; both are handled.
+- 9 new tests, including a real 49-cell date grid captured from Google Flights (`test/fixtures/gf-grid-lh-sin-lhr.json`).
+
 ## v1.9.0 — 2026-10-25
 
 ### Added

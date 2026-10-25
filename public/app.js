@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-SG');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const CABIN_LABEL = { economy: 'Economy', premium: 'Premium Eco' };
-const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed', dates: 'mm-dates-v1', fareDates: 'mm-fare-dates-v1' };
+const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed', dates: 'mm-dates-v1', fareDates: 'mm-fare-dates-v1', gfPending: 'mm-gf-pending-v1' };
 
 let meta = null;
 let rows = [];
@@ -146,6 +146,10 @@ async function init() {
   await refresh();
   [...new Set(rows.map((r) => r.region))].sort().forEach((r) => $('region').add(new Option(r, r)));
   setView(view);
+  window.name = 'miles-maximiser'; // lets the bookmarklet reuse this tab when it can
+  initBookmarklet();
+  await importFromHash();
+  window.addEventListener('hashchange', importFromHash);
 }
 
 async function refresh() {
@@ -189,13 +193,14 @@ function render() {
 
   $('rows').innerHTML = list.map((r) => {
     const route = ['SIN', ...r.via, r.code].join(' → ');
+    const gfBtn = `<a class="gf" href="${esc(gfLink(r))}" target="_blank" rel="noopener" data-key="${r.key}" title="Open ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]} to ${esc(r.city)} in Google Flights for ${esc(datesLabel())}, filtered to ${esc(r.carrierName)}. Then click your “Send to Miles Maximiser” bookmark.">G</a>`;
     const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for ${esc(datesLabel())} (${meta.live.provider})">↻</button>` : '';
     const flags = [
       !r.eligible ? r.ineligibleReason : '',
       r.seasonal ? 'Seasonal service' : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
     const fd = r.overridden ? fareDates[r.key] : null;
-    const title = fd ? `Live fare, ${fd.outbound} to ${fd.inbound} (${fd.provider})` : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '';
+    const title = fd ? `${fd.provider === 'google-flights' ? 'From Google Flights' : 'Live fare'}, ${fd.outbound} to ${fd.inbound}${fd.provider === 'google-flights' ? '' : ` (${fd.provider})`}` : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '';
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
         <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span></td>
@@ -207,7 +212,7 @@ function render() {
         <td class="num">
           <input class="price${r.overridden ? ' edited' : ''}" type="number" min="1" step="1" placeholder="add"
                  value="${r.priceSgd ?? ''}" data-key="${r.key}" title="${esc(title)}"
-                 aria-label="Price for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${liveBtn}
+                 aria-label="Price for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${liveBtn}${gfBtn}
           ${fd ? `<span class="fare-dates">${shortRange(fd.outbound, fd.inbound)}</span>` : ''}
         </td>
         <td class="num mps">${r.milesPerSgd ? `<div class="bar" style="width:${(r.milesPerSgd / maxMps) * 100}%"></div><span>${r.milesPerSgd}</span>` : '—'}</td>
@@ -315,6 +320,82 @@ function initDates() {
   $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); render(); });
   renderDates();
 }
+
+// ---------- Google Flights links + "Send to Miles Maximiser" bookmarklet ----------
+
+const addDaysIso = (d, n) => new Date(Date.parse(`${d}T00:00:00Z`) + n * 864e5).toISOString().slice(0, 10);
+
+// Same defaults as the server: ~60 days out, 7 nights.
+function linkDates() {
+  const out = $('out-date').value || addDaysIso(localToday(), 60);
+  return { outbound: out, inbound: $('in-date').value || addDaysIso(out, 7) };
+}
+
+const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carrier: r.carrier, cabin: r.cabin, ...linkDates() });
+
+$('rows').addEventListener('click', (e) => {
+  const a = e.target.closest('a.gf');
+  if (!a) return;
+  a.href = gfLink(rows.find((r) => r.key === a.dataset.key) || {}); // dates may have changed since render
+  const [carrier, dest, cabin] = a.dataset.key.split(':');
+  store.set(KEYS.gfPending, { carrier, dest, cabin, at: Date.now() }); // fallback if Google rewrites the URL
+});
+
+async function initBookmarklet() {
+  try {
+    const src = await (await fetch('bookmarklet.js')).text();
+    const code = src.split('\n').filter((l) => !/^\s*\/\//.test(l)).join(' ').replace(/\s+/g, ' ')
+      .replace('__APP__', location.origin);
+    $('gf-bookmarklet').href = `javascript:${encodeURIComponent(code)}`;
+  } catch { $('gf-help').hidden = true; }
+  $('gf-bookmarklet').addEventListener('click', (e) => { e.preventDefault(); alert('Drag this button to your bookmarks bar, then click it on a Google Flights page.'); });
+}
+
+function gfMessage(html, kind) {
+  const el = $('gf-msg');
+  el.innerHTML = html; el.className = `gf-msg ${kind}`; el.hidden = false;
+  el.scrollIntoView({ block: 'nearest' });
+}
+
+// Prices arrive in the URL hash from the bookmarklet: #gf=<json>.
+async function importFromHash() {
+  if (!location.hash.startsWith('#gf=')) return;
+  let payload;
+  try { payload = JSON.parse(decodeURIComponent(location.hash.slice(4))); } catch { payload = null; }
+  history.replaceState(null, '', location.pathname + location.search); // don't re-import on reload
+  if (!payload) { gfMessage('Couldn\'t read the data from Google Flights. Try the bookmark again.', 'err'); return; }
+
+  const pending = store.get(KEYS.gfPending, null);
+  const res = window.GFLink.interpretImport(payload, {
+    carriers: meta.carriers,
+    pending: pending && Date.now() - pending.at < 6 * 3600e3 ? pending : null,
+    window: $('out-date').value ? { outbound: $('out-date').value, inbound: $('in-date').value, flex: $('flex-days').value } : null,
+  });
+  if (res.error) { gfMessage(esc(res.error), 'err'); return; }
+
+  const key = `${res.carrier}:${res.dest}:${res.cabin}`;
+  const row = rows.find((r) => r.key === key);
+  if (!row) {
+    gfMessage(`${esc(meta.carriers[res.carrier].name)} ${CABIN_LABEL[res.cabin]} to ${esc(res.dest)} isn't a route in the table, so nothing was saved.`, 'err');
+    return;
+  }
+  overrides[key] = res.lowest; // return fare, like the other sources
+  fareDates[key] = { outbound: res.outbound, inbound: res.inbound, provider: 'google-flights' };
+  store.set(KEYS.prices, overrides);
+  store.set(KEYS.fareDates, fareDates);
+  await refresh();
+  const how = res.source === 'grid' ? `cheapest of ${res.considered} date${res.considered === 1 ? '' : 's'} in the date grid` : 'cheapest result on the page';
+  gfMessage(`Saved <b>S$${fmt(res.lowest)}</b> for ${esc(row.city)} ${res.dest} · ${esc(row.carrierName)} · ${CABIN_LABEL[res.cabin]}, ` +
+    `${shortRange(res.outbound, res.inbound)} (${how}${res.notes.length ? `; ${esc(res.notes.join('; '))}` : ''}).`, 'ok');
+}
+
+// Another tab (e.g. one the bookmarklet opened) saved prices: pick them up here.
+window.addEventListener('storage', (e) => {
+  if (e.key !== KEYS.prices && e.key !== KEYS.fareDates) return;
+  overrides = store.get(KEYS.prices, {});
+  fareDates = store.get(KEYS.fareDates, {});
+  refresh();
+});
 
 // ---------- Live prices: SerpApi key prompt, fast-flights fallback ----------
 
