@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-SG');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const CABIN_LABEL = { economy: 'Economy', premium: 'Premium Eco' };
-const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed' };
+const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed', dates: 'mm-dates-v1', fareDates: 'mm-fare-dates-v1' };
 
 let meta = null;
 let rows = [];
@@ -26,6 +26,7 @@ function loadOverrides() {
 
 let overrides = loadOverrides();
 let classOverrides = store.get(KEYS.classes, {}); // only set when a user's quote is in a different class
+let fareDates = store.get(KEYS.fareDates, {}); // row key -> { outbound, inbound, provider } of a live price
 try { localStorage.removeItem('mm-tiers-v1'); } catch { /* old per-airline assumptions are no longer used */ }
 let selected = null; // Set of carrier codes
 let view = store.get(KEYS.view, 'table');
@@ -120,15 +121,16 @@ async function init() {
     `<p>Accrual: ${esc(meta.accrualSource)} Distances are great-circle miles summed per segment flown; PPS/Elite bonuses not included.</p>` +
     `<p>Miles Maximiser v${esc(meta.version)}</p>`;
 
-  const d = new Date(); d.setDate(d.getDate() + 60);
-  $('out-date').value = d.toISOString().slice(0, 10);
-  d.setDate(d.getDate() + 7);
-  $('in-date').value = d.toISOString().slice(0, 10);
+  initDates();
   initLive();
 
   ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', render));
   $('roundtrip').addEventListener('change', refresh);
-  $('reset').addEventListener('click', () => { overrides = {}; classOverrides = {}; store.set(KEYS.prices, overrides); store.set(KEYS.classes, classOverrides); refresh(); });
+  $('reset').addEventListener('click', () => {
+    overrides = {}; classOverrides = {}; fareDates = {};
+    store.set(KEYS.prices, overrides); store.set(KEYS.classes, classOverrides); store.set(KEYS.fareDates, fareDates);
+    refresh();
+  });
 
   $('cal-open').addEventListener('click', () => window.SalesCalendar.open(meta));
 
@@ -187,12 +189,13 @@ function render() {
 
   $('rows').innerHTML = list.map((r) => {
     const route = ['SIN', ...r.via, r.code].join(' → ');
-    const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for the dates above (${meta.live.provider})">↻</button>` : '';
+    const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for ${esc(datesLabel())} (${meta.live.provider})">↻</button>` : '';
     const flags = [
       !r.eligible ? r.ineligibleReason : '',
       r.seasonal ? 'Seasonal service' : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
-    const title = r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '';
+    const fd = r.overridden ? fareDates[r.key] : null;
+    const title = fd ? `Live fare, ${fd.outbound} to ${fd.inbound} (${fd.provider})` : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '';
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
         <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span></td>
@@ -205,6 +208,7 @@ function render() {
           <input class="price${r.overridden ? ' edited' : ''}" type="number" min="1" step="1" placeholder="add"
                  value="${r.priceSgd ?? ''}" data-key="${r.key}" title="${esc(title)}"
                  aria-label="Price for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${liveBtn}
+          ${fd ? `<span class="fare-dates">${shortRange(fd.outbound, fd.inbound)}</span>` : ''}
         </td>
         <td class="num mps">${r.milesPerSgd ? `<div class="bar" style="width:${(r.milesPerSgd / maxMps) * 100}%"></div><span>${r.milesPerSgd}</span>` : '—'}</td>
         <td class="num">${r.centsPerMile ?? '—'}</td>
@@ -245,12 +249,72 @@ $('rows').addEventListener('change', (e) => {
   const input = e.target.closest('input.price');
   if (!input) return;
   const v = Number(input.value);
+  delete fareDates[input.dataset.key]; // a typed price is the user's own quote, not a dated live fare
+  store.set(KEYS.fareDates, fareDates);
   // Store as return fares regardless of the current trip toggle.
   if (v > 0) overrides[input.dataset.key] = $('roundtrip').checked ? v : v * 2;
   else delete overrides[input.dataset.key];
   store.set(KEYS.prices, overrides);
   refresh();
 });
+
+// ---------- Travel dates for live prices (optional) ----------
+
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const shortDate = (d) => `${Number(d.slice(8, 10))} ${MONTHS[Number(d.slice(5, 7)) - 1]}`;
+const shortRange = (a, b) => `${shortDate(a)} – ${shortDate(b)}`;
+const localToday = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
+
+// Only send what the user chose; the server fills in defaults (≈60 days out, 7 nights).
+function dateParams() {
+  const p = { flex: $('flex-days').value };
+  if ($('out-date').value) p.outbound = $('out-date').value;
+  if ($('in-date').value) p.inbound = $('in-date').value;
+  return p;
+}
+
+function datesLabel() {
+  const out = $('out-date').value, back = $('in-date').value, flex = Number($('flex-days').value);
+  if (!out) return 'about 60 days out (7 nights)';
+  return `${back ? shortRange(out, back) : `${shortDate(out)} (7 nights)`}${flex ? ` ± ${flex} day${flex > 1 ? 's' : ''}` : ''}`;
+}
+
+function renderDates() {
+  const out = $('out-date').value, flex = Number($('flex-days').value);
+  const today = localToday();
+  $('out-date').min = today;
+  $('in-date').min = out || today;
+  $('flex-days').disabled = !out;
+  if (!out) $('flex-days').value = '0';
+  $('dates-clear').hidden = !out && !$('in-date').value;
+  const searches = 2 * flex + 1;
+  const cost = flex && meta.live.provider === 'serpapi' ? ` Uses up to ${searches} SerpApi searches per ↻.` :
+    flex ? ` Searches ${searches} date options per ↻, so it takes longer.` : '';
+  $('date-hint').textContent = !out
+    ? 'Optional: add travel dates to price your trip. Without dates, ↻ checks a trip about 60 days out for 7 nights.'
+    : `↻ finds the lowest fare for ${datesLabel()}${flex ? ', keeping the same trip length' : ''}.${cost}`;
+  $('date-hint').hidden = !meta.live.provider;
+  store.set(KEYS.dates, { outbound: out, inbound: $('in-date').value, flex });
+}
+
+function initDates() {
+  const saved = store.get(KEYS.dates, {});
+  const today = localToday();
+  // Drop saved dates that are now in the past.
+  if (saved.outbound && saved.outbound >= today) {
+    $('out-date').value = saved.outbound;
+    if (saved.inbound && saved.inbound >= saved.outbound) $('in-date').value = saved.inbound;
+    if ([0, 1, 2, 3].includes(saved.flex)) $('flex-days').value = String(saved.flex);
+  }
+  $('out-date').addEventListener('change', () => {
+    // Keep return on or after departure.
+    if ($('in-date').value && $('out-date').value && $('in-date').value < $('out-date').value) $('in-date').value = '';
+    renderDates(); render();
+  });
+  ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); render(); }));
+  $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); render(); });
+  renderDates();
+}
 
 // ---------- Live prices: SerpApi key prompt, fast-flights fallback ----------
 
@@ -266,6 +330,7 @@ function renderLive() {
   $('key-toggle').hidden = st.serpApiKey === 'env';
   $('key-toggle').textContent = st.serpApiKey ? 'Remove SerpApi key' : 'Add SerpApi key';
   if (st.serpApiKey) $('key-form').hidden = true;
+  if ($('flex-days')) renderDates(); // hint mentions SerpApi quota
 }
 
 function initLive() {
@@ -311,12 +376,16 @@ $('rows').addEventListener('click', async (e) => {
   const [carrier, dest, cabin] = btn.dataset.key.split(':');
   btn.disabled = true; btn.textContent = '…';
   try {
-    const q = new URLSearchParams({ carrier, dest, cabin, outbound: $('out-date').value, inbound: $('in-date').value });
+    const q = new URLSearchParams({ carrier, dest, cabin, ...dateParams() });
+    if (Number(q.get('flex'))) btn.title = `Searching ${2 * q.get('flex') + 1} date options…`;
     const res = await (await fetch(`/api/live?${q}`)).json();
-    if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares found for those dates`);
+    if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
+    if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));
     overrides[btn.dataset.key] = res.lowest;
+    fareDates[btn.dataset.key] = { outbound: res.outbound, inbound: res.inbound, provider: res.provider };
     store.set(KEYS.prices, overrides);
+    store.set(KEYS.fareDates, fareDates);
     await refresh();
   } catch (err) {
     btn.textContent = '!'; btn.title = err.message; btn.disabled = false;

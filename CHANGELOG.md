@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.8.0 — 2026-10-25
+
+### Added
+- **Optional travel dates** for live prices: Depart and Return in the Live prices bar now start blank. ↻ searches only within the dates you enter. With no dates, it checks a trip about 60 days out for 7 nights (as before). Leaving Return blank means 7 nights.
+- **Flexible dates**: Exact, ± 1, ± 2 or ± 3 days. ↻ searches every shifted trip (departure and return move together, so trip length stays the same) and keeps the cheapest. Ties go to the date closest to the one you entered. Past departure days are skipped.
+- Each live price shows the dates it was found for under the price (e.g. "3 Dec – 10 Dec"), and in its tooltip.
+- A hint under the bar explains what ↻ will search. With SerpApi, it warns that ± N uses up to 2N + 1 searches per ↻ (free tier: 250/month).
+- Dates and flexibility are remembered in your browser; dates that have passed are dropped.
+
+### Changed
+- Dates are validated as real calendar dates; Return must be on or after Depart; Depart can't be in the past (Singapore date).
+- Typing a price over a live fare removes its dates; "Reset my edits" clears them too.
+
+### Technical
+- `/api/live` takes optional `outbound`, `inbound` and `flex` (0-3). Response adds `outbound`/`inbound` of the cheapest trip, `requested`, `window`, `searched`, `failed`, `providers` and `byDate` (fare or error per date). Existing fields unchanged.
+- `lib/live.js`: `datePairs()` and `lowestFareInWindow()`. Searches run 2 at a time; each date is still cached for 6 hours and still falls back from SerpApi to fast-flights. If some dates fail, the cheapest of the rest is returned; if all fail, the first error is.
+- 8 new tests (date defaults, flex shifting, past-day skipping, validation, cheapest pick and tie-break, partial and total failure, SerpApi request per date, endpoint).
+
 ## v1.7.0 — 2026-10-24
 
 ### Added

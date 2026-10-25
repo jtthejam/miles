@@ -50,12 +50,14 @@ async function handleApi(url, res) {
       try {
         const carrier = String(q.get('carrier') || 'SQ').toUpperCase();
         if (!data.carriers[carrier]) throw new Error(`Unsupported carrier ${carrier}`);
-        const out = await live.lowestReturnFare({
+        // Dates are optional; flex (0-3) searches that many days either side, keeping trip length.
+        const out = await live.lowestFareInWindow({
           carrier,
           dest: String(q.get('dest') || '').toUpperCase(),
           cabin: q.get('cabin'),
-          outbound: q.get('outbound'),
-          inbound: q.get('inbound'),
+          outbound: q.get('outbound') || undefined,
+          inbound: q.get('inbound') || undefined,
+          flex: q.get('flex') || 0,
         });
         return sendJson(res, 200, out);
       } catch (e) {

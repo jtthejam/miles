@@ -51,11 +51,21 @@
       <strong>Live prices</strong>
       <span id="live-status" class="live-status"></span>
       <span id="live-dates" class="live-dates" hidden>
-        <label>Depart <input type="date" id="out-date"></label>
-        <label>Return <input type="date" id="in-date"></label>
+        <label>Depart <input type="date" id="out-date" aria-describedby="date-hint"></label>
+        <label>Return <input type="date" id="in-date" aria-describedby="date-hint"></label>
+        <label>Flexibility
+          <select id="flex-days" aria-describedby="date-hint">
+            <option value="0">Exact</option>
+            <option value="1">± 1 day</option>
+            <option value="2">± 2 days</option>
+            <option value="3">± 3 days</option>
+          </select>
+        </label>
+        <button type="button" id="dates-clear" class="ghost small" hidden>Clear dates</button>
       </span>
       <button type="button" id="key-toggle" class="ghost small"></button>
     </div>
+    <p id="date-hint" class="hint date-hint" hidden></p>
     <form id="key-form" class="key-form" hidden autocomplete="off">
       <p class="key-why">For reliable live prices, add a free <b>SerpApi</b> key (250 searches/month).
         <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noopener">Get a key</a> ·

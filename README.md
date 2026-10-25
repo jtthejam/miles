@@ -68,7 +68,11 @@ The Earn column shows ✓ (published) or ≈ (assumed). If your own quote books 
 
 ## Live prices
 
-Tap ↻ on a row to fetch the current lowest fare on that airline for the dates in the Live prices bar. Results are cached for 6 hours.
+Tap ↻ on a row to fetch the current lowest fare on that airline. Results are cached for 6 hours per date.
+
+**Travel dates (optional).** Enter Depart and Return to search only those dates. Leave both blank to check a trip about 60 days out for 7 nights; leave Return blank for 7 nights.
+
+**Flexibility.** Exact, ± 1, ± 2 or ± 3 days. ↻ searches each trip shifted by up to that many days (departure and return move together, so trip length stays the same) and keeps the cheapest. The dates found appear under the price. With SerpApi, ± N costs up to 2N + 1 searches per ↻.
 
 | Provider | When it's used | Setup |
 |---|---|---|
@@ -83,7 +87,7 @@ The saved key lives in `.local/config.json` on the machine running the server (g
 |---|---|
 | `GET /api/meta` | Version, carriers + accrual tables, sources, live pricing status |
 | `GET /api/routes?tiers={"SQ:economy":"75-HMW"}&roundTrip=true&overrides={"CA:PEK:economy":420}` | Ranked rows |
-| `GET /api/live?carrier=TK&dest=LHR&cabin=economy&outbound=2027-03-01&inbound=2027-03-10` | Live lowest fare (SerpApi, else fast-flights) |
+| `GET /api/live?carrier=TK&dest=LHR&cabin=economy&outbound=2027-03-01&inbound=2027-03-10&flex=2` | Live lowest fare (SerpApi, else fast-flights). Dates optional; `flex` 0-3 days. Returns the cheapest trip's `lowest`, `outbound`, `inbound`, plus `byDate` |
 | `POST /api/settings/serpapi` `{"key": "…"}` / `DELETE` | Save / remove the SerpApi key (local machine only) |
 
 ## Limits

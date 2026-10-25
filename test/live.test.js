@@ -13,7 +13,13 @@ fs.writeFileSync(fakePy, `#!/bin/sh
 # "python -c 'import fast_flights'" succeeds; "python ff_quote.py DEST CABIN OUT IN CARRIER" prints a quote.
 if [ "$1" = "-c" ]; then exit 0; fi
 if [ "$2" = "XXX" ]; then echo '{"error": "fast-flights failed: blocked"}'; exit 1; fi
-echo '{"lowest": 1650, "average": 1900, "offers": 4}'
+# Date-dependent fares for flexible-date tests: cheapest departing 2027-03-03; 2027-03-04 fails.
+case "$4" in
+  2027-03-03) echo '{"lowest": 1400, "average": 1500, "offers": 2}' ;;
+  2027-03-04) echo '{"error": "fast-flights failed: timeout"}'; exit 1 ;;
+  2027-03-05) echo '{"lowest": 1400, "average": 1450, "offers": 2}' ;;
+  *) echo '{"lowest": 1650, "average": 1900, "offers": 4}' ;;
+esac
 `, { mode: 0o755 });
 process.env.MILES_CONFIG_DIR = path.join(tmp, '.local');
 process.env.PYTHON = fakePy;
@@ -101,4 +107,102 @@ test('settings endpoint: save, status in meta, remove; rejects non-JSON posts', 
 
   res = await fetch(`${base}/api/settings/serpapi`, { method: 'DELETE' });
   assert.equal((await res.json()).live.provider, 'fast-flights');
+});
+
+test('datePairs: optional dates default to ~60 days out for 7 nights', () => {
+  const w = live.datePairs({ today: '2026-10-25' });
+  assert.deepEqual(w.pairs, [{ outbound: '2026-12-24', inbound: '2026-12-31', shift: 0 }]);
+  assert.equal(live.datePairs({ outbound: '2027-03-01', today: '2026-10-25' }).inbound, '2027-03-08');
+});
+
+test('datePairs: flex shifts both dates, keeps trip length, skips past days', () => {
+  const w = live.datePairs({ outbound: '2027-03-01', inbound: '2027-03-10', flex: 2, today: '2026-10-25' });
+  assert.deepEqual(w.pairs.map((p) => [p.outbound, p.inbound]), [
+    ['2027-02-27', '2027-03-08'], ['2027-02-28', '2027-03-09'], ['2027-03-01', '2027-03-10'],
+    ['2027-03-02', '2027-03-11'], ['2027-03-03', '2027-03-12'],
+  ]);
+  assert.equal(w.nights, 9);
+  const near = live.datePairs({ outbound: '2026-10-26', inbound: '2026-10-30', flex: 3, today: '2026-10-25' });
+  assert.equal(near.pairs[0].outbound, '2026-10-25');
+  assert.equal(near.pairs.length, 5);
+});
+
+test('datePairs: validation', () => {
+  const t = { today: '2026-10-25' };
+  assert.throws(() => live.datePairs({ ...t, outbound: '2027-02-30' }), /YYYY-MM-DD/);
+  assert.throws(() => live.datePairs({ ...t, inbound: '2027-03-01' }), /departure date/);
+  assert.throws(() => live.datePairs({ ...t, outbound: '2027-03-05', inbound: '2027-03-01' }), /on or after/);
+  assert.throws(() => live.datePairs({ ...t, outbound: '2026-10-01' }), /past/);
+  assert.throws(() => live.datePairs({ ...t, outbound: '2027-03-01', flex: 4 }), /flex/);
+  assert.throws(() => live.datePairs({ ...t, outbound: '2027-03-01', flex: 'x' }), /flex/);
+});
+
+test('flexible dates: returns the cheapest trip, its dates and per-date results', async () => {
+  live._test.cache.clear();
+  const out = await live.lowestFareInWindow(q({ outbound: '2027-03-01', inbound: '2027-03-08', flex: 3 }));
+  assert.equal(out.lowest, 1400);
+  // 03-03 and 03-05 tie at 1400; the one closer to the requested date wins.
+  assert.equal(out.outbound, '2027-03-03');
+  assert.equal(out.inbound, '2027-03-10');
+  assert.equal(out.searched, 7);
+  assert.equal(out.failed, 1); // 2027-03-04
+  assert.match(out.byDate.find((d) => d.outbound === '2027-03-04').error, /timeout/);
+  assert.deepEqual(out.window, { from: '2027-02-26', to: '2027-03-11' });
+  assert.deepEqual(out.requested, { outbound: '2027-03-01', inbound: '2027-03-08', flex: 3, nights: 7 });
+});
+
+test('exact dates: one search, constrained to those dates', async () => {
+  live._test.cache.clear();
+  const out = await live.lowestFareInWindow(q({ outbound: '2027-03-01', inbound: '2027-03-08' }));
+  assert.equal(out.searched, 1);
+  assert.equal(out.lowest, 1650);
+  assert.equal(out.outbound, '2027-03-01');
+});
+
+test('every date failing surfaces the error', async () => {
+  live._test.cache.clear();
+  await assert.rejects(live.lowestFareInWindow(q({ outbound: '2027-03-04', inbound: '2027-03-08' })), /timeout/);
+});
+
+test('flexible dates via SerpApi send one request per shifted date', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  const seen = [];
+  try {
+    global.fetch = async (url) => {
+      const p = new URL(url).searchParams;
+      seen.push([p.get('outbound_date'), p.get('return_date')]);
+      const price = p.get('outbound_date') === '2027-03-02' ? 1300 : 1700;
+      return { ok: true, json: async () => ({ best_flights: [{ price }] }) };
+    };
+    live._test.cache.clear();
+    const out = await live.lowestFareInWindow(q({ outbound: '2027-03-01', inbound: '2027-03-10', flex: 1 }));
+    assert.deepEqual(seen.sort(), [['2027-02-28', '2027-03-09'], ['2027-03-01', '2027-03-10'], ['2027-03-02', '2027-03-11']]);
+    assert.equal(out.lowest, 1300);
+    assert.equal(out.provider, 'serpapi');
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
+
+test('/api/live accepts optional dates and flex', async () => {
+  if (!server.listening) await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  live._test.cache.clear();
+  let res = await fetch(`${base}/api/live?carrier=SQ&dest=JFK&cabin=economy&outbound=2027-03-01&inbound=2027-03-08&flex=2`);
+  let out = await res.json();
+  assert.equal(res.status, 200);
+  assert.equal(out.outbound, '2027-03-03');
+  assert.equal(out.searched, 5);
+
+  res = await fetch(`${base}/api/live?carrier=SQ&dest=JFK&cabin=economy`);
+  out = await res.json();
+  assert.equal(res.status, 200);
+  assert.equal(out.searched, 1);
+  assert.equal(out.requested.nights, 7);
+
+  res = await fetch(`${base}/api/live?carrier=SQ&dest=JFK&cabin=economy&outbound=2027-03-01&flex=9`);
+  assert.equal(res.status, 502);
+  assert.match((await res.json()).error, /flex/);
 });
