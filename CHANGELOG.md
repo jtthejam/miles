@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.9.0 — 2026-10-25
+
+### Added
+- Every airline now has at least one priced route (new test enforces it):
+  - Lufthansa Singapore–Munich from S$1,307 and SWISS Singapore–Zurich from S$1,263 (Economy, from the airlines' SG fare pages).
+  - Air China Singapore–Beijing from S$425 (Economy).
+  - ANA Singapore–Los Angeles via Tokyo Haneda from S$1,188 (Economy), 21,920 miles in Premium Economy at 125%.
+- Air China Premium Economy: classes G (110%) and E (100%) from the KrisFlyer chart; sale fares assumed to book into E. Priced at "add" until a fare is entered.
+
+### Changed
+- Lufthansa Munich is no longer flagged seasonal: it runs 5 weekly through winter 2026–27 (daily 17 Jan – 17 Feb 2027).
+- Air China Economy accrual now lists only Economy classes (Y/B/M/U 100%, H/Q/V 50%); G and E moved to Premium Economy.
+
 ## v1.8.1 — 2026-10-25
 
 ### Fixed

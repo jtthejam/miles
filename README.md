@@ -1,4 +1,4 @@
-# Miles Maximiser v1.7.0
+# Miles Maximiser v1.9.0
 
 Small Node.js web app that ranks Economy and Premium Economy flights from Singapore by **KrisFlyer miles earned per SGD spent**, across Singapore Airlines and selected Star Alliance partners.
 
@@ -12,15 +12,17 @@ PORT=8080 npm start  # different port
 
 ## Airlines
 
-| Code | Airline | Routes from SIN | Premium Economy |
+| Code | Airline | Routes from SIN (Economy fare from) | Premium Economy |
 |---|---|---|---|
 | SQ | Singapore Airlines | 40 nonstop destinations | Yes |
-| TK | Turkish Airlines | IST, plus Europe/New York via IST | No cabin |
-| LH | Lufthansa | MUC (seasonal, 7 May – 23 Oct 2026) | Yes |
-| LX | SWISS | ZRH | Yes |
-| NH | ANA | NRT, HND | Yes |
-| CA | Air China | PEK | Not modelled |
+| TK | Turkish Airlines | IST (S$707), plus Europe/New York via IST | No cabin |
+| LH | Lufthansa | MUC (S$1,307); 5 weekly in winter 2026–27, daily 17 Jan – 17 Feb 2027 | Yes (no price yet) |
+| LX | SWISS | ZRH (S$1,263) | Yes (no price yet) |
+| NH | ANA | NRT (S$749), HND, LAX via HND (S$1,188) | Yes (no price yet) |
+| CA | Air China | PEK (S$425) | Yes, classes G/E (no price yet) |
 | NZ | Air New Zealand | AKL, CHC | Yes |
+
+Every airline has at least one priced route (checked by `npm test`). Rows marked "no price yet" still show miles; type in a quote or use live prices.
 
 Add a route by appending to `data/fares.partners.json`; add an airport to `data/airports.json`. Data is validated on start.
 
@@ -54,7 +56,7 @@ Earn rates follow the **booking class the sale fare books into** (`saleFare` in 
 | Turkish | V, 25% | — | Assumed |
 | ANA | K, 50% | E/G, 125% | Assumed |
 | Lufthansa, SWISS | V, 50% | N, 100% | Assumed |
-| Air China | Q, 50% | — | Assumed |
+| Air China | Q, 50% | E, 100% (G earns 110%) | Assumed |
 
 The Earn column shows ✓ (published) or ≈ (assumed). If your own quote books into a different class, change the letter in that row; "Reset my edits" restores sale classes. Notable rules:
 

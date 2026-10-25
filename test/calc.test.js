@@ -20,7 +20,7 @@ test('accrual tables match KrisFlyer chart', () => {
   assert.equal(pctForClass(C.LH, 'premium', 'N'), 100);
   assert.equal(pctForClass(C.NH, 'premium', 'G'), 125);
   assert.equal(pctForClass(C.NH, 'economy', 'K'), 50);
-  assert.equal(pctForClass(C.CA, 'economy', 'G'), 110);
+  assert.equal(pctForClass(C.CA, 'premium', 'G'), 110);
   assert.equal(pctForClass(C.CA, 'economy', 'K'), null); // unlisted → no accrual
   assert.equal(pctForClass(C.NZ, 'premium', 'U'), 110);
   assert.equal(pctForClass(C.NZ, 'economy', 'G'), 10);
@@ -45,10 +45,21 @@ test('TK: connecting distance sums segments via IST', () => {
   assert.equal(r.accrualPct, 25);
 });
 
-test('TK and CA have no Premium Economy rows', () => {
+test('TK has no Premium Economy rows; Air China does (E 100%, G 110%)', () => {
   const rows = buildRows(data);
   assert.ok(!rows.some((r) => r.carrier === 'TK' && r.cabin === 'premium'));
-  assert.ok(!rows.some((r) => r.carrier === 'CA' && r.cabin === 'premium'));
+  const caPY = find(rows, 'CA', 'PEK', 'premium');
+  assert.equal(caPY.bookingClass, 'E');
+  assert.equal(caPY.accrualPct, 100);
+  assert.equal(pctForClass(C.CA, 'premium', 'G'), 110);
+});
+
+test('every airline has at least one route with a price', () => {
+  const rows = buildRows(data);
+  for (const code of Object.keys(C)) {
+    const priced = rows.filter((r) => r.carrier === code && r.priceSgd > 0 && r.miles > 0);
+    assert.ok(priced.length > 0, `${code} has no priced, earning route`);
+  }
 });
 
 test('NZ: promo class K earns 10% to AKL and nothing to CHC', () => {
@@ -65,7 +76,7 @@ test('NZ: promo class K earns 10% to AKL and nothing to CHC', () => {
 
 test('unpriced rows still show miles and sort last', () => {
   const rows = buildRows(data);
-  const ca = find(rows, 'CA', 'PEK', 'economy');
+  const ca = find(rows, 'CA', 'PEK', 'premium');
   assert.equal(ca.priceSgd, null);
   assert.ok(ca.miles > 0);
   const firstUnpriced = rows.findIndex((r) => r.milesPerSgd == null);

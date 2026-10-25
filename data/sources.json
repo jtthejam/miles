@@ -18,5 +18,21 @@
   "nz-promo-2026-08": {
     "label": "Air New Zealand SG promo (book by 10 Sep 2026, travel to Jun 2027)",
     "url": "https://suitesmile.com/blog/2026/08/26/air-new-zealand-promo-fares-singapore-aug-2026/"
+  },
+  "lh-site-2026-10": {
+    "label": "Lufthansa SG lowest fares, SIN–MUC (seen 25 Oct 2026, Nov 2026 – Sep 2027 dates)",
+    "url": "https://www.lufthansa.com/xx/en/flights/flight-singapore-munich"
+  },
+  "lx-site-2026-10": {
+    "label": "SWISS SG lowest fares, SIN–ZRH (seen 25 Oct 2026, Nov 2026 – Sep 2027 dates)",
+    "url": "https://www.swiss.com/lhg/sg/en/o-d/cy-cy/singapore-zurich"
+  },
+  "ca-cheapflights-2026-10": {
+    "label": "Air China SIN–PEK return via Cheapflights (updated 22 Oct 2026)",
+    "url": "https://www.cheapflights.com.sg/flights/Singapore-SIN/Beijing-BJS.CA.ksp"
+  },
+  "nh-lax-2026-10": {
+    "label": "ANA SG fares, SIN–LAX (seen 25 Oct 2026, Nov 2026 – Jan 2027)",
+    "url": "https://flights.ana.co.jp/en-sg/flights-from-singapore-to-los-angeles"
   }
 }

@@ -1,22 +1,19 @@
 [
-  { "carrier": "TK", "to": "IST", "via": [], "price": { "economy": 707 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "MUC", "via": ["IST"], "price": { "economy": 728 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "MXP", "via": ["IST"], "price": { "economy": 743 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "ZRH", "via": ["IST"], "price": { "economy": 745 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "BCN", "via": ["IST"], "price": { "economy": 745 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "CDG", "via": ["IST"], "price": { "economy": 777 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "LHR", "via": ["IST"], "price": { "economy": 871 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "AMS", "via": ["IST"], "price": { "economy": 890 }, "source": { "economy": "tk-deals-2026-10" } },
-  { "carrier": "TK", "to": "JFK", "via": ["IST"], "price": { "economy": 1328 }, "source": { "economy": "tk-deals-2026-10" } },
-
-  { "carrier": "LH", "to": "MUC", "via": [], "price": { "economy": null, "premium": null }, "seasonal": true },
-  { "carrier": "LX", "to": "ZRH", "via": [], "price": { "economy": null, "premium": null } },
-
-  { "carrier": "NH", "to": "NRT", "via": [], "price": { "economy": 749, "premium": null }, "source": { "economy": "nh-site-2026-10" } },
-  { "carrier": "NH", "to": "HND", "via": [], "price": { "economy": 1182, "premium": null }, "source": { "economy": "nh-site-2026-10" } },
-
-  { "carrier": "CA", "to": "PEK", "via": [], "price": { "economy": null } },
-
-  { "carrier": "NZ", "to": "AKL", "via": [], "price": { "economy": 983, "premium": 2352 }, "source": { "economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08" } },
-  { "carrier": "NZ", "to": "CHC", "via": [], "price": { "economy": 1288, "premium": 2355 }, "source": { "economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08" } }
+  {"carrier": "TK", "to": "IST", "via": [], "price": {"economy": 707}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "MUC", "via": ["IST"], "price": {"economy": 728}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "MXP", "via": ["IST"], "price": {"economy": 743}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "ZRH", "via": ["IST"], "price": {"economy": 745}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "BCN", "via": ["IST"], "price": {"economy": 745}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "CDG", "via": ["IST"], "price": {"economy": 777}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "LHR", "via": ["IST"], "price": {"economy": 871}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "AMS", "via": ["IST"], "price": {"economy": 890}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "TK", "to": "JFK", "via": ["IST"], "price": {"economy": 1328}, "source": {"economy": "tk-deals-2026-10"}},
+  {"carrier": "LH", "to": "MUC", "via": [], "price": {"economy": 1307, "premium": null}, "source": {"economy": "lh-site-2026-10"}},
+  {"carrier": "LX", "to": "ZRH", "via": [], "price": {"economy": 1263, "premium": null}, "source": {"economy": "lx-site-2026-10"}},
+  {"carrier": "NH", "to": "NRT", "via": [], "price": {"economy": 749, "premium": null}, "source": {"economy": "nh-site-2026-10"}},
+  {"carrier": "NH", "to": "HND", "via": [], "price": {"economy": 1182, "premium": null}, "source": {"economy": "nh-site-2026-10"}},
+  {"carrier": "NH", "to": "LAX", "via": ["HND"], "price": {"economy": 1188, "premium": null}, "source": {"economy": "nh-lax-2026-10"}},
+  {"carrier": "CA", "to": "PEK", "via": [], "price": {"economy": 425, "premium": null}, "source": {"economy": "ca-cheapflights-2026-10"}},
+  {"carrier": "NZ", "to": "AKL", "via": [], "price": {"economy": 983, "premium": 2352}, "source": {"economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08"}},
+  {"carrier": "NZ", "to": "CHC", "via": [], "price": {"economy": 1288, "premium": 2355}, "source": {"economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08"}}
 ]

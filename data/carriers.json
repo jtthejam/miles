@@ -157,7 +157,7 @@
         }
       ]
     },
-    "note": "Singapore–Munich LH768/769 was a seasonal weekly flight, 7 May – 23 Oct 2026. Lufthansa City flights do not earn.",
+    "note": "Singapore–Munich LH768/769 (A350): 5 weekly in winter 2026–27, daily 17 Jan – 17 Feb 2027. Lufthansa City flights do not earn.",
     "saleFare": {
       "economy": {
         "class": "V",
@@ -300,19 +300,12 @@
     "accrual": {
       "economy": [
         {
-          "pct": 110,
-          "classes": [
-            "G"
-          ]
-        },
-        {
           "pct": 100,
           "classes": [
             "Y",
             "B",
             "M",
-            "U",
-            "E"
+            "U"
           ]
         },
         {
@@ -324,15 +317,35 @@
           ]
         }
       ],
-      "premium": []
+      "premium": [
+        {
+          "pct": 110,
+          "classes": [
+            "G"
+          ]
+        },
+        {
+          "pct": 100,
+          "classes": [
+            "E"
+          ]
+        }
+      ]
     },
-    "note": "Booking classes not listed in the chart (e.g. K, L) earn nothing. Premium Economy not modelled on Singapore routes.",
+    "note": "Premium Economy classes are G (110%) and E (100%); Economy classes not in the chart (e.g. K, L) earn nothing.",
     "saleFare": {
       "economy": {
         "class": "Q",
         "family": "Discount Economy",
         "confidence": "assumed",
         "basis": "Air China doesn't publish sale-fare classes; lowest earning tier (H/Q/V, 50%) assumed. Unlisted classes earn nothing."
+      },
+      "premium": {
+        "class": "E",
+        "family": "Premium Economy (discounted)",
+        "confidence": "assumed",
+        "basis": "Air China Premium Economy books into G or E; the discounted E (100%) is assumed for sale fares. G earns 110%.",
+        "url": "https://www.expertflyer.com/info-airlines/air-china-fares"
       }
     }
   },
