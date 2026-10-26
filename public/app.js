@@ -186,14 +186,44 @@ async function loadSavedSearches() {
     const res = await (await fetch('/api/db/searches')).json();
     savedSearches = res.searches || [];
     meta.preliminaryDays = res.preliminaryDays || 14;
+    renderShareStatus(res);
   } catch { savedSearches = []; }
   const sel = $('saved-searches');
   sel.innerHTML = '<option value="">Choose a previous search…</option>' + savedSearches.map((s, i) =>
     `<option value="${i}">${esc(rangeLabel(s))} · searched ${esc(shortDate(s.lastSearched.slice(0, 10)))} · ${s.routes} route${s.routes === 1 ? '' : 's'}${s.ageDays > meta.preliminaryDays ? ' · preliminary' : ''}</option>`).join('');
   $('saved-wrap').hidden = !savedSearches.length;
+  $('share-help').hidden = !savedSearches.length; // nothing to share until you've searched
   // Show which saved search matches the dates on screen, if any.
   const cur = savedSearches.findIndex((s) => s.outbound === $('out-date').value && s.inbound === $('in-date').value && s.flex === Number($('flex-days').value));
   sel.value = cur >= 0 ? String(cur) : '';
+}
+
+function renderShareStatus(res) {
+  const a = res.autoShare || {};
+  const n = a.uncommitted;
+  $('share-status').textContent = n ? `· ${n} file${n === 1 ? '' : 's'} ready to send` : res.community && res.community.records ? `· ${fmt(res.community.records)} community prices loaded` : '';
+  $('share-auto').innerHTML = a.enabled
+    ? `<b>Automatic:</b> your saved prices are anonymised into <code>data/community/</code> once they're ${a.minAgeDays} days old (checked on startup and every 6 hours).` +
+      (n ? ` <b>${n} file${n === 1 ? '' : 's'}</b> waiting to be committed.` : n === 0 ? ' Nothing waiting to be committed.' : '')
+    : 'Automatic sharing is off (<code>MILES_AUTO_SHARE=0</code>). Use the button below to create a share file.';
+}
+
+async function sharePrices() {
+  const msg = $('share-msg');
+  msg.hidden = false; msg.textContent = 'Creating…';
+  try {
+    const res = await fetch('/api/db/share', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ minAgeDays: Number($('share-age').value) }) });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || `HTTP ${res.status}`);
+    msg.textContent = out.count
+      ? `Wrote ${out.count} anonymised price${out.count === 1 ? '' : 's'} to ${out.file}\n\nCheck the file, then send it as a pull request:\n` +
+        '  node scripts/share_prices.js --pr        (GitHub CLI)\nor\n  git checkout -b share-prices\n  git add data/community\n  git commit -m "Share prices"\n  git push -u origin share-prices\nthen open the pull request to jtthejam/miles on GitHub.'
+      : `Nothing new to share: prices must be at least ${out.minAgeDays} day${out.minAgeDays === 1 ? '' : 's'} old and not already in data/community.`;
+    refresh();
+    loadSavedSearches();
+  } catch (e) {
+    msg.textContent = e.message;
+  }
 }
 
 function useSavedSearch(s) {
@@ -218,6 +248,7 @@ function visibleRows() {
     .sort((a, b) => (key === 'priceSgd' ? val(a) - val(b) : val(b) - val(a)));
 }
 
+const reportsLabel = (n) => `${n} report${n === 1 ? '' : 's'}`;
 const PROVIDER_LABEL = { serpapi: 'SerpApi', 'fast-flights': 'fast-flights', 'google-flights': 'Google Flights' };
 
 // Earlier searches for this row in the current range, as a price reference (tooltip lines).
@@ -255,14 +286,19 @@ function render() {
       !r.eligible ? (r.partlyEligible ? `Partly earns: ${r.ineligibleReason}` : r.ineligibleReason) : '',
       r.seasonal ? 'Seasonal service' : '',
       r.priceFrom === 'search' && r.search.latest.preliminary ? `Preliminary price: searched ${ago(r.search.latest.ageDays)}` : '',
+      r.priceFrom === 'community' && r.community.latest.preliminary ? `Preliminary community price: searched ${ago(r.community.latest.ageDays)}` : '',
+      r.priceFrom === 'community' && r.community.latest.reports < 2 ? 'Community price from one report: check it' : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
     const fd = r.overridden ? fareDates[r.key] : null;
     const sl = r.priceFrom === 'search' ? r.search.latest : null;
+    const cl = r.priceFrom === 'community' ? r.community.latest : null;
     const title = [
       fd ? `${fd.provider === 'google-flights' ? 'From Google Flights' : 'Live fare'}, ${fd.outbound} to ${fd.inbound}${fd.provider === 'google-flights' ? '' : ` (${fd.provider})`}`
         : sl ? `Saved search: S$${fmt(sl.price)} for ${sl.outbound} to ${sl.inbound}, searched ${sl.searchedAt.slice(0, 10)} (${PROVIDER_LABEL[sl.provider] || sl.provider})${sl.preliminary ? ', preliminary' : ''}`
+        : cl ? `Community price (shared by other users): S$${fmt(cl.price)} for ${cl.outbound} to ${cl.inbound}, searched ${cl.searchedOn}, ${reportsLabel(cl.reports)}${cl.preliminary ? ', preliminary' : ''}`
         : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '',
       searchHistory(r),
+      r.community && r.priceFrom !== 'community' ? `Community reference: S$${fmt(r.community.latest.price)} for ${r.community.latest.outbound} to ${r.community.latest.inbound}, searched ${r.community.latest.searchedOn} (${reportsLabel(r.community.latest.reports)})` : '',
     ].filter(Boolean).join('\n');
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
@@ -277,7 +313,8 @@ function render() {
                  value="${r.priceSgd ?? ''}" data-key="${r.key}" title="${esc(title)}"
                  aria-label="Price for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${liveBtn}${gfBtn}
           ${fd ? `<span class="fare-dates">${shortRange(fd.outbound, fd.inbound)}</span>`
-            : sl ? `<span class="fare-dates${sl.preliminary ? ' prelim' : ''}">${shortRange(sl.outbound, sl.inbound)} · ${sl.preliminary ? `preliminary, ${ago(sl.ageDays)}` : ago(sl.ageDays)}</span>` : ''}
+            : sl ? `<span class="fare-dates${sl.preliminary ? ' prelim' : ''}">${shortRange(sl.outbound, sl.inbound)} · ${sl.preliminary ? `preliminary, ${ago(sl.ageDays)}` : ago(sl.ageDays)}</span>`
+            : cl ? `<span class="fare-dates community${cl.preliminary ? ' prelim' : ''}">community · ${shortRange(cl.outbound, cl.inbound)} · ${cl.preliminary ? `preliminary, ${ago(cl.ageDays)}` : ago(cl.ageDays)}</span>` : ''}
         </td>
         <td class="num mps">${r.milesPerSgd ? `<div class="bar" style="width:${(r.milesPerSgd / maxMps) * 100}%"></div><span>${r.milesPerSgd}</span>` : '—'}</td>
         <td class="num">${r.centsPerMile ?? '—'}</td>
@@ -408,6 +445,7 @@ function initDates() {
   });
   ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); refresh(); }));
   $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); refresh(); });
+  $('share-go').addEventListener('click', sharePrices);
   $('saved-searches').addEventListener('change', (e) => { const s = savedSearches[Number(e.target.value)]; if (e.target.value !== '' && s) useSavedSearch(s); });
   renderDates();
 }

@@ -21,6 +21,7 @@ esac
 `, { mode: 0o755 });
 fs.mkdirSync(DIR, { recursive: true });
 process.env.MILES_DB_DIR = DIR;
+process.env.MILES_COMMUNITY_DIR = path.join(tmp, 'community');
 process.env.MILES_CONFIG_DIR = path.join(tmp, '.local');
 process.env.PYTHON = fakePy;
 delete process.env.SERPAPI_KEY;
@@ -48,7 +49,7 @@ test.after(() => { server.close(); fs.rmSync(tmp, { recursive: true, force: true
 
 test('loads every .jsonl file in the folder; bad lines are skipped, not fatal', () => {
   const s = db.load();
-  assert.deepEqual(s, { files: 1, records: 1, skipped: 2 });
+  assert.deepEqual({ ...s, community: undefined }, { files: 1, records: 1, skipped: 2, community: undefined });
 });
 
 test('save appends to the month\'s file and never rewrites earlier lines', () => {

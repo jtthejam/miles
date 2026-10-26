@@ -12,6 +12,33 @@ const db = require('./lib/db');
 const { version } = require('./package.json');
 
 const PORT = Number(process.env.PORT) || 3000;
+// Automatic anonymised sharing: saved prices at least AUTO_SHARE_DAYS old are written to
+// data/community on startup and every 6 hours, ready to commit and send as a pull request.
+const AUTO_SHARE = process.env.MILES_AUTO_SHARE !== '0';
+const AUTO_SHARE_DAYS = 2;
+let lastShare = null;
+function autoShare() {
+  if (!AUTO_SHARE) return null;
+  try {
+    const out = db.share({ minAgeDays: AUTO_SHARE_DAYS });
+    lastShare = { at: new Date().toISOString(), ...out };
+    if (out.count) console.log(`Shared ${out.count} anonymised price(s) to ${out.file} (commit it and open a pull request to share)`);
+    return out;
+  } catch (e) {
+    lastShare = { at: new Date().toISOString(), error: e.message };
+    return null;
+  }
+}
+
+// Community files in data/community not yet committed to git (null if git isn't available).
+function uncommittedCommunity() {
+  return new Promise((resolve) => {
+    require('node:child_process').execFile('git', ['status', '--porcelain', '--', 'data/community'], { cwd: __dirname, timeout: 5000 }, (err, out) => {
+      if (err) return resolve(null);
+      resolve(String(out).split('\n').filter((l) => /\.jsonl$/.test(l.trim())).length);
+    });
+  });
+}
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json' };
 
@@ -50,12 +77,16 @@ async function handleApi(url, res) {
           classOverrides: parseJson(q.get('classes')),
           priceOverrides: parseJson(q.get('overrides')),
           searchPrices: range ? db.pricesForRange(range) : {},
+          communityPrices: range ? db.communityForRange(range) : {},
           roundTrip: q.get('roundTrip') !== 'false',
         }),
       });
     }
     case '/api/db/searches':
-      return sendJson(res, 200, { searches: db.searches(), ...db.stats(), dir: undefined });
+      return sendJson(res, 200, {
+        searches: db.searches(), ...db.stats(), dir: undefined,
+        autoShare: { enabled: AUTO_SHARE, minAgeDays: AUTO_SHARE_DAYS, last: lastShare, uncommitted: await uncommittedCommunity() },
+      });
     case '/api/live':
       try {
         // A route is picked by id ("SQ+LX:BOD"), or by carrier + dest for single-airline routes.
@@ -135,6 +166,17 @@ function serveStatic(url, res) {
 
 // Google Flights imports (from the bookmarklet, via the page) are saved here: all cells of a date
 // grid, or the cheapest result for the page's dates. Route details come from the data, not the client.
+// "Share prices": write your saved prices, anonymised, to data/community (this computer only).
+async function handleShare(req, res) {
+  if (!isLoopback(req)) return sendJson(res, 403, { error: 'Sharing can only be started on this computer' });
+  if (req.method !== 'POST') return sendJson(res, 405, { error: 'Method not allowed' });
+  if (req.headers['content-type']?.split(';')[0] !== 'application/json') return sendJson(res, 415, { error: 'Expected application/json' });
+  const { minAgeDays } = parseJson(await readBody(req));
+  const days = Math.max(0, Math.min(30, Number(minAgeDays ?? 2) || 0));
+  const out = db.share({ minAgeDays: days });
+  return sendJson(res, 200, { ...out, minAgeDays: days });
+}
+
 async function handleDbRecords(req, res) {
   if (req.method !== 'POST') return sendJson(res, 405, { error: 'Method not allowed' });
   if (req.headers['content-type']?.split(';')[0] !== 'application/json') return sendJson(res, 415, { error: 'Expected application/json' });
@@ -165,6 +207,7 @@ const server = http.createServer((req, res) => {
   const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   if (url.pathname === '/api/settings/serpapi') return handleSettings(req, res);
   if (url.pathname === '/api/db/records') return handleDbRecords(req, res);
+  if (url.pathname === '/api/db/share') return handleShare(req, res);
   if (req.method !== 'GET') { res.writeHead(405); return res.end(); }
   if (url.pathname.startsWith('/api/')) return handleApi(url, res);
   serveStatic(url, res);
@@ -172,12 +215,15 @@ const server = http.createServer((req, res) => {
 
 if (require.main === module) {
   const loadedDb = db.load(); // every *.jsonl in data/db
+  autoShare();
+  setInterval(autoShare, 6 * 3600e3).unref();
   live.checkFastFlights().then(() => {
     server.listen(PORT, process.env.HOST || '127.0.0.1', () => {
       const st = live.status();
       const how = st.provider === 'serpapi' ? 'SerpApi' : st.provider === 'fast-flights' ? 'fast-flights (no SerpApi key)' : 'off';
       console.log(`Miles Maximiser v${version} on http://localhost:${PORT} — live prices: ${how}`);
       console.log(`Price database: ${loadedDb.records} saved prices from ${loadedDb.files} file(s) in data/db${loadedDb.skipped ? ` (${loadedDb.skipped} unreadable lines skipped)` : ''}`);
+      console.log(`Community prices: ${loadedDb.community.records} from ${loadedDb.community.files} shared file(s) in data/community${loadedDb.community.skipped ? ` (${loadedDb.community.skipped} lines rejected)` : ''}`);
     });
   });
 }

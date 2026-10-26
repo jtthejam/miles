@@ -81,6 +81,23 @@
         If Google changes its page, it may stop working until the app is updated. Keep the airline filter set to one airline: miles depend on who flies you.</p>
     </details>
     <p id="gf-msg" class="gf-msg" role="status" hidden></p>
+    <details id="share-help" class="gf-help" hidden>
+      <summary>Sharing with other users (anonymised) <span id="share-status" class="hint"></span></summary>
+      <p id="share-auto"></p>
+      <p>Shared files keep only route, cabin, the dates priced, the price, where it came from and the <b>day</b> it was searched.
+        Your search ranges, search times and ids are left out, each date pair is merged to one price per day, and the order is shuffled.</p>
+      <p>To send them: commit <code>data/community/</code> and open a pull request to <code>jtthejam/miles</code>
+        (from your fork, if you can't push to it), or run <code>node scripts/share_prices.js --pr</code> with the GitHub CLI installed.
+        Pull the original repo to get everyone else's prices.</p>
+      <div class="key-row">
+        <label class="inline">Share now: prices at least
+          <select id="share-age"><option value="0">0</option><option value="2" selected>2</option><option value="7">7</option><option value="14">14</option></select>
+          days old</label>
+        <button type="button" id="share-go" class="ghost">Create share file now</button>
+      </div>
+      <p class="hint">Prices from Google Flights and SerpApi aren't licensed for redistribution; check their terms before sharing publicly.</p>
+      <pre id="share-msg" class="share-msg" hidden></pre>
+    </details>
     <form id="key-form" class="key-form" hidden autocomplete="off">
       <p class="key-why">For reliable live prices, add a free <b>SerpApi</b> key (250 searches/month).
         <a href="https://serpapi.com/users/sign_up" target="_blank" rel="noopener">Get a key</a> ·
