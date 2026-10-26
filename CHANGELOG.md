@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.10.1 — 2026-10-26
+
+### Fixed
+- Travel dates and flexibility can now be set without a SerpApi key or fast-flights. Previously they were hidden whenever ↻ was off, but **G** links and Google Flights imports use them too.
+- The hint under the dates now describes whichever price sources are available: ↻ (when on) and **G**, including how flexibility applies to each. ↻ shifts departure and return together; the date grid lets each move within ± flexibility.
+- With ↻ off, the status line points to **G**, and the "Free prices from Google Flights" steps open by default.
+
 ## v1.10.0 — 2026-10-25
 
 ### Added

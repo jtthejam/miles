@@ -292,13 +292,17 @@ function renderDates() {
   $('flex-days').disabled = !out;
   if (!out) $('flex-days').value = '0';
   $('dates-clear').hidden = !out && !$('in-date').value;
+  // Dates work with or without a live provider: G links and Google Flights imports use them too.
+  const live = !!meta.live.provider;
   const searches = 2 * flex + 1;
   const cost = flex && meta.live.provider === 'serpapi' ? ` Uses up to ${searches} SerpApi searches per ↻.` :
     flex ? ` Searches ${searches} date options per ↻, so it takes longer.` : '';
+  const gf = !out ? '' : flex
+    ? ` G opens Google Flights on these dates; with its Date grid open, the bookmark saves the cheapest departure and return each within ± ${flex} day${flex > 1 ? 's' : ''}.`
+    : ' G opens Google Flights on these dates, and the bookmark saves only prices for these exact dates.';
   $('date-hint').textContent = !out
-    ? 'Optional: add travel dates to price your trip. Without dates, ↻ checks a trip about 60 days out for 7 nights.'
-    : `↻ finds the lowest fare for ${datesLabel()}${flex ? ', keeping the same trip length' : ''}.${cost}`;
-  $('date-hint').hidden = !meta.live.provider;
+    ? `Optional: add travel dates to price your trip. Without dates, ${live ? '↻ and G check' : 'G checks'} a trip about 60 days out for 7 nights.`
+    : live ? `↻ finds the lowest fare for ${datesLabel()}${flex ? ', keeping the same trip length' : ''}.${cost}${gf}` : gf.trim();
   store.set(KEYS.dates, { outbound: out, inbound: $('in-date').value, flex });
 }
 
@@ -405,9 +409,9 @@ function renderLive() {
   const status = {
     serpapi: `via <b>SerpApi</b>${st.serpApiKey === 'env' ? ' (key from SERPAPI_KEY)' : ''}${st.fastFlights ? ' · fast-flights as backup' : ''}`,
     'fast-flights': 'via <b>fast-flights</b> (free, unofficial — may stop working)',
-  }[st.provider] || 'off — add a SerpApi key or install fast-flights (<code>pip install fast-flights</code>)';
+  }[st.provider] || '↻ off (add a SerpApi key or <code>pip install fast-flights</code>). Use <b>G</b> on a row for free Google Flights prices.';
   $('live-status').innerHTML = status;
-  $('live-dates').hidden = !st.provider;
+  $('gf-help').open = !st.provider || $('gf-help').open; // Google Flights is the way to get prices without a provider
   $('key-toggle').hidden = st.serpApiKey === 'env';
   $('key-toggle').textContent = st.serpApiKey ? 'Remove SerpApi key' : 'Add SerpApi key';
   if (st.serpApiKey) $('key-form').hidden = true;
