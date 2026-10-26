@@ -28,6 +28,10 @@
     "NZ": {
       "light": "#000000",
       "dark": "#ffffff"
+    },
+    "UA": {
+      "light": "#002244",
+      "dark": "#7fa3d9"
     }
   },
   "fairs": [

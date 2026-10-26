@@ -7,7 +7,7 @@ window.RouteMap = (() => {
   const SIN_ROT = [-103.9915, -20]; // globe start: Singapore centred, tilted to show the north
   const BINS = [4, 6, 8, 10]; // miles per SGD bins → ordinal blue ramp v0..v4
   // Carrier colours: categorical slots in fixed order, keyed by carrier code (never by rank).
-  const CARRIER_ORDER = ['SQ', 'TK', 'LH', 'LX', 'NH', 'CA', 'NZ'];
+  const CARRIER_ORDER = ['SQ', 'TK', 'LH', 'LX', 'NH', 'CA', 'NZ', 'UA'];
 
   let W = 960, H = 560;
   let kind = 'globe';

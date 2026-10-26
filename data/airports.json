@@ -256,5 +256,329 @@
     "region": "North Asia",
     "lat": 35.772,
     "lon": 140.3929
+  },
+  "BHX": {
+    "city": "Birmingham",
+    "region": "Europe",
+    "lat": 52.4539,
+    "lon": -1.748
+  },
+  "BER": {
+    "city": "Berlin",
+    "region": "Europe",
+    "lat": 52.3622,
+    "lon": 13.5007
+  },
+  "HAM": {
+    "city": "Hamburg",
+    "region": "Europe",
+    "lat": 53.6304,
+    "lon": 9.9882
+  },
+  "MRS": {
+    "city": "Marseille",
+    "region": "Europe",
+    "lat": 43.4393,
+    "lon": 5.2214
+  },
+  "LYS": {
+    "city": "Lyon",
+    "region": "Europe",
+    "lat": 45.7264,
+    "lon": 5.0908
+  },
+  "NAP": {
+    "city": "Naples",
+    "region": "Europe",
+    "lat": 40.886,
+    "lon": 14.2908
+  },
+  "VLC": {
+    "city": "Valencia",
+    "region": "Europe",
+    "lat": 39.4893,
+    "lon": -0.4816
+  },
+  "DUB": {
+    "city": "Dublin",
+    "region": "Europe",
+    "lat": 53.4213,
+    "lon": -6.2701
+  },
+  "LIS": {
+    "city": "Lisbon",
+    "region": "Europe",
+    "lat": 38.7813,
+    "lon": -9.1359
+  },
+  "LUX": {
+    "city": "Luxembourg",
+    "region": "Europe",
+    "lat": 49.3724,
+    "lon": 6.1216
+  },
+  "VIE": {
+    "city": "Vienna",
+    "region": "Europe",
+    "lat": 48.1103,
+    "lon": 16.5697
+  },
+  "OSL": {
+    "city": "Oslo",
+    "region": "Europe",
+    "lat": 60.1939,
+    "lon": 11.1004
+  },
+  "ARN": {
+    "city": "Stockholm",
+    "region": "Europe",
+    "lat": 59.6519,
+    "lon": 17.9186
+  },
+  "HEL": {
+    "city": "Helsinki",
+    "region": "Europe",
+    "lat": 60.3172,
+    "lon": 24.9633
+  },
+  "KEF": {
+    "city": "Reykjavik",
+    "region": "Europe",
+    "lat": 63.985,
+    "lon": -22.6056
+  },
+  "WAW": {
+    "city": "Warsaw",
+    "region": "Europe",
+    "lat": 52.1657,
+    "lon": 20.9671
+  },
+  "PRG": {
+    "city": "Prague",
+    "region": "Europe",
+    "lat": 50.1008,
+    "lon": 14.26
+  },
+  "BTS": {
+    "city": "Bratislava",
+    "region": "Europe",
+    "lat": 48.1702,
+    "lon": 17.2127
+  },
+  "BUD": {
+    "city": "Budapest",
+    "region": "Europe",
+    "lat": 47.4369,
+    "lon": 19.2556
+  },
+  "LJU": {
+    "city": "Ljubljana",
+    "region": "Europe",
+    "lat": 46.2237,
+    "lon": 14.4576
+  },
+  "ZAG": {
+    "city": "Zagreb",
+    "region": "Europe",
+    "lat": 45.7429,
+    "lon": 16.0688
+  },
+  "SJJ": {
+    "city": "Sarajevo",
+    "region": "Europe",
+    "lat": 43.8246,
+    "lon": 18.3315
+  },
+  "BEG": {
+    "city": "Belgrade",
+    "region": "Europe",
+    "lat": 44.8184,
+    "lon": 20.3091
+  },
+  "TGD": {
+    "city": "Podgorica",
+    "region": "Europe",
+    "lat": 42.3594,
+    "lon": 19.2519
+  },
+  "SKP": {
+    "city": "Skopje",
+    "region": "Europe",
+    "lat": 41.9616,
+    "lon": 21.6214
+  },
+  "TIA": {
+    "city": "Tirana",
+    "region": "Europe",
+    "lat": 41.4147,
+    "lon": 19.7206
+  },
+  "PRN": {
+    "city": "Pristina",
+    "region": "Europe",
+    "lat": 42.5728,
+    "lon": 21.0358
+  },
+  "ATH": {
+    "city": "Athens",
+    "region": "Europe",
+    "lat": 37.9364,
+    "lon": 23.9445
+  },
+  "SOF": {
+    "city": "Sofia",
+    "region": "Europe",
+    "lat": 42.6967,
+    "lon": 23.4114
+  },
+  "OTP": {
+    "city": "Bucharest",
+    "region": "Europe",
+    "lat": 44.5722,
+    "lon": 26.1022
+  },
+  "RMO": {
+    "city": "Chișinău",
+    "region": "Europe",
+    "lat": 46.9277,
+    "lon": 28.931
+  },
+  "TLL": {
+    "city": "Tallinn",
+    "region": "Europe",
+    "lat": 59.4133,
+    "lon": 24.8328
+  },
+  "RIX": {
+    "city": "Riga",
+    "region": "Europe",
+    "lat": 56.9236,
+    "lon": 23.9711
+  },
+  "VNO": {
+    "city": "Vilnius",
+    "region": "Europe",
+    "lat": 54.6341,
+    "lon": 25.2858
+  },
+  "MLA": {
+    "city": "Malta",
+    "region": "Europe",
+    "lat": 35.8575,
+    "lon": 14.4775
+  },
+  "LCA": {
+    "city": "Larnaca (Cyprus)",
+    "region": "Europe",
+    "lat": 34.8751,
+    "lon": 33.6249
+  },
+  "ESB": {
+    "city": "Ankara",
+    "region": "Europe",
+    "lat": 40.1281,
+    "lon": 32.9951
+  },
+  "EWR": {
+    "city": "New York (Newark)",
+    "region": "Americas",
+    "lat": 40.6925,
+    "lon": -74.1687
+  },
+  "ORD": {
+    "city": "Chicago",
+    "region": "Americas",
+    "lat": 41.9769,
+    "lon": -87.9082
+  },
+  "IAH": {
+    "city": "Houston",
+    "region": "Americas",
+    "lat": 29.9844,
+    "lon": -95.3414
+  },
+  "IAD": {
+    "city": "Washington",
+    "region": "Americas",
+    "lat": 38.9475,
+    "lon": -77.4599
+  },
+  "BOS": {
+    "city": "Boston",
+    "region": "Americas",
+    "lat": 42.3629,
+    "lon": -71.0064
+  },
+  "DFW": {
+    "city": "Dallas",
+    "region": "Americas",
+    "lat": 32.8972,
+    "lon": -97.0377
+  },
+  "MIA": {
+    "city": "Miami",
+    "region": "Americas",
+    "lat": 25.7954,
+    "lon": -80.2901
+  },
+  "DEN": {
+    "city": "Denver",
+    "region": "Americas",
+    "lat": 39.8617,
+    "lon": -104.6732
+  },
+  "HNL": {
+    "city": "Honolulu",
+    "region": "Americas",
+    "lat": 21.3178,
+    "lon": -157.9203
+  },
+  "ATL": {
+    "city": "Atlanta",
+    "region": "Americas",
+    "lat": 33.6367,
+    "lon": -84.4279
+  },
+  "LAS": {
+    "city": "Las Vegas",
+    "region": "Americas",
+    "lat": 36.0803,
+    "lon": -115.1524
+  },
+  "MCO": {
+    "city": "Orlando",
+    "region": "Americas",
+    "lat": 28.4294,
+    "lon": -81.309
+  },
+  "PHX": {
+    "city": "Phoenix",
+    "region": "Americas",
+    "lat": 33.4343,
+    "lon": -112.0116
+  },
+  "SAN": {
+    "city": "San Diego",
+    "region": "Americas",
+    "lat": 32.7336,
+    "lon": -117.1897
+  },
+  "PHL": {
+    "city": "Philadelphia",
+    "region": "Americas",
+    "lat": 39.8721,
+    "lon": -75.2407
+  },
+  "MSP": {
+    "city": "Minneapolis",
+    "region": "Americas",
+    "lat": 44.882,
+    "lon": -93.2218
+  },
+  "PDX": {
+    "city": "Portland",
+    "region": "Americas",
+    "lat": 45.5887,
+    "lon": -122.5969
   }
 }
