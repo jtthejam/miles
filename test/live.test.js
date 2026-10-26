@@ -13,6 +13,8 @@ fs.writeFileSync(fakePy, `#!/bin/sh
 # "python -c 'import fast_flights'" succeeds; "python ff_quote.py DEST CABIN OUT IN CARRIER" prints a quote.
 if [ "$1" = "-c" ]; then exit 0; fi
 if [ "$2" = "XXX" ]; then echo '{"error": "fast-flights failed: blocked"}'; exit 1; fi
+# Connecting route: the helper gets the connection as its 7th argument.
+if [ "$7" = "IST" ]; then echo '{"lowest": 1234, "average": 1300, "offers": 3}'; exit 0; fi
 # Date-dependent fares for flexible-date tests: cheapest departing 2027-03-03; 2027-03-04 fails.
 case "$4" in
   2027-03-03) echo '{"lowest": 1400, "average": 1500, "offers": 2}' ;;
@@ -205,4 +207,54 @@ test('/api/live accepts optional dates and flex', async () => {
   res = await fetch(`${base}/api/live?carrier=SQ&dest=JFK&cabin=economy&outbound=2027-03-01&flex=9`);
   assert.equal(res.status, 502);
   assert.match((await res.json()).error, /flex/);
+});
+
+test('connecting routes: SerpApi limits stops and keeps only offers via the row\'s hub', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  let params;
+  try {
+    global.fetch = async (url) => {
+      params = new URL(url).searchParams;
+      return { ok: true, json: async () => ({
+        price_insights: { lowest_price: 900 }, // covers every connection: must be ignored
+        best_flights: [{ price: 900, layovers: [{ id: 'FRA' }] }, { price: 1180, layovers: [{ id: 'IST' }] }],
+        other_flights: [{ price: 1250, layovers: [{ id: 'IST' }] }, { price: 1000, layovers: [{ id: 'IST' }, { id: 'MUC' }] }],
+      }) };
+    };
+    live._test.cache.clear();
+    const out = await live.lowestReturnFare({ ...q(), dest: 'BOD', carrier: 'TK', cabin: 'economy', via: ['IST'] });
+    assert.equal(params.get('stops'), '2'); // SerpApi: 1 stop or fewer
+    assert.equal(params.get('include_airlines'), 'TK');
+    assert.equal(out.lowest, 1180);
+    assert.equal(out.offers, 2);
+    assert.equal(out.otherConnections, 2);
+
+    // Nonstop rows are unchanged: no stops parameter, price_insights still used.
+    live._test.cache.clear();
+    const direct = await live.lowestReturnFare({ ...q(), dest: 'IST', carrier: 'TK', cabin: 'economy' });
+    assert.equal(params.get('stops'), null);
+    assert.equal(direct.lowest, 900);
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
+
+test('connecting routes: fast-flights gets the connection; cache keeps routes apart', async () => {
+  live._test.cache.clear();
+  const viaIst = await live.lowestReturnFare({ ...q(), dest: 'BOD', carrier: 'TK', cabin: 'economy', via: ['IST'] });
+  assert.equal(viaIst.lowest, 1234);
+  const any = await live.lowestReturnFare({ ...q(), dest: 'BOD', carrier: 'TK', cabin: 'economy' });
+  assert.equal(any.lowest, 1650);
+  await assert.rejects(live.lowestReturnFare({ ...q(), via: ['ist'] }), /via/);
+});
+
+test('/api/live uses the route\'s connection from the data', async () => {
+  if (!server.listening) await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  live._test.cache.clear();
+  const out = await (await fetch(`${base}/api/live?carrier=TK&dest=BOD&cabin=economy&outbound=2027-03-01&inbound=2027-03-08`)).json();
+  assert.equal(out.lowest, 1234);
+  assert.deepEqual(out.via, ['IST']);
 });

@@ -149,3 +149,12 @@ test('sales calendar data is complete', () => {
   }
   assert.ok(cal.sales.every((s) => s.url.startsWith('https://')));
 });
+
+test('Bordeaux connecting routes: distance per segment, Economy only on SWISS', () => {
+  const rows = buildRows(data).filter((r) => r.code === 'BOD');
+  assert.deepEqual(rows.map((r) => [r.key, r.via.join()]).sort(), [['LX:BOD:economy', 'ZRH'], ['TK:BOD:economy', 'IST']]);
+  for (const r of rows) {
+    const direct = buildRows(data).find((x) => x.carrier === r.carrier && x.code === r.via[0] && x.cabin === 'economy');
+    assert.ok(r.distance > direct.distance, `${r.key} counts both segments`);
+  }
+});

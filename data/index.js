@@ -24,6 +24,10 @@ for (const [code, c] of Object.entries(carriers)) {
 for (const f of fares) {
   if (!carriers[f.carrier]) throw new Error(`Unknown carrier ${f.carrier}`);
   for (const ap of [f.to, ...f.via]) if (!airports[ap]) throw new Error(`Unknown airport ${ap}`);
+  for (const cab of f.cabins || []) {
+    if (!carriers[f.carrier].accrual[cab]?.length) throw new Error(`${f.carrier}:${f.to} lists cabin ${cab} the airline doesn't have`);
+  }
+  if (f.via.includes(f.to) || f.via.includes('SIN')) throw new Error(`Bad connection on ${f.carrier}:${f.to}`);
   for (const [cab, cls] of Object.entries(f.class || {})) {
     if (!carriers[f.carrier].accrual[cab]?.length) throw new Error(`${f.carrier} has no ${cab} cabin`);
     if (!/^[A-Z]$/.test(cls)) throw new Error(`Bad class ${cls} on ${f.carrier}:${f.to}`);

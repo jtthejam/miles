@@ -47,6 +47,12 @@
     "lat": 50.0379,
     "lon": 8.5622
   },
+  "BOD": {
+    "city": "Bordeaux",
+    "region": "Europe",
+    "lat": 44.8283,
+    "lon": -0.7156
+  },
   "MUC": {
     "city": "Munich",
     "region": "Europe",

@@ -93,6 +93,12 @@ Keep Google's airline filter on one airline: miles depend on who flies you, so t
 
 The server can't fetch the date grid itself: Google requires a per-request BotGuard token that only a real browser session produces.
 
+## Connecting routes
+
+A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed per segment flown. Live prices, **G** links and bookmark imports stick to that connection (airline filter + stop limit, and layover checks where the source reports them). Add `"cabins": ["economy"]` when the connecting flight has no Premium Economy.
+
+Single-airline only for now: every segment must be on the row's airline.
+
 ## API
 
 | Endpoint | Purpose |

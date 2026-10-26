@@ -51,9 +51,13 @@ async function handleApi(url, res) {
         const carrier = String(q.get('carrier') || 'SQ').toUpperCase();
         if (!data.carriers[carrier]) throw new Error(`Unsupported carrier ${carrier}`);
         // Dates are optional; flex (0-3) searches that many days either side, keeping trip length.
+        const dest = String(q.get('dest') || '').toUpperCase();
+        // The route's connection (e.g. IST for TK to BOD) comes from the data, so searches match the row's miles.
+        const route = data.fares.find((f) => f.carrier === carrier && f.to === dest);
         const out = await live.lowestFareInWindow({
           carrier,
-          dest: String(q.get('dest') || '').toUpperCase(),
+          dest,
+          via: route ? route.via : [],
           cabin: q.get('cabin'),
           outbound: q.get('outbound') || undefined,
           inbound: q.get('inbound') || undefined,

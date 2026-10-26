@@ -73,10 +73,12 @@
   // ---------- links ----------
 
   // Round trip SIN ⇄ dest on one airline (accrual depends on the operating carrier), 1 adult.
-  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, cabin }) {
+  // maxStops pins connecting routes: with a one-airline filter, "TK, at most 1 stop" to BOD can only be via IST.
+  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, cabin, maxStops = null }) {
     if (!SEAT[cabin]) throw new Error('cabin must be economy or premium');
     const leg = (date, from, to) => [
       ...strField(2, date),
+      ...(maxStops != null ? intField(5, maxStops) : []),
       ...(carrier ? strField(6, carrier) : []),
       ...bytesField(13, strField(2, from)),
       ...bytesField(14, strField(2, to)),
@@ -103,6 +105,7 @@
       const l = readMessage(b);
       return {
         date: l[2] ? text(l[2][0]) : null,
+        maxStops: l[5] ? l[5][0] : null,
         airlines: (l[6] || []).map(text),
         from: airport(l[13] && l[13][0]),
         to: airport(l[14] && l[14][0]),
@@ -165,6 +168,11 @@
     if (!ctx.carriers[carrier]) return { error: `${carrier} isn't one of the airlines in this app.` };
     if (!dest || !cabin) return { error: 'Couldn\'t tell the route or cabin from that page. Open it with the "Google Flights" link on a row, then try again.' };
 
+    // Connecting routes (e.g. TK to BOD via IST): miles assume that connection.
+    const via = (ctx.routes && ctx.routes[`${carrier}:${dest}`]) || [];
+    if (via.length && legs.length && legs.some((l) => l.maxStops == null || l.maxStops > via.length)) {
+      notes.push(`Google's stops filter is off, so prices may include connections other than ${via.join(', ')}`);
+    }
     const outbound = out.date || null, inbound = back.date || null;
     const anchorOut = outbound || iso(Date.now()), anchorIn = inbound || anchorOut;
 
@@ -184,6 +192,16 @@
       if ((payload.list || []).length && !list.length) return { error: 'Prices aren\'t in SGD. Use the link from the app (it sets SGD), or change currency to SGD.' };
       // Keep only results that name the airline (Google sometimes lists partner-operated legs).
       let own = list.filter((r) => String(r[2]).toLowerCase().includes(name));
+      // r[3] = stops on the outbound (newer bookmarklets). Connecting rows need exactly that many.
+      const stopsKnown = own.filter((r) => typeof r[3] === 'number');
+      if (stopsKnown.length) {
+        const right = own.filter((r) => r[3] === via.length);
+        if (!right.length) {
+          return { error: via.length ? `None of the results on that page have exactly ${via.length} stop${via.length > 1 ? 's' : ''} (this route connects via ${via.join(', ')}).` : 'None of the results on that page are nonstop.' };
+        }
+        if (right.length < own.length) notes.push(`${own.length - right.length} with a different number of stops skipped`);
+        own = right;
+      }
       if (list.length && !own.length) return { error: `None of the results on that page are ${ctx.carriers[carrier].name} flights.` };
       if (NO_ACCRUAL[carrier]) {
         const earning = own.filter((r) => !NO_ACCRUAL[carrier].test(r[2]));

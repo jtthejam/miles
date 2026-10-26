@@ -27,8 +27,8 @@ test('links encode exactly like fast-flights', () => {
 test('decodes our links and Google\'s rewritten ones', () => {
   assert.deepEqual(G.decodeTfs(FF_SQ_PREMIUM), {
     legs: [
-      { date: '2026-12-01', airlines: ['SQ'], from: 'SIN', to: 'LHR' },
-      { date: '2026-12-08', airlines: ['SQ'], from: 'LHR', to: 'SIN' },
+      { date: '2026-12-01', maxStops: null, airlines: ['SQ'], from: 'SIN', to: 'LHR' },
+      { date: '2026-12-08', maxStops: null, airlines: ['SQ'], from: 'LHR', to: 'SIN' },
     ],
     seat: 2,
     trip: 1,
@@ -132,4 +132,35 @@ test('real Google Flights date grid payload (Lufthansa SIN-LHR, captured 2026-10
   assert.deepEqual([exact.lowest, exact.inbound, exact.considered], [1034, '2026-12-08', 1]);
   const late = G.interpretImport(fx, { carriers, window: { outbound: '2026-12-03', inbound: '2026-12-10', flex: 1 } });
   assert.deepEqual([late.lowest, late.outbound, late.considered], [1085, '2026-12-03', 9]); // 2-4 Dec × 9-11 Dec
+});
+
+test('connecting routes: links limit stops (byte-identical to fast-flights max_stops)', () => {
+  // fast-flights 3.1.0, FlightQuery(..., airlines=["TK"], max_stops=1) SIN⇄BOD 2026-12-01/08 economy
+  const FF_TK_BOD_1STOP = 'GiASCjIwMjYtMTItMDEoATICVEtqBRIDU0lOcgUSA0JPRBogEgoyMDI2LTEyLTA4KAEyAlRLagUSA0JPRHIFEgNTSU5CAQFIAZgBAQ==';
+  const bod = { dest: 'BOD', outbound: '2026-12-01', inbound: '2026-12-08', carrier: 'TK', cabin: 'economy' };
+  assert.equal(G.encodeTfs({ ...bod, maxStops: 1 }), FF_TK_BOD_1STOP);
+  assert.deepEqual(G.decodeTfs(FF_TK_BOD_1STOP).legs.map((l) => l.maxStops), [1, 1]);
+  assert.equal(G.decodeTfs(FF_SQ_PREMIUM).legs[0].maxStops, null);
+});
+
+test('connecting routes: import keeps results with the route\'s stops and flags a removed stops filter', () => {
+  const tk = { ...carriers, TK: { name: 'Turkish Airlines' } };
+  const routes = { 'TK:BOD': ['IST'], 'SQ:LHR': [] };
+  const bod = { dest: 'BOD', outbound: '2026-12-01', inbound: '2026-12-08', carrier: 'TK', cabin: 'economy' };
+  const list = [['980', 'Singapore dollars', 'Turkish Airlines', 2], ['1180', 'Singapore dollars', 'Turkish Airlines', 1], ['1250', 'Singapore dollars', 'Turkish Airlines', 1]];
+
+  const pinned = G.interpretImport({ href: href(G.encodeTfs({ ...bod, maxStops: 1 })), list }, { carriers: tk, routes });
+  assert.equal(pinned.lowest, 1180);
+  assert.deepEqual(pinned.notes, ['1 with a different number of stops skipped']);
+
+  const unpinned = G.interpretImport({ href: href(G.encodeTfs(bod)), list }, { carriers: tk, routes });
+  assert.equal(unpinned.lowest, 1180);
+  assert.match(unpinned.notes[0], /stops filter is off.*IST/);
+
+  const none = G.interpretImport({ href: href(G.encodeTfs(bod)), list: [list[0]] }, { carriers: tk, routes });
+  assert.match(none.error, /exactly 1 stop .*via IST/);
+
+  // Nonstop rows: connecting results don't count (their miles would differ).
+  const sq = G.interpretImport({ href: href(FF_SQ_PREMIUM), list: [['1063', 'Singapore dollars', 'Singapore Airlines and Austrian', 2], ['1719', 'Singapore dollars', 'Singapore Airlines', 0]] }, { carriers, routes });
+  assert.equal(sq.lowest, 1719);
 });

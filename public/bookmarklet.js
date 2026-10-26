@@ -26,8 +26,9 @@
   if (!grid.length) {
     els = document.querySelectorAll('[aria-label^="From "]');
     for (i = 0; i < els.length; i++) {
-      m = /^From\s([\d,]+)\s(.+?)\sround\strip\stotal\..*?flights?\swith\s(.+?)\./.exec(els[i].getAttribute('aria-label'));
-      if (m) list.push([m[1], sp(m[2]), sp(m[3])]);
+      m = /^From\s([\d,]+)\s(.+?)\sround\strip\stotal\.\s*(?:(Nonstop)|(\d+)\sstops?)?.*?flights?\swith\s(.+?)\./.exec(els[i].getAttribute('aria-label'));
+      // [price, currency, airlines, stops]; stops is null if Google's wording changes.
+      if (m) list.push([m[1], sp(m[2]), sp(m[5]), m[3] ? 0 : m[4] ? +m[4] : null]);
     }
   }
 

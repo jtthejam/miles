@@ -335,7 +335,8 @@ function linkDates() {
   return { outbound: out, inbound: $('in-date').value || addDaysIso(out, 7) };
 }
 
-const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carrier: r.carrier, cabin: r.cabin, ...linkDates() });
+// Connecting rows limit stops to the route's connections, which (with the airline filter) pins the hub.
+const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carrier: r.carrier, cabin: r.cabin, maxStops: r.via && r.via.length ? r.via.length : null, ...linkDates() });
 
 $('rows').addEventListener('click', (e) => {
   const a = e.target.closest('a.gf');
@@ -372,6 +373,7 @@ async function importFromHash() {
   const pending = store.get(KEYS.gfPending, null);
   const res = window.GFLink.interpretImport(payload, {
     carriers: meta.carriers,
+    routes: Object.fromEntries(rows.map((r) => [`${r.carrier}:${r.code}`, r.via])),
     pending: pending && Date.now() - pending.at < 6 * 3600e3 ? pending : null,
     window: $('out-date').value ? { outbound: $('out-date').value, inbound: $('in-date').value, flex: $('flex-days').value } : null,
   });

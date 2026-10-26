@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.11.0 — 2026-10-26
+
+### Added
+- **Bordeaux (BOD)** on single-airline connections:
+  - Turkish Airlines via Istanbul, Economy (6,891 mi; sale class V earns 25%).
+  - SWISS via Zurich, Economy only (6,882 mi; 50%). Zurich–Bordeaux is short-haul, with no Premium Economy.
+  - No advertised fares yet, so both show "add": price them with **G**, ↻ or your own quote.
+- Routes can list the cabins they're sold in (`"cabins": ["economy"]` in `data/fares.*.json`).
+
+### Changed
+- **Searches now stick to the route's connection.** A row's miles assume its connection (e.g. SIN–IST–BOD), so:
+  - **G links** limit Google Flights to that many stops on that airline. For these routes, that leaves only the intended hub.
+  - **SerpApi** limits stops and keeps only offers whose layovers match the route. Its `price_insights` lowest price, which covers every connection, is no longer used for connecting rows.
+  - **fast-flights** limits stops and keeps only itineraries that fly the route's airports.
+  - **Bookmark imports** from the results list keep only results with the route's number of stops: none for nonstop rows, one for one-stop rows. If you turn off Google's stops filter, the app says so.
+- Nonstop rows ignore connecting results in imports, since those earn different miles. For example, an SQ + Austrian two-stop itinerary no longer prices the SQ London nonstop row.
+
+### Not included
+- **Lufthansa to Bordeaux via Munich**: Munich–Bordeaux is flown at least partly by Lufthansa City Airlines, which earns no KrisFlyer miles. That needs per-segment earning, planned for v1.12.0 (mixed airlines).
+
+### Technical
+- `/api/live` takes the connection from the route data. The response includes `via`, and `otherConnections` (SerpApi offers dropped for a different connection).
+- `scripts/ff_quote.py` takes an optional 7th argument, VIA.
+- `GFLink.encodeTfs({ maxStops })` encodes byte-identically to fast-flights `max_stops`; `decodeTfs` returns `maxStops` per leg.
+- The bookmarklet now also sends each result's number of stops. Bookmarks dragged before v1.11.0 still work but skip the stops check, so drag it again.
+- Data validation: route cabins must exist for the airline; connections can't be Singapore or the destination.
+- 6 new tests.
+
 ## v1.10.1 — 2026-10-26
 
 ### Fixed
