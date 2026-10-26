@@ -4,3 +4,6 @@ node_modules/
 .env
 .local/
 __pycache__/
+
+# Price database: your search history (see data/db/README.md)
+data/db/*.jsonl

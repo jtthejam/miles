@@ -105,6 +105,10 @@ A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed
 
 Each segment earns at its own airline's rate for its booking class (pick per airline in the Earn column). Searches filter to the route's airlines and check who flies each segment.
 
+## Price database
+
+Every price found (↻ searches and Google Flights imports) is saved in `data/db/*.jsonl`, tagged with the search range, the dates priced and when it was searched. Nothing is deleted, and all files are loaded on startup. Rows show the latest saved price for your dates, with earlier searches in the tooltip. Prices older than 14 days are marked preliminary. Pick earlier date ranges from **Saved searches** under Live prices. A ↻ reuses a price saved in the last 24 hours instead of searching again. Details: [`data/db/README.md`](data/db/README.md).
+
 ## Route network
 
 `data/fares.network.json` holds unpriced connecting routes to the main European and US cities. `scripts/build_network.py` builds it from dated research files (`data/research/YYYY-MM-DD/*.json`), which record which hub serves which city and who operates it, with sources. Only routes where every segment was verified are included. Lufthansa routes flown partly by Lufthansa City Airlines (no KrisFlyer miles) are left out.
@@ -121,6 +125,8 @@ python3 scripts/build_network.py data/research/2026-10-26
 | `GET /api/routes?tiers={"SQ:economy":"75-HMW"}&roundTrip=true&overrides={"CA:PEK:economy":420}` | Ranked rows |
 | `GET /api/live?carrier=TK&dest=LHR&cabin=economy&outbound=2027-03-01&inbound=2027-03-10&flex=2` | Live lowest fare (SerpApi, else fast-flights). Dates optional; `flex` 0-3 days. Returns the cheapest trip's `lowest`, `outbound`, `inbound`, plus `byDate` |
 | `POST /api/settings/serpapi` `{"key": "…"}` / `DELETE` | Save / remove the SerpApi key (local machine only) |
+| `GET /api/db/searches` | Saved search ranges (newest first) |
+| `POST /api/db/records` `{"route", "cabin", "range", "prices": [{outbound, inbound, price}]}` | Save Google Flights import prices |
 
 ## Limits
 

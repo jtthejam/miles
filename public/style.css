@@ -321,3 +321,7 @@ label.cls.seg .al { font-size: 10px; font-weight: 650; color: var(--muted); marg
 #rows td:first-child { white-space: normal; max-width: 200px; }
 #rows td:first-child .route { white-space: normal; }
 #rows td:first-child .route .seg-al { white-space: nowrap; }
+
+/* Saved search prices: age under the price; older than 14 days = preliminary */
+.fare-dates.prelim { color: #b06d00; }
+#saved-wrap select { max-width: 330px; }

@@ -59,9 +59,18 @@ const grid = [
 test('date grid import: cheapest cell, nearest to the asked date on ties', () => {
   const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), grid }, { carriers });
   assert.deepEqual(
-    { ...r, notes: undefined },
-    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined },
+    { ...r, notes: undefined, allCells: undefined, pageRange: undefined },
+    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined, allCells: undefined, pageRange: undefined },
   );
+  // For the price database: every cell, tagged with the page's range (± 3 days for the grid).
+  assert.equal(r.allCells.length, 6);
+  assert.deepEqual(r.pageRange, { outbound: '2026-12-01', inbound: '2026-12-08', flex: 3 });
+});
+
+test('date grid import keeps every cell for the database, even outside your dates', () => {
+  const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), grid }, { carriers, window: { outbound: '2026-12-01', inbound: '2026-12-08', flex: 0 } });
+  assert.equal(r.considered, 1);
+  assert.equal(r.allCells.length, 6);
 });
 
 test('date grid import keeps to the app\'s travel dates ± flexibility', () => {

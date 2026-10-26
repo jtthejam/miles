@@ -26,6 +26,8 @@ case "$4" in
 esac
 `, { mode: 0o755 });
 process.env.MILES_CONFIG_DIR = path.join(tmp, '.local');
+process.env.MILES_DB_DIR = path.join(tmp, 'db'); // never touch the real data/db
+process.env.MILES_DB_REUSE_HOURS = '0'; // these tests exercise the providers; reuse is tested in db.test.js
 process.env.PYTHON = fakePy;
 delete process.env.SERPAPI_KEY;
 

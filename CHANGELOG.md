@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.14.0 — 2026-10-27
+
+### Added
+- **Price database** in `data/db/`: every price the app finds is saved as JSON lines (`prices-YYYY-MM.jsonl`). This covers ↻ searches (SerpApi or fast-flights, including searches that found no fares) and Google Flights imports (every cell of a date grid, even outside your dates).
+  - Each record is tagged with the **search range** you asked for (departure, return, ± flexibility), the **dates the price is for**, and **when it was searched**.
+  - **Nothing is ever deleted.** Files are append-only, so earlier searches stay available as a price reference.
+  - **On startup the app loads every `.jsonl` file in `data/db/`**, so you can copy files over from another computer. The server log says how many prices it loaded.
+- **Saved prices in the table**: each row shows the current price from saved searches for your date range: the newest price for each date pair, then the cheapest of those.
+  - Under the price: its dates and age ("1 Dec – 8 Dec · 2 days ago").
+  - Hover the price for **every earlier search** of that route in the range, with the lowest seen.
+  - Your own typed price still wins; advertised fares show when there's no saved search.
+- **Preliminary prices**: searches more than 14 days old are flagged "Preliminary price: searched N days ago". Newer searches are preferred when both exist.
+- **Saved searches** picker under Live prices: lists every date range you've searched (newest first, with search date, number of routes, and "preliminary" when old). Choosing one loads its dates and saved prices. Past ranges stay viewable.
+- On startup with no dates set, the app opens your **most recent saved search**.
+- **Fewer searches**: a ↻ reuses a saved price less than 24 hours old for the same route, cabin and dates instead of searching again (`MILES_DB_REUSE_HOURS` changes this; `0` turns it off). With ± flexibility, only the date pairs without a recent price are searched.
+
+### Changed
+- ↻ and Google Flights results are no longer stored in the browser; they go to the database. Older browser-stored live prices are replaced the next time you search that row.
+- `data/db/*.jsonl` is gitignored (personal search history); `data/db/README.md` explains the format.
+
+### API
+- `GET /api/routes` takes `outbound`, `inbound`, `flex` and returns saved prices for that range (`priceFrom`: yours / search / advertised, and `search`: latest, lowest, history).
+- `GET /api/db/searches`: saved search ranges.
+- `POST /api/db/records`: save Google Flights import prices. Route details come from the data, not the request.
+- `GET /api/live` responses add `reused` (date pairs answered from the database) and `searchId`.
+
+### Technical
+- `lib/db.js`: load, append, range query, reuse, saved-search list. No dependencies, plain JSONL.
+- 10 new tests. The test suite uses its own temporary database folder.
+
 ## v1.13.0 — 2026-10-26
 
 ### Added

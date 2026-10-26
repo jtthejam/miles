@@ -123,6 +123,14 @@ async function init() {
 
   initDates();
   initLive();
+  // Price database: list saved searches; with no dates set, open the most recent saved search.
+  await loadSavedSearches();
+  if (!$('out-date').value && savedSearches.length) {
+    const s = savedSearches[0];
+    $('out-date').value = s.outbound; $('in-date').value = s.inbound; $('flex-days').value = String(Math.min(3, s.flex));
+    renderDates();
+    $('saved-searches').value = '0';
+  }
 
   ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', render));
   $('roundtrip').addEventListener('change', refresh);
@@ -152,14 +160,48 @@ async function init() {
   window.addEventListener('hashchange', importFromHash);
 }
 
+// Rows include saved search prices (data/db) for the current date range.
+let range = null; // the range the server resolved (default ~60 days out, 7 nights, when no dates are set)
 async function refresh() {
   const q = new URLSearchParams({
     classes: JSON.stringify(classOverrides),
     roundTrip: $('roundtrip').checked,
     overrides: JSON.stringify(overrides),
+    ...dateParams(),
   });
-  rows = (await (await fetch(`/api/routes?${q}`)).json()).rows;
+  const res = await (await fetch(`/api/routes?${q}`)).json();
+  rows = res.rows;
+  range = res.range;
   render();
+}
+
+// ---------- Saved searches (price database) ----------
+
+let savedSearches = [];
+const rangeLabel = (s) => `${shortRange(s.outbound, s.inbound)} ${s.outbound.slice(0, 4)}${s.flex ? ` ± ${s.flex}` : ''}`;
+const ago = (d) => (d <= 0 ? 'today' : d === 1 ? '1 day ago' : `${d} days ago`);
+
+async function loadSavedSearches() {
+  try {
+    const res = await (await fetch('/api/db/searches')).json();
+    savedSearches = res.searches || [];
+    meta.preliminaryDays = res.preliminaryDays || 14;
+  } catch { savedSearches = []; }
+  const sel = $('saved-searches');
+  sel.innerHTML = '<option value="">Choose a previous search…</option>' + savedSearches.map((s, i) =>
+    `<option value="${i}">${esc(rangeLabel(s))} · searched ${esc(shortDate(s.lastSearched.slice(0, 10)))} · ${s.routes} route${s.routes === 1 ? '' : 's'}${s.ageDays > meta.preliminaryDays ? ' · preliminary' : ''}</option>`).join('');
+  $('saved-wrap').hidden = !savedSearches.length;
+  // Show which saved search matches the dates on screen, if any.
+  const cur = savedSearches.findIndex((s) => s.outbound === $('out-date').value && s.inbound === $('in-date').value && s.flex === Number($('flex-days').value));
+  sel.value = cur >= 0 ? String(cur) : '';
+}
+
+function useSavedSearch(s) {
+  $('out-date').value = s.outbound;
+  $('in-date').value = s.inbound;
+  $('flex-days').value = String(Math.min(3, s.flex));
+  renderDates();
+  refresh();
 }
 
 function visibleRows() {
@@ -174,6 +216,17 @@ function visibleRows() {
     .filter((r) => (cabin === 'all' || r.cabin === cabin) && (region === 'all' || r.region === region))
     .filter((r) => !pricedOnly || r.priceSgd != null)
     .sort((a, b) => (key === 'priceSgd' ? val(a) - val(b) : val(b) - val(a)));
+}
+
+const PROVIDER_LABEL = { serpapi: 'SerpApi', 'fast-flights': 'fast-flights', 'google-flights': 'Google Flights' };
+
+// Earlier searches for this row in the current range, as a price reference (tooltip lines).
+function searchHistory(r) {
+  if (!r.search || !r.search.history.length) return '';
+  const lines = r.search.history.slice(0, 6).map((h) =>
+    `${h.searchedAt.slice(0, 10)}: S$${fmt(h.price)} (${shortRange(h.outbound, h.inbound)}, ${PROVIDER_LABEL[h.provider] || h.provider})${h.preliminary ? ' · preliminary' : ''}`);
+  const more = r.search.searches > 6 ? `\n…and ${r.search.searches - 6} earlier` : '';
+  return `Searches for these dates (newest first; lowest S$${fmt(r.search.lowest.price)}):\n${lines.join('\n')}${more}`;
 }
 
 function render() {
@@ -201,9 +254,16 @@ function render() {
     const flags = [
       !r.eligible ? (r.partlyEligible ? `Partly earns: ${r.ineligibleReason}` : r.ineligibleReason) : '',
       r.seasonal ? 'Seasonal service' : '',
+      r.priceFrom === 'search' && r.search.latest.preliminary ? `Preliminary price: searched ${ago(r.search.latest.ageDays)}` : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
     const fd = r.overridden ? fareDates[r.key] : null;
-    const title = fd ? `${fd.provider === 'google-flights' ? 'From Google Flights' : 'Live fare'}, ${fd.outbound} to ${fd.inbound}${fd.provider === 'google-flights' ? '' : ` (${fd.provider})`}` : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '';
+    const sl = r.priceFrom === 'search' ? r.search.latest : null;
+    const title = [
+      fd ? `${fd.provider === 'google-flights' ? 'From Google Flights' : 'Live fare'}, ${fd.outbound} to ${fd.inbound}${fd.provider === 'google-flights' ? '' : ` (${fd.provider})`}`
+        : sl ? `Saved search: S$${fmt(sl.price)} for ${sl.outbound} to ${sl.inbound}, searched ${sl.searchedAt.slice(0, 10)} (${PROVIDER_LABEL[sl.provider] || sl.provider})${sl.preliminary ? ', preliminary' : ''}`
+        : r.source ? `Source: ${r.source.label}` : r.overridden ? 'Your price' : '',
+      searchHistory(r),
+    ].filter(Boolean).join('\n');
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
         <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span></td>
@@ -216,7 +276,8 @@ function render() {
           <input class="price${r.overridden ? ' edited' : ''}" type="number" min="1" step="1" placeholder="add"
                  value="${r.priceSgd ?? ''}" data-key="${r.key}" title="${esc(title)}"
                  aria-label="Price for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${liveBtn}${gfBtn}
-          ${fd ? `<span class="fare-dates">${shortRange(fd.outbound, fd.inbound)}</span>` : ''}
+          ${fd ? `<span class="fare-dates">${shortRange(fd.outbound, fd.inbound)}</span>`
+            : sl ? `<span class="fare-dates${sl.preliminary ? ' prelim' : ''}">${shortRange(sl.outbound, sl.inbound)} · ${sl.preliminary ? `preliminary, ${ago(sl.ageDays)}` : ago(sl.ageDays)}</span>` : ''}
         </td>
         <td class="num mps">${r.milesPerSgd ? `<div class="bar" style="width:${(r.milesPerSgd / maxMps) * 100}%"></div><span>${r.milesPerSgd}</span>` : '—'}</td>
         <td class="num">${r.centsPerMile ?? '—'}</td>
@@ -343,10 +404,11 @@ function initDates() {
   $('out-date').addEventListener('change', () => {
     // Keep return on or after departure.
     if ($('in-date').value && $('out-date').value && $('in-date').value < $('out-date').value) $('in-date').value = '';
-    renderDates(); render();
+    renderDates(); refresh();
   });
-  ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); render(); }));
-  $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); render(); });
+  ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); refresh(); }));
+  $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); refresh(); });
+  $('saved-searches').addEventListener('change', (e) => { const s = savedSearches[Number(e.target.value)]; if (e.target.value !== '' && s) useSavedSearch(s); });
   renderDates();
 }
 
@@ -410,11 +472,31 @@ async function importFromHash() {
     gfMessage(`${esc(res.carriers.map((c) => meta.carriers[c].name).join(' + '))} ${CABIN_LABEL[res.cabin]} to ${esc(res.dest)} isn't a route in the table, so nothing was saved.`, 'err');
     return;
   }
-  overrides[key] = res.lowest; // return fare, like the other sources
-  fareDates[key] = { outbound: res.outbound, inbound: res.inbound, provider: 'google-flights' };
+  // Save everything the page priced to the price database (all date-grid cells), tagged with the
+  // page's search range. Falls back to a price kept in this browser if the server can't save it.
+  let savedToDb = false;
+  try {
+    const r2 = await fetch('/api/db/records', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ route: res.routeId, cabin: res.cabin, source: res.source, range: res.pageRange, prices: res.allCells }),
+    });
+    savedToDb = r2.ok;
+  } catch { savedToDb = false; }
+  if (savedToDb) {
+    if (fareDates[key]) { delete overrides[key]; delete fareDates[key]; }
+  } else {
+    overrides[key] = res.lowest; // return fare, like the other sources
+    fareDates[key] = { outbound: res.outbound, inbound: res.inbound, provider: 'google-flights' };
+  }
   store.set(KEYS.prices, overrides);
   store.set(KEYS.fareDates, fareDates);
+  // Show the import's range if your dates aren't set, so the saved prices are what you see.
+  if (!$('out-date').value && res.pageRange) {
+    $('out-date').value = res.pageRange.outbound; $('in-date').value = res.pageRange.inbound;
+    renderDates();
+  }
   await refresh();
+  loadSavedSearches();
   const how = res.source === 'grid' ? `cheapest of ${res.considered} date${res.considered === 1 ? '' : 's'} in the date grid` : 'cheapest result on the page';
   gfMessage(`Saved <b>S$${fmt(res.lowest)}</b> for ${esc(row.city)} ${res.dest} · ${esc(row.carrierName)} · ${CABIN_LABEL[res.cabin]}, ` +
     `${shortRange(res.outbound, res.inbound)} (${how}${res.notes.length ? `; ${esc(res.notes.join('; '))}` : ''}).`, 'ok');
@@ -497,11 +579,14 @@ $('rows').addEventListener('click', async (e) => {
     if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));
-    overrides[btn.dataset.key] = res.lowest;
-    fareDates[btn.dataset.key] = { outbound: res.outbound, inbound: res.inbound, provider: res.provider };
+    // The server saved this search to the price database; the row now shows it from there.
+    // An older price kept in this browser (pre-v1.14 live results) would hide it, so drop that.
+    if (fareDates[btn.dataset.key]) { delete overrides[btn.dataset.key]; delete fareDates[btn.dataset.key]; }
     store.set(KEYS.prices, overrides);
     store.set(KEYS.fareDates, fareDates);
+    if (res.reused) console.info(`${res.reused} of ${res.searched} date options came from saved searches (no search spent)`);
     await refresh();
+    loadSavedSearches();
   } catch (err) {
     btn.textContent = '!'; btn.title = err.message; btn.disabled = false;
     alert(`${dest} ${CABIN_LABEL[cabin]} (${carrier}): ${err.message}`);

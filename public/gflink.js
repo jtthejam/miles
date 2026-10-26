@@ -235,6 +235,9 @@
       cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]) })).filter((c) => c.price);
     }
     if (!cells.length) return { error: 'No prices found on that page. Wait for results to load (or open the Date grid), then click the bookmark again.' };
+    // Everything the page priced, saved to the price database even if outside your current dates.
+    // Results lists hold one date pair, so only their cheapest result is kept.
+    const allCells = source === 'grid' ? cells.slice() : [cells.slice().sort((a, b) => a.price - b.price)[0]];
 
     // Keep to the user's travel dates ± flexibility, when set. The grid varies departure and return
     // independently, so both may move within the window.
@@ -255,7 +258,9 @@
     const target = w && w.outbound ? w.outbound : anchorOut;
     const best = cells.slice().sort((a, b) => a.price - b.price ||
       Math.abs(dayDiff(a.outbound, target)) - Math.abs(dayDiff(b.outbound, target)))[0];
-    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, source, considered: cells.length, notes };
+    // The search range the page covers: its dates, ± 3 days for the 7 × 7 date grid.
+    const pageRange = { outbound: outbound || best.outbound, inbound: inbound || best.inbound, flex: source === 'grid' ? 3 : 0 };
+    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, source, considered: cells.length, notes, allCells, pageRange };
   }
 
   // Routes as [{ routeId, carriers, dest, via }]; also accepts the v1.11 map { "TK:BOD": ["IST"] }.
