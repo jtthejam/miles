@@ -1,0 +1,844 @@
+{
+ "TK": {
+  "SIN-IST": {
+   "served": true,
+   "note": "TK54/TK55 SIN-IST daily",
+   "source": "https://aviability.com/en/flight/tk55-turkish-airlines/sin-ist"
+  },
+  "LHR": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MAN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BHX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BER": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "HAM": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MUC": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "CDG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MRS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LYS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "FCO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MXP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "NAP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BCN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "VLC": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "DUB": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LIS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "AMS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BRU": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LUX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "VIE": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "CPH": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "OSL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ARN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "HEL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "KEF": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "WAW": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "PRG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BTS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Listed as Terminated on TK destinations page",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BUD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LJU": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ZAG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SJJ": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BEG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "TGD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SKP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "TIA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "PRN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ATH": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SOF": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "OTP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "RMO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "TLL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "RIX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "VNO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MLA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LCA": {
+   "served": false,
+   "seasonal": false,
+   "note": "TK does not serve Republic of Cyprus (only Ercan/Northern Cyprus)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ESB": {
+   "served": true,
+   "seasonal": false,
+   "note": "Domestic IST-ESB operated by TK",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "JFK": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "EWR": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LAX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SFO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ORD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SEA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "IAH": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "IAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "BOS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "DFW": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MIA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "DEN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "HNL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "ATL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "LAS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MCO": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "PHX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "SAN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "PHL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "MSP": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "PDX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not listed as a TK destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  }
+ },
+ "CA": {
+  "SIN-PEK": {
+   "served": true,
+   "note": "CA969/970 + second daily, PEK-SIN 2x daily NW26",
+   "source": "https://www.aeroroutes.com/eng/260703-canw26int"
+  },
+  "LHR": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA937 PEK-LHR operating daily Oct 2026",
+   "source": "https://www.flightradar24.com/data/flights/ca937"
+  },
+  "MAN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BHX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BER": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not served (only closed Tegel listed)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "HAM": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MUC": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA961/962 PEK-MUC operating Oct 2026",
+   "source": "https://www.planemapper.com/flights/CA962"
+  },
+  "CDG": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA933 PEK-CDG operating Oct 2026",
+   "source": "https://www.planemapper.com/flights/CA933"
+  },
+  "MRS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "LYS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "FCO": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-FCO daily, extra freq summer 2026",
+   "source": "https://www.aeroroutes.com/eng/260212-cans26eu"
+  },
+  "MXP": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA949 PEK-MXP daily Oct 2026 (CA also flies PKX-MXP)",
+   "source": "https://www.flightradar24.com/data/flights/ca949"
+  },
+  "NAP": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA907 PEK-MAD (continues to GRU) 4 weekly NW26",
+   "source": "https://www.aeroroutes.com/eng/260703-canw26int"
+  },
+  "BCN": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA845 PEK-BCN daily Oct 2026",
+   "source": "https://www.flightradar24.com/data/flights/ca845"
+  },
+  "VLC": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "DUB": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "LIS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "AMS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BRU": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-BRU launched 24 Mar 2026, daily (also TFU-BRU)",
+   "source": "https://www.aeroroutes.com/eng/251202-cans26bru"
+  },
+  "LUX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "VIE": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-VIE 6-9 weekly NW26",
+   "source": "https://www.aeroroutes.com/eng/260919-ca4q26eu"
+  },
+  "CPH": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-CPH daily",
+   "source": "https://www.aeroroutes.com/eng/260212-cans26eu"
+  },
+  "OSL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "ARN": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-ARN 7-10 weekly NW26",
+   "source": "https://www.aeroroutes.com/eng/260703-canw26int"
+  },
+  "HEL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "KEF": {
+   "served": true,
+   "seasonal": false,
+   "note": "One-stop PEK-CPH-KEF (5th freedom), 3 weekly A330-300, starts 26 Oct 2026; no nonstop",
+   "source": "https://aviationnews.eu/news/2026/08/air-china-to-launch-beijing-copenhagen-reykjavik-route-with-intra-european-fifth-freedom-flights/"
+  },
+  "WAW": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-WAW daily NW26",
+   "source": "https://www.aeroroutes.com/eng/260703-canw26int"
+  },
+  "PRG": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BTS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BUD": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-BUD 6-7 weekly",
+   "source": "https://www.aeroroutes.com/eng/260919-ca4q26eu"
+  },
+  "LJU": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "ZAG": {
+   "served": true,
+   "seasonal": false,
+   "note": "One-stop PEK-OTP-ZAG, 3 weekly A330-200, from 4 Sep 2026; no nonstop",
+   "source": "https://www.aeroroutes.com/eng/260702-casep26eu"
+  },
+  "SJJ": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "BEG": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "TGD": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "SKP": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "TIA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "PRN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "ATH": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-ATH CA863/864, 4-5 weekly summer 2026",
+   "source": "https://www.aeroroutes.com/eng/260226-cans26ath"
+  },
+  "SOF": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "OTP": {
+   "served": true,
+   "seasonal": false,
+   "note": "PEK-OTP nonstop 3 weekly (continues to ZAG), resumed 4 Sep 2026",
+   "source": "https://www.aeroroutes.com/eng/260702-casep26eu"
+  },
+  "RMO": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "TLL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "RIX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "VNO": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MLA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "LCA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "ESB": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "JFK": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA981/982 PEK-JFK operating Oct 2026",
+   "source": "https://www.planemapper.com/flights/CA981"
+  },
+  "EWR": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "LAX": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA983 PEK-LAX operating Oct 2026",
+   "source": "https://www.planemapper.com/flights/CA983"
+  },
+  "SFO": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA985/986 PEK-SFO; latest flight seen 7 Oct 2026 (low frequency)",
+   "source": "https://www.planemapper.com/flights/CA986"
+  },
+  "ORD": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "SEA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "IAH": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "IAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "CA817 PEK-IAD ~2 weekly Oct 2026",
+   "source": "https://www.planemapper.com/flights/CA817"
+  },
+  "BOS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "DFW": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MIA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "DEN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "HNL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "ATL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "LAS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MCO": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "PHX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "SAN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "PHL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "MSP": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "PDX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  }
+ }
+}

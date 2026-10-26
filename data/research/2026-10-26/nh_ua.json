@@ -1,0 +1,474 @@
+{
+ "NH": {
+  "SIN-NRT": {
+   "served": true,
+   "flights": "NH801/802 daily year-round; NH803/804 daily seasonal (Apr 20-May 8 and from Sep 1 2026)",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf",
+   "source2": "https://www.ana.co.jp/es/mx/the-ana-experience/corp_info/pr20260818/"
+  },
+  "SIN-HND": {
+   "served": true,
+   "flights": "NH841/844 and NH843/842, 2x daily",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "premiumEconomyUS": [
+   "JFK",
+   "ORD",
+   "SFO",
+   "HNL"
+  ],
+  "premiumEconomyNote": "Confirmed: JFK (HND, all 777-300ER), ORD and SFO (777-300ER on select HND and NRT frequencies; both old and new 777 layouts carry PE), HNL (NRT A380, 73 PE seats). LAX/IAH/SEA/IAD are 787-operated; some ANA 787-9 layouts have PE but per-route fit not confirmed -> excluded. Sources: https://onemileatatime.com/guides/all-nippon-airways-new-777-routes/ , https://upgradedpoints.com/travel/airlines/ana-us-routes-plane-types/",
+  "JFK": {
+   "HND": true,
+   "NRT": false,
+   "note": "HND NH110/109 and NH160/159",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "EWR": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "LAX": {
+   "HND": true,
+   "NRT": true,
+   "note": "HND NH126/125, NH106/105; NRT NH6/5",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "SFO": {
+   "HND": true,
+   "NRT": true,
+   "note": "HND NH108/107; NRT NH8/7",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "ORD": {
+   "HND": true,
+   "NRT": true,
+   "note": "HND NH112/111; NRT NH12/11",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "SEA": {
+   "HND": true,
+   "NRT": false,
+   "note": "HND NH118/117; SEA Wikipedia confirms HND only",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "IAH": {
+   "HND": true,
+   "NRT": false,
+   "note": "HND NH114/113",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "IAD": {
+   "HND": true,
+   "NRT": false,
+   "note": "HND NH102/101",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "BOS": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "DFW": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "MIA": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "DEN": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "HNL": {
+   "HND": true,
+   "NRT": true,
+   "note": "HND NH186/185; NRT NH184/183 (A380) and NH182/181 (3-7/wk)",
+   "source": "https://www.anahd.co.jp/group/en/pr/pdf/20260203.pdf"
+  },
+  "ATL": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "LAS": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "MCO": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "PHX": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "SAN": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "PHL": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "MSP": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  },
+  "PDX": {
+   "HND": false,
+   "NRT": false,
+   "note": "No ANA passenger service (ANA FY2026 schedule lists no such route; MIA terminated, NCA freighter-only to DFW)",
+   "source": "https://en.wikipedia.org/wiki/List_of_All_Nippon_Airways_destinations"
+  }
+ },
+ "UA": {
+  "fromSIN": [
+   {
+    "to": "SFO",
+    "note": "2x daily 787-9: UA1/UA29 SFO-SIN, UA2/UA28 SIN-SFO; no other UA SIN routes",
+    "source": "https://mainlymiles.com/2026/05/11/united-expands-polaris-2-0-to-all-singapore-flights-from-august/"
+   }
+  ],
+  "fromHND": [
+   {
+    "to": "SFO",
+    "source": "https://www.tokyo-haneda-airport.com/airlines/united-airlines"
+   },
+   {
+    "to": "LAX",
+    "source": "https://www.tokyo-haneda-airport.com/airlines/united-airlines"
+   },
+   {
+    "to": "ORD",
+    "source": "https://www.tokyo-haneda-airport.com/airlines/united-airlines"
+   },
+   {
+    "to": "EWR",
+    "source": "https://www.tokyo-haneda-airport.com/airlines/united-airlines"
+   },
+   {
+    "to": "IAD",
+    "source": "https://www.tokyo-haneda-airport.com/airlines/united-airlines"
+   }
+  ],
+  "fromNRT": [
+   {
+    "to": "SFO",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   },
+   {
+    "to": "LAX",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   },
+   {
+    "to": "EWR",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   },
+   {
+    "to": "DEN",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   },
+   {
+    "to": "IAH",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   },
+   {
+    "to": "ORD",
+    "source": "https://en.wikipedia.org/wiki/Narita_International_Airport"
+   }
+  ],
+  "tokyoNote": "HND also GUM. NRT-ORD begins 24-25 Oct 2026 (https://united.mediaroom.com/2026-05-14-United-Adds-Nonstop-Service-to-Sapporo,-New-Flight-Between-Chicago-and-Tokyo-Narita). United: NRT served from 6 of 7 continental hubs (all but IAD). No UA IAH-HND (ANA flies it). Counts United Express as United.",
+  "JFK": {
+   "SFO": false,
+   "ORD": false,
+   "IAD": false,
+   "IAH": false,
+   "EWR": false,
+   "DEN": false,
+   "LAX": false,
+   "note": "United has no JFK service (left Oct 2022; JetBlue deal return planned 2027).",
+   "source": "https://en.wikipedia.org/wiki/John_F._Kennedy_International_Airport"
+  },
+  "EWR": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Newark_Liberty_International_Airport"
+  },
+  "LAX": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Los_Angeles_International_Airport"
+  },
+  "SFO": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "United hub.",
+   "source": "https://en.wikipedia.org/wiki/San_Francisco_International_Airport"
+  },
+  "ORD": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "ORD Wikipedia page unreachable; ORD column derived from reverse direction (every other airport page lists UA to ORD).",
+   "source": "https://en.wikipedia.org/wiki/San_Francisco_International_Airport"
+  },
+  "SEA": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Seattle%E2%80%93Tacoma_International_Airport"
+  },
+  "IAH": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/George_Bush_Intercontinental_Airport"
+  },
+  "IAD": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Dulles_International_Airport"
+  },
+  "BOS": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Logan_International_Airport"
+  },
+  "DFW": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Dallas_Fort_Worth_International_Airport"
+  },
+  "MIA": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Miami_International_Airport"
+  },
+  "DEN": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Denver_International_Airport"
+  },
+  "HNL": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "EWR and IAH seasonal.",
+   "source": "https://en.wikipedia.org/wiki/Daniel_K._Inouye_International_Airport"
+  },
+  "ATL": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": false,
+   "note": "All hubs except LAX; IAD/EWR extra seasonal Express.",
+   "source": "https://en.wikipedia.org/wiki/Hartsfield%E2%80%93Jackson_Atlanta_International_Airport"
+  },
+  "LAS": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Harry_Reid_International_Airport"
+  },
+  "MCO": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Orlando_International_Airport"
+  },
+  "PHX": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "LAX also United Express.",
+   "source": "https://en.wikipedia.org/wiki/Phoenix_Sky_Harbor_International_Airport"
+  },
+  "SAN": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": true,
+   "note": "LAX also served by United Express.",
+   "source": "https://en.wikipedia.org/wiki/San_Diego_International_Airport"
+  },
+  "PHL": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": false,
+   "EWR": false,
+   "DEN": true,
+   "LAX": false,
+   "note": "IAD is United Express. EWR: EWR page lists PHL but PHL page does not (likely bus/Landline) -> false. IAH: PHL page lists IAH but IAH page does not -> conflicting, marked false.",
+   "source": "https://en.wikipedia.org/wiki/Philadelphia_International_Airport"
+  },
+  "MSP": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": false,
+   "note": "IAD is United Express only; EWR seasonal mainline + Express.",
+   "source": "https://en.wikipedia.org/wiki/Minneapolis%E2%80%93Saint_Paul_International_Airport"
+  },
+  "PDX": {
+   "SFO": true,
+   "ORD": true,
+   "IAD": true,
+   "IAH": true,
+   "EWR": true,
+   "DEN": true,
+   "LAX": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Portland_International_Airport"
+  }
+ },
+ "fareClasses": {
+  "premiumPlus": [
+   "O",
+   "A",
+   "R"
+  ],
+  "premiumPlusAward": "ON",
+  "basicEconomy": "N",
+  "lowestEconomy": [
+   "L",
+   "K",
+   "G"
+  ],
+  "economyOrderHighToLow": [
+   "Y",
+   "B",
+   "M",
+   "E",
+   "U",
+   "H",
+   "Q",
+   "V",
+   "W",
+   "S",
+   "T",
+   "L",
+   "K",
+   "G"
+  ],
+  "economyAward": [
+   "YN",
+   "XN",
+   "X"
+  ],
+  "source": "https://thepointsguy.com/airline/united-fare-classes/"
+ },
+ "researchedOn": "2026-10-26"
+}

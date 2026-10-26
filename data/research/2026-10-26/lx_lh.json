@@ -1,0 +1,1416 @@
+{
+ "LX": {
+  "SIN-ZRH": {
+   "served": true,
+   "note": "SWISS daily, 777-300ER (has Premium Economy)",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SQ SIN-ZRH": {
+   "served": true,
+   "note": "Singapore Airlines listed at ZRH",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "premiumEconomyUS": [
+   "LAX",
+   "SFO",
+   "BOS",
+   "ORD"
+  ],
+  "premiumEconomyUSNote": "PE exists on all 777-300ER, A340-300 and A350-900; NOT on A330-300. LAX/SFO=777-300ER, BOS=A350-900 (from 29 Mar 2026), ORD=LX8/9 777-300ER (other ORD rotation may be A330/A340). IAD=A330-300 (no PE). JFK/EWR/MIA aircraft not verified from a current source -> excluded (possible false negatives; JFK/MIA historically had some 777 rotations). Sources: https://www.swiss.com/es/en/fly/on-board/travel-classes/swiss-premium-economy , https://www.aeroroutes.com/eng/260330-lxns26inc , https://www.aeroroutes.com/eng/260520-lxnw26inc",
+  "LHR": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MAN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BHX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BER": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "HAM": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MUC": {
+   "served": true,
+   "seasonal": false,
+   "note": "Also LH/EN operate ZRH-MUC",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "CDG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MRS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LYS": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not in SWISS ZRH list",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "FCO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MXP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "NAP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BCN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "VLC": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "DUB": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LIS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "AMS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BRU": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LUX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "VIE": {
+   "served": false,
+   "seasonal": false,
+   "note": "ZRH-VIE flown by Austrian (OS), not LX",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "CPH": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "OSL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ARN": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "HEL": {
+   "served": false,
+   "seasonal": false,
+   "note": "Finnair operates; not SWISS",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "KEF": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "WAW": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "PRG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BTS": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BUD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LJU": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ZAG": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated by SWISS (Croatia Airlines operates)",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SJJ": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BEG": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "TGD": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SKP": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "TIA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "PRN": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not in current SWISS ZRH list (older lists had it); likely GVA-only or other carriers",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ATH": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SOF": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "OTP": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "RMO": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "TLL": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "RIX": {
+   "served": false,
+   "seasonal": false,
+   "note": "Terminated by SWISS",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "VNO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MLA": {
+   "served": true,
+   "seasonal": true,
+   "note": "Seasonal (summer) per ZRH table",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LCA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not served by SWISS from ZRH",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ESB": {
+   "served": false,
+   "seasonal": false,
+   "note": "Not served",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "JFK": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "EWR": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LAX": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SFO": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ORD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SEA": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "IAH": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "IAD": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "BOS": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "DFW": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MIA": {
+   "served": true,
+   "seasonal": false,
+   "note": "",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "DEN": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "HNL": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "ATL": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "LAS": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MCO": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "PHX": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "SAN": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "PHL": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "MSP": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "PDX": {
+   "served": false,
+   "seasonal": false,
+   "note": "No SWISS ZRH service listed",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  }
+ },
+ "LH": {
+  "SIN-MUC": {
+   "served": true,
+   "operator": "LH",
+   "note": "LH768/769 (extra weekly frequency 7 May-23 Oct 2026)",
+   "source": "https://business.lufthansagroup.com/gb/en/program/experts/news/lufthansa-group-airlines-expand-capacity-in-march"
+  },
+  "SIN-FRA": {
+   "served": true,
+   "operator": "LH",
+   "note": "LH780/781 daily 747-400 per flightmapper; Singapore listed under LH at FRA. Also SQ-operated codeshares (LH97xx) which are SQ flights.",
+   "source": "https://info.flightmapper.net/route/Lufthansa_LH_FRA_SIN"
+  },
+  "_note": "Lufthansa CityLine (CL) ceased flying 18 Apr 2026 (https://www.airlineratings.com/articles/lufthansa-cityline-ceases-operations-amid-group-restructuring-), so no CL operator remains. 'mixed' = some rotations VL (no KrisFlyer miles) and/or EN. Wikipedia airport tables do not split operator per flight; FRA table has no VL row so VL involvement at FRA comes from news sources.",
+  "LHR": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL operates some rotations (5-7 daily) from 2026",
+    "source": "https://frankfurtflyer.de/lufthansa-city-airlines-plant-16-neue-strecken-ab-frankfurt-und-muenchen/"
+   }
+  },
+  "MAN": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL from 9 Feb 2026 (6 weekly)",
+    "source": "https://reisetopia.de/news/lufthansa-city-airlines-februar-2026-frankfurt/amp/"
+   }
+  },
+  "BHX": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BER": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL twice daily from 10 Feb 2026",
+    "source": "https://reisetopia.de/news/lufthansa-city-airlines-februar-2026-frankfurt/amp/"
+   }
+  },
+  "HAM": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "Listed under LH at MUC; VL also operates some domestic HAM flying - operator may be mixed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL shared from 29 Mar 2026",
+    "source": "https://frankfurtflyer.de/lufthansa-city-airlines-plant-16-neue-strecken-ab-frankfurt-und-muenchen/"
+   }
+  },
+  "MUC": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Same airport (hub)",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "CDG": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 1 daily from 2026",
+    "source": "https://frankfurtflyer.de/lufthansa-city-airlines-plant-16-neue-strecken-ab-frankfurt-und-muenchen/"
+   }
+  },
+  "MRS": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "Listed under LH (table typo 'Milan–Linate Marseille')",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 19 weekly from 25 Oct 2026",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   }
+  },
+  "LYS": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "Seasonal LH + VL 1 weekly; seasonal",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "FCO": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "MXP": {
+   "MUC": {
+    "served": true,
+    "operator": "EN",
+    "note": "Air Dolomiti only (not in LH mainline MUC list)",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "NAP": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "MAD": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 2 daily on some rotations from 2026",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BCN": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "VLC": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH listed; VL from 19 Feb 2026 - mainline share unclear, may be VL-only",
+    "source": "https://reisetopia.de/news/lufthansa-city-airlines-februar-2026-frankfurt/amp/"
+   }
+  },
+  "DUB": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LIS": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "AMS": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL (shared, from 29 Mar 2026) + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BRU": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LUX": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti (seasonal)",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "VIE": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH list at MUC (Austrian operates)",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "CPH": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL operates some rotations (13 weekly) from 2026",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "OSL": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "ARN": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "Listed as 'Stockholm'",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "Stockholm–Arlanda",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "HEL": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed; VL ~2 daily",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 3 daily from 25 Oct 2026",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   }
+  },
+  "KEF": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "Reykjavík–Keflavík",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "WAW": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH list on MUC Wikipedia table; may be a table omission (false negative possible)",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "PRG": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BTS": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "BUD": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 2 weekly on some rotations",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LJU": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Seasonal LH listed on MUC table, but Apr 2026 CityLine shutdown consolidated LJU away from FRA/MUC https://blog.wego.com/lufthansa-shuts-down-cityline/",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Listed on FRA Wikipedia table but consolidated away from FRA/MUC after CityLine shutdown Apr 2026 https://blog.wego.com/lufthansa-shuts-down-cityline/",
+    "source": ""
+   }
+  },
+  "ZAG": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + Air Dolomiti (EN begins 25 Oct 2026)",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "SJJ": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BEG": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "TGD": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "LH serves Tivat (TIV) seasonal, not Podgorica",
+    "source": ""
+   }
+  },
+  "SKP": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "TIA": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "PRN": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "ATH": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "SOF": {
+   "MUC": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH + VL both listed",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "OTP": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "mixed",
+    "note": "LH; VL 2 daily from 25 Oct 2026",
+    "source": "https://www.airliners.de/lufthansa-city-airlines-16-verbindungen-maerz/85750"
+   }
+  },
+  "RMO": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "Chișinău",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "TLL": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "RIX": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "VNO": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "MLA": {
+   "MUC": {
+    "served": true,
+    "operator": "VL",
+    "note": "Listed only under Lufthansa City Airlines at MUC -> no KrisFlyer miles",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LCA": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "ESB": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "JFK": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "EWR": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LAX": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "SFO": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "ORD": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "SEA": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "IAH": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "IAD": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "BOS": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "DFW": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "MIA": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "DEN": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "HNL": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "ATL": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Frankfurt_Airport"
+   }
+  },
+  "LAS": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not LH (Discover/Condor)",
+    "source": ""
+   }
+  },
+  "MCO": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not LH (Discover/Condor operate FRA-MCO)",
+    "source": ""
+   }
+  },
+  "PHX": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "SAN": {
+   "MUC": {
+    "served": true,
+    "operator": "LH",
+    "note": "",
+    "source": "https://en.wikipedia.org/wiki/Munich_Airport"
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "PHL": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "MSP": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  },
+  "PDX": {
+   "MUC": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   },
+   "FRA": {
+    "served": false,
+    "operator": "none",
+    "note": "Not in LH/VL/EN lists at this hub",
+    "source": ""
+   }
+  }
+ }
+}

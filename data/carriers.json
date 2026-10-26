@@ -421,5 +421,80 @@
         "url": "https://www.airnewzealand.com.sg/what-is-my-booking-class"
       }
     }
+  },
+  "UA": {
+    "name": "United",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "E",
+            "H",
+            "M",
+            "U",
+            "Y"
+          ]
+        },
+        {
+          "pct": 75,
+          "classes": [
+            "Q",
+            "V",
+            "W"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "L",
+            "S",
+            "T"
+          ]
+        },
+        {
+          "pct": 25,
+          "classes": [
+            "G",
+            "K"
+          ]
+        },
+        {
+          "pct": 10,
+          "classes": [
+            "N"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 100,
+          "classes": [
+            "A",
+            "O",
+            "R"
+          ]
+        }
+      ]
+    },
+    "note": "KrisFlyer chart lists Premium Economy and Economy together; Premium Plus classes O/A/R (100%) are assigned to Premium Economy. Basic Economy (N) earns 10%.",
+    "saleFare": {
+      "economy": {
+        "class": "G",
+        "family": "Economy (lowest standard fare)",
+        "confidence": "assumed",
+        "basis": "United doesn't publish sale-fare classes; L, K and G are its lowest standard Economy classes, and G (25%) is assumed as the conservative case. Basic Economy (N) earns only 10%: pick N if your fare is Basic Economy.",
+        "url": "https://thepointsguy.com/guide/united-fare-classes/"
+      },
+      "premium": {
+        "class": "O",
+        "family": "Premium Plus",
+        "confidence": "assumed",
+        "basis": "United Premium Plus books into O, A or R; all earn 100% with KrisFlyer.",
+        "url": "https://thepointsguy.com/guide/united-fare-classes/"
+      }
+    },
+    "noAdvertisedFare": "No Singapore-origin United fare in SGD was found published (checked 26 Oct 2026; deals found were US-origin, in USD). Price United routes with G, the refresh button or your own quote."
   }
 }

@@ -105,6 +105,14 @@ A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed
 
 Each segment earns at its own airline's rate for its booking class (pick per airline in the Earn column). Searches filter to the route's airlines and check who flies each segment.
 
+## Route network
+
+`data/fares.network.json` holds unpriced connecting routes to the main European and US cities. `scripts/build_network.py` builds it from dated research files (`data/research/YYYY-MM-DD/*.json`), which record which hub serves which city and who operates it, with sources. Only routes where every segment was verified are included. Lufthansa routes flown partly by Lufthansa City Airlines (no KrisFlyer miles) are left out.
+
+```
+python3 scripts/build_network.py data/research/2026-10-26
+```
+
 ## API
 
 | Endpoint | Purpose |

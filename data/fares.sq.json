@@ -4,13 +4,45 @@
     "to": "JFK",
     "via": [],
     "price": {
-      "economy": 1447,
       "premium": 1768
     },
     "source": {
-      "economy": "sq-ttf-2026-10",
       "premium": "sq-promo-2026-08"
-    }
+    },
+    "cabins": [
+      "premium"
+    ],
+    "note": "Nonstop A350-900ULR: Business and Premium Economy only. Economy flies via Frankfurt (SQ:JFK@FRA)."
+  },
+  {
+    "id": "SQ:JFK@FRA",
+    "carrier": "SQ",
+    "to": "JFK",
+    "via": [
+      "FRA"
+    ],
+    "cabins": [
+      "economy"
+    ],
+    "price": {
+      "economy": 1447
+    },
+    "source": {
+      "economy": "sq-ttf-2026-10"
+    },
+    "note": "SQ26/25 via Frankfurt (777-300ER). Price is the advertised Economy fare to New York."
+  },
+  {
+    "carrier": "SQ",
+    "to": "EWR",
+    "via": [],
+    "cabins": [
+      "premium"
+    ],
+    "price": {
+      "premium": null
+    },
+    "note": "Nonstop A350-900ULR: Business and Premium Economy only."
   },
   {
     "carrier": "SQ",
@@ -132,7 +164,9 @@
   {
     "carrier": "SQ",
     "to": "MAD",
-    "via": [],
+    "via": [
+      "BCN"
+    ],
     "price": {
       "economy": 988,
       "premium": 2498
@@ -140,7 +174,8 @@
     "source": {
       "economy": "sq-ttf-2026-10",
       "premium": "sq-promo-2026-08"
-    }
+    },
+    "note": "From 26 Oct 2026 SQ flies Singapore–Barcelona–Madrid (5 a week); the Barcelona–Madrid leg is not sold on its own."
   },
   {
     "carrier": "SQ",

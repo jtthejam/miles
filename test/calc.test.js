@@ -57,6 +57,8 @@ test('TK has no Premium Economy rows; Air China does (E 100%, G 110%)', () => {
 test('every airline has at least one route with a price', () => {
   const rows = buildRows(data);
   for (const code of Object.keys(C)) {
+    // An airline may be exempt only with a stated reason (no advertised Singapore fare found).
+    if (C[code].noAdvertisedFare) continue;
     const priced = rows.filter((r) => r.carrier === code && r.priceSgd > 0 && r.miles > 0);
     assert.ok(priced.length > 0, `${code} has no priced, earning route`);
   }

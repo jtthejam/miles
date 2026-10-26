@@ -1,0 +1,690 @@
+{
+ "SQ": {
+  "LHR": {
+   "served": true,
+   "routing": "SIN-LHR",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "28/wk; A350/A380/777-300ER",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MAN": {
+   "served": true,
+   "routing": "SIN-MAN",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Daily A350; Houston tag (MAN-IAH) ended Mar 2025",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BHX": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BER": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "SQ not served (Scoot flies SIN-BER, not SQ)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "HAM": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MUC": {
+   "served": true,
+   "routing": "SIN-MUC",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "10/wk A350",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "CDG": {
+   "served": true,
+   "routing": "SIN-CDG",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "11/wk A350/777-300ER",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MRS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LYS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "FCO": {
+   "served": true,
+   "routing": "SIN-FCO",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "3/wk winter, 5/wk summer; year-round",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MXP": {
+   "served": true,
+   "routing": "SIN-MXP",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Daily A350; MXP-BCN tag ends 27 Oct 2026",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "NAP": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MAD": {
+   "served": true,
+   "routing": "SIN-BCN-MAD",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "New from 26 Oct 2026, 5/wk A350 via Barcelona (BCN-MAD not sold standalone)",
+   "source": "https://milelion.com/2026/05/08/singapore-airlines-returns-to-madrid-from-october-2026/"
+  },
+  "BCN": {
+   "served": true,
+   "routing": "SIN-BCN",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Nonstop 5/wk A350 from Oct 2026 (SIN-MXP-BCN routing ends 27 Oct 2026)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "VLC": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "DUB": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LIS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "AMS": {
+   "served": true,
+   "routing": "SIN-AMS",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "7/wk 777-300ER",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BRU": {
+   "served": true,
+   "routing": "SIN-BRU",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "4/wk A350, year-round",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LUX": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "VIE": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "CPH": {
+   "served": true,
+   "routing": "SIN-CPH",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Daily A350, year-round",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "OSL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "ARN": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "HEL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "KEF": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "WAW": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "PRG": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BTS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BUD": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LJU": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "ZAG": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "SJJ": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BEG": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "TGD": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "SKP": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "TIA": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "PRN": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "ATH": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "SQ terminated (Scoot flies SIN-ATH, not SQ)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "SOF": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "OTP": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "RMO": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "TLL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "RIX": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "VNO": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MLA": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "LCA": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "ESB": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "JFK": {
+   "served": true,
+   "routing": "SIN-JFK",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Nonstop A350-900ULR has Business + Premium Economy ONLY (no Economy); for Economy use SIN-FRA-JFK (777-300ER, daily, has Y and PY)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "EWR": {
+   "served": true,
+   "routing": "SIN-EWR",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "A350-900ULR: Business + Premium Economy ONLY, no Economy cabin",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LAX": {
+   "served": true,
+   "routing": "SIN-LAX",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "Nonstop 10/wk A350; also SIN-NRT-LAX daily 777-300ER",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "SFO": {
+   "served": true,
+   "routing": "SIN-SFO",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "14/wk A350 LH/ULR (ULR frequencies have no Economy)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "ORD": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "SEA": {
+   "served": true,
+   "routing": "SIN-SEA",
+   "premiumEconomy": true,
+   "seasonal": false,
+   "note": "5/wk A350, year-round",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "IAH": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "SQ ended SIN-MAN-IAH; last flight 30 Mar 2025 (https://mainlymiles.com/2024/08/12/singapore-airlines-axing-houston-flights-daily-to-gatwick/)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "IAD": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "BOS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "DFW": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MIA": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "DEN": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "HNL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "ATL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "LAS": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Terminated",
+   "source": "https://en.wikipedia.org/wiki/List_of_Singapore_Airlines_destinations"
+  },
+  "MCO": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "PHX": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "SAN": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "PHL": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "MSP": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  },
+  "PDX": {
+   "served": false,
+   "routing": "",
+   "premiumEconomy": false,
+   "seasonal": false,
+   "note": "Not in SQ network (2026/27 schedule)",
+   "source": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/"
+  }
+ },
+ "NZ": {
+  "SIN-AKL": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "NZ282/283 AKL-SIN daily-ish, 777-300ER/787-9 (both have Premium Economy); CHC-SIN seasonal from Nov 2026",
+   "source": "https://www.flightstats.com/v2/flight-details/NZ/282"
+  },
+  "JFK": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "Year-round nonstop AKL-JFK (787-9)",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "EWR": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "LAX": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "Year-round nonstop AKL-LAX",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "SFO": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "Year-round nonstop AKL-SFO",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "ORD": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "AKL-ORD service currently paused",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "SEA": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "IAH": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "Year-round nonstop AKL-IAH",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "IAD": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "BOS": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "DFW": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "MIA": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "DEN": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "HNL": {
+   "served": true,
+   "premiumEconomy": true,
+   "note": "Year-round nonstop AKL-HNL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "ATL": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "LAS": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "MCO": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "PHX": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "SAN": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "PHL": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "MSP": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  },
+  "PDX": {
+   "served": false,
+   "premiumEconomy": false,
+   "note": "No NZ nonstop from AKL",
+   "source": "https://www.airnewzealand.com/en-nz/where-we-fly"
+  }
+ }
+}

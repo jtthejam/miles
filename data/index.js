@@ -4,7 +4,8 @@
 const airports = require('./airports.json');
 const { _source, ...carriers } = require('./carriers.json');
 const sources = require('./sources.json');
-const fares = [...require('./fares.sq.json'), ...require('./fares.partners.json')];
+// fares.network.json: unpriced connecting routes built from verified schedules (scripts/build_network.py).
+const fares = [...require('./fares.sq.json'), ...require('./fares.partners.json'), ...require('./fares.network.json')];
 const { _about: salesAbout, ...salesCalendar } = require('./sales.json');
 
 const tierId = (t) => `${t.pct}-${t.classes.join('')}`;

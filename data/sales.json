@@ -299,5 +299,7 @@
       "url": "https://www.newstalkzb.co.nz/lifestyle/air-nz-adventure-beyond-sale-discounted-flights-to-new-york-tokyo-london-and-more"
     }
   ],
-  "none": {}
+  "none": {
+    "UA": "No United sale pattern found for the Singapore market (checked 26 Oct 2026); United's published sales target US departures."
+  }
 }
