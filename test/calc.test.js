@@ -151,10 +151,33 @@ test('sales calendar data is complete', () => {
 });
 
 test('Bordeaux connecting routes: distance per segment, Economy only on SWISS', () => {
-  const rows = buildRows(data).filter((r) => r.code === 'BOD');
+  const rows = buildRows(data).filter((r) => r.code === 'BOD' && !r.mixed);
   assert.deepEqual(rows.map((r) => [r.key, r.via.join()]).sort(), [['LX:BOD:economy', 'ZRH'], ['TK:BOD:economy', 'IST']]);
   for (const r of rows) {
     const direct = buildRows(data).find((x) => x.carrier === r.carrier && x.code === r.via[0] && x.cabin === 'economy');
     assert.ok(r.distance > direct.distance, `${r.key} counts both segments`);
   }
+});
+
+test('mixed-airline route: each segment earns at its own airline\'s class rate', () => {
+  const row = buildRows(data).find((r) => r.key === 'SQ+LX:BOD:economy');
+  assert.equal(row.carrierName, 'Singapore Airlines + SWISS');
+  assert.deepEqual(row.segments.map((s) => [s.from, s.to, s.carrier, s.bookingClass, s.pct]), [['SIN', 'ZRH', 'SQ', 'K', 50], ['ZRH', 'BOD', 'LX', 'V', 50]]);
+  assert.equal(row.miles, row.segments.reduce((a, s) => a + s.miles, 0));
+  // Override only SWISS's class: only the Zurich-Bordeaux segment changes.
+  const y = buildRows(data, { classOverrides: { 'SQ+LX:BOD:economy|LX': 'Y' } }).find((r) => r.key === 'SQ+LX:BOD:economy');
+  assert.deepEqual(y.segments.map((s) => s.pct), [50, 100]);
+  assert.equal(y.miles - row.miles, row.segments[1].miles);
+  assert.equal(y.bookingClass, 'K+Y');
+  assert.ok(y.classOverridden);
+  // Mixed rows only exist in cabins every airline sells (and the route allows).
+  assert.ok(!buildRows(data).some((r) => r.key === 'SQ+LX:BOD:premium'));
+});
+
+test('route data: mixed routes validated', () => {
+  const ids = data.fares.map((f) => f.routeId);
+  assert.equal(new Set(ids).size, ids.length);
+  const m = data.fares.find((f) => f.routeId === 'SQ+LX:BOD');
+  assert.deepEqual(m.via, ['ZRH']);
+  assert.deepEqual(m.segments.map((s) => `${s.from}-${s.to}`), ['SIN-ZRH', 'ZRH-BOD']);
 });

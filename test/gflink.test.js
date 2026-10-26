@@ -60,7 +60,7 @@ test('date grid import: cheapest cell, nearest to the asked date on ties', () =>
   const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), grid }, { carriers });
   assert.deepEqual(
     { ...r, notes: undefined },
-    { carrier: 'SQ', dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined },
+    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined },
   );
 });
 
@@ -83,7 +83,7 @@ test('results-list import: only results on the filtered airline, SGD only', () =
     ['1059', 'Singapore dollars', 'Lufthansa'],
   ];
   const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), list }, { carriers });
-  assert.equal(r.lowest, 1063);
+  assert.equal(r.lowest, 1719); // S$1,063 is Singapore Airlines + Austrian: not this route's airlines
   assert.equal(r.source, 'results');
   assert.equal(r.outbound, '2026-12-01');
   const lh = G.interpretImport({ href: href(GOOGLE_UI_LH), list }, { carriers });
@@ -97,7 +97,7 @@ test('results-list import: only results on the filtered airline, SGD only', () =
 
 test('refuses pages it can\'t attribute to one airline', () => {
   const noFilter = G.encodeTfs({ ...q, cabin: 'economy' });
-  assert.match(G.interpretImport({ href: href(noFilter), grid }, { carriers }).error, /one airline/);
+  assert.match(G.interpretImport({ href: href(noFilter), grid }, { carriers }).error, /route's airline/);
   assert.match(G.interpretImport({ href: 'https://example.com/?tfs=x', grid }, { carriers }).error, /isn't a Google Flights/);
   const fromKul = G.encodeTfs({ ...q, origin: 'KUL', carrier: 'SQ', cabin: 'economy' });
   assert.match(G.interpretImport({ href: href(fromKul), grid }, { carriers }).error, /departs from KUL/);
@@ -163,4 +163,32 @@ test('connecting routes: import keeps results with the route\'s stops and flags 
   // Nonstop rows: connecting results don't count (their miles would differ).
   const sq = G.interpretImport({ href: href(FF_SQ_PREMIUM), list: [['1063', 'Singapore dollars', 'Singapore Airlines and Austrian', 2], ['1719', 'Singapore dollars', 'Singapore Airlines', 0]] }, { carriers, routes });
   assert.equal(sq.lowest, 1719);
+});
+
+test('mixed-airline routes: links filter to both airlines; import finds the route by airline set', () => {
+  const cs = { ...carriers, LX: { name: 'SWISS' } };
+  const routes = [
+    { routeId: 'LX:BOD', carriers: ['LX'], dest: 'BOD', via: ['ZRH'] },
+    { routeId: 'SQ+LX:BOD', carriers: ['SQ', 'LX'], dest: 'BOD', via: ['ZRH'] },
+  ];
+  const bod = { dest: 'BOD', outbound: '2026-12-01', inbound: '2026-12-08', cabin: 'economy', maxStops: 1 };
+  const mixedTfs = G.encodeTfs({ ...bod, carriers: ['SQ', 'LX'] });
+  assert.deepEqual(G.decodeTfs(mixedTfs).legs.map((l) => l.airlines), [['SQ', 'LX'], ['SQ', 'LX']]);
+
+  const list = [
+    ['900', 'Singapore dollars', 'SWISS', 1], // SWISS-only itinerary: earns differently, not this route
+    ['1,050', 'Singapore dollars', 'Singapore Airlines and SWISS', 1],
+    ['1,300', 'Singapore dollars', 'SWISS and Singapore Airlines', 1],
+  ];
+  const r = G.interpretImport({ href: href(mixedTfs), list }, { carriers: cs, routes });
+  assert.deepEqual([r.routeId, r.lowest, r.carriers.join()], ['SQ+LX:BOD', 1050, 'SQ,LX']);
+
+  const single = G.interpretImport({ href: href(G.encodeTfs({ ...bod, carrier: 'LX' })), list }, { carriers: cs, routes });
+  assert.deepEqual([single.routeId, single.lowest], ['LX:BOD', 900]);
+
+  const grid = G.interpretImport({ href: href(mixedTfs), grid: [['1,111', 'Dec 1', 'Dec 8', 'SGD']] }, { carriers: cs, routes });
+  assert.match(grid.notes.join(), /doesn't show who flies each flight: check it's Singapore Airlines then SWISS/);
+
+  const noRoute = G.interpretImport({ href: href(G.encodeTfs({ ...bod, carriers: ['SQ', 'TK'] })), list }, { carriers: { ...cs, TK: { name: 'Turkish Airlines' } }, routes });
+  assert.match(noRoute.error, /No route in the table flies SQ \+ TK to BOD/);
 });

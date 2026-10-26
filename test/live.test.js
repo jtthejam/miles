@@ -13,6 +13,8 @@ fs.writeFileSync(fakePy, `#!/bin/sh
 # "python -c 'import fast_flights'" succeeds; "python ff_quote.py DEST CABIN OUT IN CARRIER" prints a quote.
 if [ "$1" = "-c" ]; then exit 0; fi
 if [ "$2" = "XXX" ]; then echo '{"error": "fast-flights failed: blocked"}'; exit 1; fi
+# Mixed route: carriers "SQ,LX" (6th), connection (7th), airline names (8th).
+if [ "$6" = "SQ,LX" ] && [ "$7" = "ZRH" ] && [ "$8" = "Singapore Airlines|SWISS" ]; then echo '{"lowest": 4321, "average": 4321, "offers": 1}'; exit 0; fi
 # Connecting route: the helper gets the connection as its 7th argument.
 if [ "$7" = "IST" ]; then echo '{"lowest": 1234, "average": 1300, "offers": 3}'; exit 0; fi
 # Date-dependent fares for flexible-date tests: cheapest departing 2027-03-03; 2027-03-04 fails.
@@ -257,4 +259,43 @@ test('/api/live uses the route\'s connection from the data', async () => {
   const out = await (await fetch(`${base}/api/live?carrier=TK&dest=BOD&cabin=economy&outbound=2027-03-01&inbound=2027-03-08`)).json();
   assert.equal(out.lowest, 1234);
   assert.deepEqual(out.via, ['IST']);
+});
+
+test('mixed routes: SerpApi gets every airline and keeps offers flown SQ then LX via ZRH', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  let params;
+  try {
+    global.fetch = async (url) => {
+      params = new URL(url).searchParams;
+      const offer = (price, nums, via) => ({ price, layovers: via.map((id) => ({ id })), flights: nums.map((n) => ({ flight_number: n })) });
+      return { ok: true, json: async () => ({
+        price_insights: { lowest_price: 700 },
+        best_flights: [offer(700, ['LX 177', 'LX 642'], ['ZRH']), offer(1050, ['SQ 346', 'LX 642'], ['ZRH'])],
+        other_flights: [offer(980, ['SQ 326', 'LH 1234'], ['FRA']), offer(1200, ['SQ 346', 'LX 644'], ['ZRH'])],
+      }) };
+    };
+    live._test.cache.clear();
+    const out = await live.lowestReturnFare({ carriers: ['SQ', 'LX'], dest: 'BOD', cabin: 'economy', outbound: '2027-03-01', inbound: '2027-03-08', via: ['ZRH'], segmentCarriers: ['SQ', 'LX'] });
+    assert.equal(params.get('include_airlines'), 'SQ,LX');
+    assert.equal(params.get('stops'), '2');
+    assert.equal(out.lowest, 1050);
+    assert.equal(out.offers, 2);
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
+
+test('/api/live by route id passes the route\'s airlines to fast-flights', async () => {
+  if (!server.listening) await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  live._test.cache.clear();
+  const out = await (await fetch(`${base}/api/live?route=${encodeURIComponent('SQ+LX:BOD')}&cabin=economy&outbound=2027-03-01&inbound=2027-03-08`)).json();
+  assert.equal(out.route, 'SQ+LX:BOD');
+  assert.deepEqual(out.carriers, ['SQ', 'LX']);
+  assert.deepEqual(out.segmentCarriers, ['SQ', 'LX']);
+  assert.equal(out.lowest, 4321); // fake fast-flights answers 4321 when given SQ,LX + names
+  const bad = await fetch(`${base}/api/live?route=XX:YYY&cabin=economy`);
+  assert.match((await bad.json()).error, /Unknown route/);
 });

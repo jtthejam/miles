@@ -74,12 +74,14 @@
 
   // Round trip SIN ⇄ dest on one airline (accrual depends on the operating carrier), 1 adult.
   // maxStops pins connecting routes: with a one-airline filter, "TK, at most 1 stop" to BOD can only be via IST.
-  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, cabin, maxStops = null }) {
+  // carriers: every airline on a mixed route (Google keeps itineraries using only those airlines).
+  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, carriers, cabin, maxStops = null }) {
     if (!SEAT[cabin]) throw new Error('cabin must be economy or premium');
+    const airlines = carriers || (carrier ? [carrier] : []);
     const leg = (date, from, to) => [
       ...strField(2, date),
       ...(maxStops != null ? intField(5, maxStops) : []),
-      ...(carrier ? strField(6, carrier) : []),
+      ...airlines.flatMap((c) => strField(6, c)),
       ...bytesField(13, strField(2, from)),
       ...bytesField(14, strField(2, to)),
     ];
@@ -130,10 +132,13 @@
 
   const amount = (s) => Number(String(s).replace(/[^\d]/g, '')) || null;
 
-  // Work out which row the page is for, and its prices.
-  //   payload: { href, grid: [[price, "Nov 28", "Dec 5", currency]], list: [[price, currencyName, airlinesText]] }
-  //   ctx: { carriers: {SQ: {name}}, pending: {carrier, dest, cabin}|null, window: {outbound, inbound, flex}|null }
-  // Returns { carrier, dest, cabin, outbound, inbound, lowest, source, considered, notes } or { error }.
+  // Work out which route the page is for, and its prices.
+  //   payload: { href, grid: [[price, "Nov 28", "Dec 5", currency]], list: [[price, currencyName, airlinesText, stops]] }
+  //   ctx: { carriers: {SQ: {name}},
+  //          routes: [{ routeId, carriers, dest, via }] (or legacy { "TK:BOD": ["IST"] }),
+  //          pending: { routeId, dest, cabin } | null  (row whose G link was opened last),
+  //          window: { outbound, inbound, flex } | null }
+  // Returns { routeId, carrier, carriers, dest, cabin, outbound, inbound, lowest, source, considered, notes } or { error }.
   function interpretImport(payload, ctx) {
     const notes = [];
     let tfs = null;
@@ -149,6 +154,9 @@
     const legs = (q && q.legs) || [];
     const out = legs[0] || {}, back = legs[1] || {};
     const pending = ctx.pending || {};
+    const routes = normaliseRoutes(ctx.routes);
+    const pendingRoute = routes.find((r) => r.routeId === pending.routeId) ||
+      (pending.carrier ? { routeId: `${pending.carrier}:${pending.dest}`, carriers: [pending.carrier], dest: pending.dest, via: [] } : null);
 
     if (legs.length && out.from && out.from !== 'SIN') return { error: `This search departs from ${out.from}; the app only covers flights from Singapore.` };
     if (legs.length > 2 || (q && q.trip && q.trip !== 1)) return { error: 'Use a round-trip search (one way and multi-city aren\'t supported).' };
@@ -157,19 +165,32 @@
     const cabin = q && q.seat ? CABIN_BY_SEAT[q.seat] : pending.cabin;
     if (q && q.seat && !cabin) return { error: 'Set the cabin to Economy or Premium economy.' };
 
-    // The airline filter must be exactly one airline on both legs: accrual depends on who flies you.
-    const sets = legs.map((l) => l.airlines.join(','));
-    const carrier = legs.length
-      ? (sets.every((s) => s === sets[0]) && legs[0].airlines.length === 1 ? legs[0].airlines[0] : null)
-      : pending.carrier;
-    if (!carrier) {
-      return { error: 'Filter to one airline first (Airlines → "<airline> only"). Without it the prices can be on any airline, and miles depend on the airline.' };
+    // The airline filter must match the route's airlines on both legs: accrual depends on who flies you.
+    const sets = legs.map((l) => l.airlines.slice().sort().join(','));
+    const filtered = legs.length ? (sets.every((x) => x === sets[0]) ? legs[0].airlines : null) : (pendingRoute ? pendingRoute.carriers : null);
+    if (!filtered || !filtered.length) {
+      return { error: 'Filter to the route\'s airline first (Airlines → "<airline> only"). Without it the prices can be on any airline, and miles depend on the airline.' };
     }
-    if (!ctx.carriers[carrier]) return { error: `${carrier} isn't one of the airlines in this app.` };
+    const unknown = filtered.find((c) => !ctx.carriers[c]);
+    if (unknown) return { error: `${unknown} isn't one of the airlines in this app.` };
     if (!dest || !cabin) return { error: 'Couldn\'t tell the route or cabin from that page. Open it with the "Google Flights" link on a row, then try again.' };
 
+    const want = filtered.slice().sort().join(',');
+    const matches = routes.filter((r) => r.dest === dest && r.carriers.slice().sort().join(',') === want);
+    let route = matches.find((r) => pendingRoute && r.routeId === pendingRoute.routeId) || matches[0];
+    if (!route) {
+      if (filtered.length > 1) return { error: `No route in the table flies ${filtered.join(' + ')} to ${dest}.` };
+      route = { routeId: `${filtered[0]}:${dest}`, carriers: filtered, dest, via: [] }; // the app reports it isn't in the table
+    }
+    if (matches.length > 1 && !(pendingRoute && matches.some((r) => r.routeId === pendingRoute.routeId))) {
+      notes.push(`more than one ${filtered.join(' + ')} route to ${dest}; saved to the one via ${route.via.join(', ') || 'nonstop'}`);
+    }
+    const carrier = route.carriers[0];
+    const mixed = route.carriers.length > 1;
+    const names = route.carriers.map((c) => ctx.carriers[c].name.toLowerCase());
+
     // Connecting routes (e.g. TK to BOD via IST): miles assume that connection.
-    const via = (ctx.routes && ctx.routes[`${carrier}:${dest}`]) || [];
+    const via = route.via || [];
     if (via.length && legs.length && legs.some((l) => l.maxStops == null || l.maxStops > via.length)) {
       notes.push(`Google's stops filter is off, so prices may include connections other than ${via.join(', ')}`);
     }
@@ -187,11 +208,14 @@
     }
     if (!cells.length) {
       source = 'results';
-      const name = ctx.carriers[carrier].name.toLowerCase();
       const list = (payload.list || []).filter((r) => /singapore dollars?/i.test(r[1]));
       if ((payload.list || []).length && !list.length) return { error: 'Prices aren\'t in SGD. Use the link from the app (it sets SGD), or change currency to SGD.' };
-      // Keep only results that name the airline (Google sometimes lists partner-operated legs).
-      let own = list.filter((r) => String(r[2]).toLowerCase().includes(name));
+      // Keep only results flown by exactly the route's airlines ("Singapore Airlines and Austrian" isn't
+      // a Singapore Airlines result; "Singapore Airlines and SWISS" is the SQ + SWISS route).
+      const airlinesOf = (t) => [...new Set(String(t).toLowerCase().split(/,\s*|\s+and\s+/).map((x) => x.trim()).filter(Boolean))].sort().join('|');
+      const wantNames = [...new Set(names)].sort().join('|');
+      let own = list.filter((r) => airlinesOf(r[2]) === wantNames);
+      const cityOnly = NO_ACCRUAL[carrier] ? list.filter((r) => NO_ACCRUAL[carrier].test(r[2])).length : 0;
       // r[3] = stops on the outbound (newer bookmarklets). Connecting rows need exactly that many.
       const stopsKnown = own.filter((r) => typeof r[3] === 'number');
       if (stopsKnown.length) {
@@ -202,12 +226,10 @@
         if (right.length < own.length) notes.push(`${own.length - right.length} with a different number of stops skipped`);
         own = right;
       }
-      if (list.length && !own.length) return { error: `None of the results on that page are ${ctx.carriers[carrier].name} flights.` };
-      if (NO_ACCRUAL[carrier]) {
-        const earning = own.filter((r) => !NO_ACCRUAL[carrier].test(r[2]));
-        if (earning.length < own.length) notes.push(`${own.length - earning.length} with Lufthansa City flights skipped (they earn no KrisFlyer miles)`);
-        if (!earning.length) return { error: 'Every result on that page includes Lufthansa City flights, which earn no KrisFlyer miles.' };
-        own = earning;
+      if (cityOnly) notes.push(`${cityOnly} with Lufthansa City flights skipped (they earn no KrisFlyer miles)`);
+      if (list.length && !own.length) {
+        if (cityOnly === list.length) return { error: 'Every result on that page includes Lufthansa City flights, which earn no KrisFlyer miles.' };
+        return { error: `None of the results on that page are ${route.carriers.map((c) => ctx.carriers[c].name).join(' + ')} flights.` };
       }
       if (!outbound || !inbound) return { error: 'Couldn\'t read the travel dates from that page.' };
       cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]) })).filter((c) => c.price);
@@ -229,10 +251,21 @@
     }
 
     if (source === 'grid' && NO_ACCRUAL[carrier]) notes.push('date grid can include Lufthansa City flights, which earn no miles: check the flight before booking');
+    if (source === 'grid' && mixed) notes.push(`date grid doesn't show who flies each flight: check it's ${route.carriers.map((c) => ctx.carriers[c].name).join(' then ')} before booking`);
     const target = w && w.outbound ? w.outbound : anchorOut;
     const best = cells.slice().sort((a, b) => a.price - b.price ||
       Math.abs(dayDiff(a.outbound, target)) - Math.abs(dayDiff(b.outbound, target)))[0];
-    return { carrier, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, source, considered: cells.length, notes };
+    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, source, considered: cells.length, notes };
+  }
+
+  // Routes as [{ routeId, carriers, dest, via }]; also accepts the v1.11 map { "TK:BOD": ["IST"] }.
+  function normaliseRoutes(routes) {
+    if (!routes) return [];
+    if (Array.isArray(routes)) return routes;
+    return Object.entries(routes).map(([id, via]) => {
+      const [c, d] = id.split(':');
+      return { routeId: id, carriers: c.split('+'), dest: d, via };
+    });
   }
 
   return { encodeTfs, decodeTfs, linkFor, interpretImport, resolveDay, SEAT };

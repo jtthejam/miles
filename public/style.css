@@ -60,7 +60,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .pill.premium { color: var(--prem); }
 .price { width: 68px; text-align: right; padding: 4px 6px; }
 .price.edited { border-color: var(--accent); }
-.mps { position: relative; min-width: 120px; }
+.mps { position: relative; min-width: 100px; }
 .mps .bar { position: absolute; inset: 6px auto 6px 0; background: var(--bar); border-radius: 4px; z-index: 0; }
 .mps span { position: relative; z-index: 1; font-weight: 600; }
 .refresh { padding: 2px 7px; margin-left: 4px; font-size: 13px; }
@@ -311,3 +311,13 @@ button.small { font-size: 13px; padding: 5px 10px; margin-left: auto; }
 .gf-msg { margin: 10px 0 0; padding: 8px 10px; border-radius: 8px; font-size: 13px; }
 .gf-msg.ok { background: color-mix(in srgb, #1b7f3b 12%, transparent); }
 .gf-msg.err { background: color-mix(in srgb, #c0392b 12%, transparent); }
+
+/* Mixed-airline rows: who flies each segment, one class picker per airline */
+.seg-al { font-size: 10px; font-weight: 650; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 3px; }
+.earn .segs { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; margin-top: 1px; }
+label.cls.seg .al { font-size: 10px; font-weight: 650; color: var(--muted); margin-right: 3px; }
+
+/* Long connecting routes (SIN → NRT NH → ORD UA) wrap at the arrows instead of widening the table. */
+#rows td:first-child { white-space: normal; max-width: 200px; }
+#rows td:first-child .route { white-space: normal; }
+#rows td:first-child .route .seg-al { white-space: nowrap; }

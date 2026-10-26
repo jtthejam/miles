@@ -48,22 +48,29 @@ async function handleApi(url, res) {
       });
     case '/api/live':
       try {
-        const carrier = String(q.get('carrier') || 'SQ').toUpperCase();
-        if (!data.carriers[carrier]) throw new Error(`Unsupported carrier ${carrier}`);
-        // Dates are optional; flex (0-3) searches that many days either side, keeping trip length.
+        // A route is picked by id ("SQ+LX:BOD"), or by carrier + dest for single-airline routes.
         const dest = String(q.get('dest') || '').toUpperCase();
-        // The route's connection (e.g. IST for TK to BOD) comes from the data, so searches match the row's miles.
-        const route = data.fares.find((f) => f.carrier === carrier && f.to === dest);
+        const carrier = String(q.get('carrier') || 'SQ').toUpperCase();
+        const routeId = q.get('route');
+        const route = routeId
+          ? data.fares.find((f) => f.routeId === routeId)
+          : data.fares.find((f) => f.carrier === carrier && f.to === dest && !f.mixed);
+        if (routeId && !route) throw new Error(`Unknown route ${routeId}`);
+        if (!route && !data.carriers[carrier]) throw new Error(`Unsupported carrier ${carrier}`);
+        // The route's connection and airlines come from the data, so searches match the row's miles.
         const out = await live.lowestFareInWindow({
-          carrier,
-          dest,
+          carriers: route ? route.carriers : [carrier],
+          dest: route ? route.to : dest,
           via: route ? route.via : [],
+          segmentCarriers: route && route.mixed ? route.segments.map((s) => s.carrier) : null,
+          airlineNames: route && route.mixed ? route.carriers.map((c) => data.carriers[c].name) : null,
           cabin: q.get('cabin'),
+          // Dates are optional; flex (0-3) searches that many days either side, keeping trip length.
           outbound: q.get('outbound') || undefined,
           inbound: q.get('inbound') || undefined,
           flex: q.get('flex') || 0,
         });
-        return sendJson(res, 200, out);
+        return sendJson(res, 200, { ...out, route: route ? route.routeId : `${carrier}:${dest}` });
       } catch (e) {
         return sendJson(res, live.enabled() ? 502 : 503, { error: e.message });
       }

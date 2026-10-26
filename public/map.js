@@ -97,7 +97,7 @@ window.RouteMap = (() => {
     const groups = new Map();
     for (const r of rows) {
       const stops = ['SIN', ...r.via, r.code];
-      const k = `${r.carrier}|${stops.join('-')}`;
+      const k = `${r.routeId}|${stops.join('-')}`; // one line per route (mixed routes are coloured by their first airline)
       if (!groups.has(k)) groups.set(k, { carrier: r.carrier, stops, rows: [] });
       groups.get(k).rows.push(r);
     }
@@ -130,7 +130,7 @@ window.RouteMap = (() => {
       const geo = { type: 'LineString', coordinates: g.stops.map(coord) };
       const d = path(geo) || '';
       const vis = el('path', { d, class: strokeClass(g) });
-      const hit = el('path', { d, class: 'route-hit', tabindex: '0', 'aria-label': `${g.rows[0].city} on ${carriers[g.carrier].name}` });
+      const hit = el('path', { d, class: 'route-hit', tabindex: '0', 'aria-label': `${g.rows[0].city} on ${g.rows[0].carrierName}` });
       const show = (e) => { if (dragging) return; clearActive(); vis.classList.add('active'); showTip(e, routeTip(g)); };
       hit.addEventListener('pointermove', show);
       hit.addEventListener('click', show);

@@ -1,5 +1,38 @@
 # Changelog
 
+## v1.12.0 — 2026-10-26
+
+### Added
+- **Mixed-airline routes**: one ticket flown by more than one airline, e.g. Singapore Airlines to Zurich, then SWISS to Bordeaux. KrisFlyer credits each segment by the airline that flies it, so:
+  - Miles = each segment's distance × that airline's % for its booking class (sale-fare class by default).
+  - The Earn column shows the effective % over the trip, plus **one class picker per airline**. Change SWISS's class and only the Zurich–Bordeaux segment changes.
+  - The route line shows who flies each segment: SIN → ZRH `SQ` → BOD `LX`.
+  - Segments that earn nothing (e.g. a class with no KrisFlyer accrual) are flagged "Partly earns".
+- First mixed route: **Singapore Airlines + SWISS to Bordeaux via Zurich** (Economy; 6,882 mi, 50% + 50% by default).
+- Airline chips: a mixed row shows when **all** its airlines are selected.
+
+### Prices for mixed routes
+- **G links** filter Google Flights to the route's airlines (e.g. Singapore Airlines + SWISS) with the route's number of stops.
+- **SerpApi** searches with every airline on the route and keeps only offers whose segments are flown in order by the route's airlines (from flight numbers), via the route's connection.
+- **fast-flights** keeps only itineraries via the route's connection that use exactly the route's airlines. A SWISS-only itinerary doesn't price the SQ + SWISS row.
+- **Bookmark imports** find the route from the page's airline filter. Results must use exactly the route's airlines, so "Singapore Airlines and Austrian" no longer counts as a Singapore Airlines result. Date-grid imports for mixed routes remind you to check who flies each flight.
+
+### Changed
+- `/api/live` accepts `route=<id>` (e.g. `SQ+LX:BOD`); `carrier` + `dest` still work for single-airline routes.
+- Table: mixed rows list airlines on separate lines, long routes wrap, and the Miles/SGD bar column is narrower, so the table keeps fitting its box.
+
+### Data format
+- Single airline (unchanged): `{"carrier": "TK", "to": "BOD", "via": ["IST"]}`.
+- Mixed: `{"to": "BOD", "segments": [{"carrier": "SQ", "to": "ZRH"}, {"carrier": "LX", "to": "BOD"}]}`. A segment may set `"class": {"economy": "V"}`.
+- Route ids: `TK:BOD` (single airline, the same as before, so saved prices keep working) or `SQ+LX:BOD`. Give a route an `"id"` if two would clash, e.g. the same airline to the same city via different hubs.
+- Every existing row is unchanged: same miles, classes and prices (checked row by row against v1.11.0).
+
+### Technical
+- `data/index.js` normalises routes to segments (`segments`, `carriers`, `via`, `mixed`, `routeId`) and validates them.
+- `lib/calc.js` computes accrual per segment. Rows add `routeId`, `carriers`, `mixed`, `segments`, `classes`, `partlyEligible`.
+- `scripts/ff_quote.py`: CARRIERS may be a comma list, plus an optional 8th argument AIRLINE_NAMES.
+- 7 new tests.
+
 ## v1.11.0 — 2026-10-26
 
 ### Added

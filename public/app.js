@@ -170,7 +170,7 @@ function visibleRows() {
   const missing = key === 'priceSgd' ? Infinity : -Infinity;
   const val = (r) => r[key] ?? missing;
   return rows
-    .filter((r) => selected.has(r.carrier))
+    .filter((r) => r.carriers.every((c) => selected.has(c))) // mixed rows need every airline on the trip selected
     .filter((r) => (cabin === 'all' || r.cabin === cabin) && (region === 'all' || r.region === region))
     .filter((r) => !pricedOnly || r.priceSgd != null)
     .sort((a, b) => (key === 'priceSgd' ? val(a) - val(b) : val(b) - val(a)));
@@ -192,11 +192,14 @@ function render() {
       </div>`).join('');
 
   $('rows').innerHTML = list.map((r) => {
-    const route = ['SIN', ...r.via, r.code].join(' → ');
+    // Mixed rows show who flies each segment: SIN → ZRH (SQ) → BOD (LX).
+    const route = r.mixed
+      ? ['SIN', ...r.segments.map((s) => `${s.to} <span class="seg-al">${s.carrier}</span>`)].join(' → ')
+      : ['SIN', ...r.via, r.code].join(' → ');
     const gfBtn = `<a class="gf" href="${esc(gfLink(r))}" target="_blank" rel="noopener" data-key="${r.key}" title="Open ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]} to ${esc(r.city)} in Google Flights for ${esc(datesLabel())}, filtered to ${esc(r.carrierName)}. Then click your “Send to Miles Maximiser” bookmark.">G</a>`;
     const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for ${esc(datesLabel())} (${meta.live.provider})">↻</button>` : '';
     const flags = [
-      !r.eligible ? r.ineligibleReason : '',
+      !r.eligible ? (r.partlyEligible ? `Partly earns: ${r.ineligibleReason}` : r.ineligibleReason) : '',
       r.seasonal ? 'Seasonal service' : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
     const fd = r.overridden ? fareDates[r.key] : null;
@@ -204,7 +207,7 @@ function render() {
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
         <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span></td>
-        <td class="carrier">${esc(r.carrierName)}${flags}</td>
+        <td class="carrier">${r.mixed ? r.carriers.map((c) => esc(meta.carriers[c].name)).join('<br>+ ') : esc(r.carrierName)}${flags}</td>
         <td><span class="pill ${r.cabin}">${CABIN_LABEL[r.cabin]}</span></td>
         <td class="num">${fmt(r.distance)} mi</td>
         <td class="num earn">${earnCell(r)}</td>
@@ -227,6 +230,7 @@ function render() {
 // Earn cell: accrual % plus the booking class it comes from. The class defaults to the sale fare's class;
 // the compact select only matters if the user's own quote books into a different class.
 function earnCell(r) {
+  if (r.mixed) return earnCellMixed(r);
   const car = meta.carriers[r.carrier];
   const sf = car.saleFare[r.cabin];
   const mark = r.classOverridden ? '' : sf.confidence === 'stated' ? '✓' : '≈';
@@ -240,6 +244,27 @@ function earnCell(r) {
   return `<span class="pct">${r.accrualPct}%</span>
     <label class="cls${r.classOverridden ? ' changed' : ''}" title="${esc(tip)}"><span class="mark">${mark}</span><span class="letter">${r.bookingClass}</span><span class="caret">▾</span>
       <select data-key="${r.key}" data-sale="${r.saleClass}" aria-label="Booking class for ${esc(r.city)} ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]}">${opts}</select></label>`;
+}
+
+// Mixed rows: effective % over the trip, plus one class picker per airline (each airline's segments earn
+// at that airline's rate for its class). Overrides are stored per airline: "SQ+LX:BOD:economy|LX".
+function earnCellMixed(r) {
+  const pickers = r.carriers.map((code) => {
+    const car = meta.carriers[code];
+    const sf = car.saleFare[r.cabin];
+    const c = r.classes[code];
+    const changed = c.bookingClass !== c.saleClass;
+    const mark = changed ? '' : sf.confidence === 'stated' ? '✓' : '≈';
+    const legs = r.segments.filter((s) => s.carrier === code).map((s) => `${s.from}–${s.to}`).join(', ');
+    const tip = `${car.name} (${legs}): ${changed ? `your class ${c.bookingClass}; sale fares book into ${c.saleClass}` : `sale fare class ${c.saleClass} (${sf.family}), ${sf.confidence === 'stated' ? 'published by the airline' : 'assumed, not published'}`}. Earns ${c.pct}%.`;
+    const opts = car.accrual[r.cabin].flatMap((t) => t.classes.map((k) => ({ k, pct: t.pct, only: t.onlyTo })))
+      .sort((a, b) => b.pct - a.pct || a.k.localeCompare(b.k))
+      .map(({ k, pct, only }) => `<option value="${k}" ${k === c.bookingClass ? 'selected' : ''}>${k} · ${pct}%${only ? ` (${only.join('/')} only)` : ''}${k === c.saleClass ? ' — sale' : ''}</option>`)
+      .join('');
+    return `<label class="cls seg${changed ? ' changed' : ''}" title="${esc(tip)}"><span class="al">${code}</span><span class="mark">${mark}</span><span class="letter">${c.bookingClass}</span><span class="caret">▾</span>
+      <select data-key="${r.key}|${code}" data-sale="${c.saleClass}" aria-label="Booking class on ${esc(car.name)} for ${esc(r.city)} ${CABIN_LABEL[r.cabin]}">${opts}</select></label>`;
+  }).join('');
+  return `<span class="pct" title="Effective rate over the whole trip">${r.accrualPct}%</span><span class="segs">${pickers}</span>`;
 }
 
 $('rows').addEventListener('change', (e) => {
@@ -336,14 +361,14 @@ function linkDates() {
 }
 
 // Connecting rows limit stops to the route's connections, which (with the airline filter) pins the hub.
-const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carrier: r.carrier, cabin: r.cabin, maxStops: r.via && r.via.length ? r.via.length : null, ...linkDates() });
+const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carriers: r.carriers, cabin: r.cabin, maxStops: r.via && r.via.length ? r.via.length : null, ...linkDates() });
 
 $('rows').addEventListener('click', (e) => {
   const a = e.target.closest('a.gf');
   if (!a) return;
   a.href = gfLink(rows.find((r) => r.key === a.dataset.key) || {}); // dates may have changed since render
-  const [carrier, dest, cabin] = a.dataset.key.split(':');
-  store.set(KEYS.gfPending, { carrier, dest, cabin, at: Date.now() }); // fallback if Google rewrites the URL
+  const row = rows.find((r) => r.key === a.dataset.key);
+  if (row) store.set(KEYS.gfPending, { routeId: row.routeId, dest: row.code, cabin: row.cabin, at: Date.now() }); // fallback if Google rewrites the URL
 });
 
 async function initBookmarklet() {
@@ -373,16 +398,16 @@ async function importFromHash() {
   const pending = store.get(KEYS.gfPending, null);
   const res = window.GFLink.interpretImport(payload, {
     carriers: meta.carriers,
-    routes: Object.fromEntries(rows.map((r) => [`${r.carrier}:${r.code}`, r.via])),
+    routes: [...new Map(rows.map((r) => [r.routeId, { routeId: r.routeId, carriers: r.carriers, dest: r.code, via: r.via }])).values()],
     pending: pending && Date.now() - pending.at < 6 * 3600e3 ? pending : null,
     window: $('out-date').value ? { outbound: $('out-date').value, inbound: $('in-date').value, flex: $('flex-days').value } : null,
   });
   if (res.error) { gfMessage(esc(res.error), 'err'); return; }
 
-  const key = `${res.carrier}:${res.dest}:${res.cabin}`;
+  const key = `${res.routeId}:${res.cabin}`;
   const row = rows.find((r) => r.key === key);
   if (!row) {
-    gfMessage(`${esc(meta.carriers[res.carrier].name)} ${CABIN_LABEL[res.cabin]} to ${esc(res.dest)} isn't a route in the table, so nothing was saved.`, 'err');
+    gfMessage(`${esc(res.carriers.map((c) => meta.carriers[c].name).join(' + '))} ${CABIN_LABEL[res.cabin]} to ${esc(res.dest)} isn't a route in the table, so nothing was saved.`, 'err');
     return;
   }
   overrides[key] = res.lowest; // return fare, like the other sources
@@ -460,13 +485,16 @@ function initLive() {
 $('rows').addEventListener('click', async (e) => {
   const btn = e.target.closest('button.refresh');
   if (!btn) return;
-  const [carrier, dest, cabin] = btn.dataset.key.split(':');
+  const row = rows.find((r) => r.key === btn.dataset.key);
+  if (!row) return;
+  const { code: dest, cabin } = row;
+  const carrier = row.carriers.join(' + ');
   btn.disabled = true; btn.textContent = '…';
   try {
-    const q = new URLSearchParams({ carrier, dest, cabin, ...dateParams() });
+    const q = new URLSearchParams({ route: row.routeId, cabin, ...dateParams() });
     if (Number(q.get('flex'))) btn.title = `Searching ${2 * q.get('flex') + 1} date options…`;
     const res = await (await fetch(`/api/live?${q}`)).json();
-    if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares found for ${datesLabel()}`);
+    if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));
     overrides[btn.dataset.key] = res.lowest;

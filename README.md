@@ -97,7 +97,13 @@ The server can't fetch the date grid itself: Google requires a per-request BotGu
 
 A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed per segment flown. Live prices, **G** links and bookmark imports stick to that connection (airline filter + stop limit, and layover checks where the source reports them). Add `"cabins": ["economy"]` when the connecting flight has no Premium Economy.
 
-Single-airline only for now: every segment must be on the row's airline.
+**Mixed airlines**: list segments instead of carrier/via:
+
+```json
+{"to": "BOD", "segments": [{"carrier": "SQ", "to": "ZRH"}, {"carrier": "LX", "to": "BOD"}], "cabins": ["economy"]}
+```
+
+Each segment earns at its own airline's rate for its booking class (pick per airline in the Earn column). Searches filter to the route's airlines and check who flies each segment.
 
 ## API
 
