@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.15.0 — 2026-10-27
+
+### Added
+- **Community prices**: anonymised prices shared by other users through the **private** data repo [`jtthejam/miles-prices`](https://github.com/jtthejam/miles-prices), cloned into `data/community/`.
+  - On startup the app pulls the repo (fast-forward only; `MILES_COMMUNITY_PULL=0` skips) and loads every shared file.
+  - Rows use community prices after your own: **your price → your latest search → community → advertised**. They're labelled "community · dates · age", and the tooltip says how many shared files agree (within 10%).
+  - Prices backed by one report are flagged "check it". Prices under half or over 3× the typical shared price for a route are ignored, once there are 3+ to compare. Community prices over 14 days old are preliminary.
+  - Your own shared files never count as community reports.
+- **Automatic anonymised sharing**: on startup and every 6 hours, saved prices at least 2 days old are written to a new file in `data/community/` (`MILES_AUTO_SHARE=0` turns this off).
+  - Each shared line keeps only route, cabin, dates priced, price (SGD), provider and the **day** searched. Search ranges, times and ids are removed.
+  - Each route, cabin, date pair and day is merged to one price, and lines are shuffled.
+  - A ledger in `data/db/` (gitignored) means nothing is shared twice, even while a pull request is open.
+- **Send with one command**: `node scripts/share_prices.js --pr` checks the new share files, commits only those on a branch in `data/community/`, pushes it, opens the pull request (GitHub CLI) and switches back to `main`.
+- **Sharing panel** under Live prices: what's shared, files waiting to be sent, how to join if `data/community/` isn't a clone yet, and "Create share file now" (choose a minimum age).
+- **Checks on every pull request in miles-prices**: a GitHub Actions workflow runs this app's community test against the repo's files. Any line with extra fields (anything that could identify you), bad dates or prices, or an unknown route fails.
+
+### Changed
+- `data/community/` is gitignored in this repo (it's a clone of the private data repo).
+
+### API
+- `POST /api/db/share` `{"minAgeDays": 2}` (this computer only): write a share file now.
+- `GET /api/db/searches` adds `community` (loaded shared prices) and `autoShare` (on/off, clone status, files waiting to be committed).
+- `GET /api/routes` rows add `community` and `priceFrom: "community"`.
+
+### Technical
+- `lib/db.js`: `anonymise`, `share`, `communityForRange`, `communityProblem` (strict validation). `lib/community-repo.js`: pull and status of the clone.
+- 8 new tests. `MILES_COMMUNITY_CHECK_DIR` points the validation test at any folder (used by the data repo's check).
+
 ## v1.14.0 — 2026-10-27
 
 ### Added

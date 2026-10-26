@@ -7,3 +7,6 @@ __pycache__/
 
 # Price database: your search history (see data/db/README.md)
 data/db/*.jsonl
+# Community prices: a clone of the private data repo jtthejam/miles-prices (see README)
+data/community/
+data/db/*.ledger

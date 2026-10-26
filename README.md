@@ -109,6 +109,16 @@ Each segment earns at its own airline's rate for its booking class (pick per air
 
 Every price found (↻ searches and Google Flights imports) is saved in `data/db/*.jsonl`, tagged with the search range, the dates priced and when it was searched. Nothing is deleted, and all files are loaded on startup. Rows show the latest saved price for your dates, with earlier searches in the tooltip. Prices older than 14 days are marked preliminary. Pick earlier date ranges from **Saved searches** under Live prices. A ↻ reuses a price saved in the last 24 hours instead of searching again. Details: [`data/db/README.md`](data/db/README.md).
 
+## Sharing prices with other users
+
+Prices can be shared, anonymised, through the private data repo [`jtthejam/miles-prices`](https://github.com/jtthejam/miles-prices). It's private because Google Flights and SerpApi results aren't licensed for public redistribution.
+
+1. Ask for access, then clone it into this folder: `git clone https://github.com/jtthejam/miles-prices.git data/community`
+2. Start the app: it pulls everyone's prices and shows them as **community** prices (after your own).
+3. Your saved prices are anonymised into `data/community/` automatically once they're 2 days old. Send them with `node scripts/share_prices.js --pr`.
+
+A shared price keeps only route, cabin, dates priced, price, provider and the day it was searched. Every pull request in the data repo is checked against these rules. Details: the data repo's README.
+
 ## Route network
 
 `data/fares.network.json` holds unpriced connecting routes to the main European and US cities. `scripts/build_network.py` builds it from dated research files (`data/research/YYYY-MM-DD/*.json`), which record which hub serves which city and who operates it, with sources. Only routes where every segment was verified are included. Lufthansa routes flown partly by Lufthansa City Airlines (no KrisFlyer miles) are left out.

@@ -86,16 +86,14 @@
       <p id="share-auto"></p>
       <p>Shared files keep only route, cabin, the dates priced, the price, where it came from and the <b>day</b> it was searched.
         Your search ranges, search times and ids are left out, each date pair is merged to one price per day, and the order is shuffled.</p>
-      <p>To send them: commit <code>data/community/</code> and open a pull request to <code>jtthejam/miles</code>
-        (from your fork, if you can't push to it), or run <code>node scripts/share_prices.js --pr</code> with the GitHub CLI installed.
-        Pull the original repo to get everyone else's prices.</p>
+      <p id="share-how"></p>
       <div class="key-row">
         <label class="inline">Share now: prices at least
           <select id="share-age"><option value="0">0</option><option value="2" selected>2</option><option value="7">7</option><option value="14">14</option></select>
           days old</label>
         <button type="button" id="share-go" class="ghost">Create share file now</button>
       </div>
-      <p class="hint">Prices from Google Flights and SerpApi aren't licensed for redistribution; check their terms before sharing publicly.</p>
+      <p class="hint">Prices are shared only within the private data repo: Google Flights and SerpApi results aren't licensed for public redistribution.</p>
       <pre id="share-msg" class="share-msg" hidden></pre>
     </details>
     <form id="key-form" class="key-form" hidden autocomplete="off">

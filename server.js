@@ -9,6 +9,7 @@ const { buildRows } = require('./lib/calc');
 const live = require('./lib/live');
 const settings = require('./lib/settings');
 const db = require('./lib/db');
+const communityRepo = require('./lib/community-repo');
 const { version } = require('./package.json');
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -30,15 +31,6 @@ function autoShare() {
   }
 }
 
-// Community files in data/community not yet committed to git (null if git isn't available).
-function uncommittedCommunity() {
-  return new Promise((resolve) => {
-    require('node:child_process').execFile('git', ['status', '--porcelain', '--', 'data/community'], { cwd: __dirname, timeout: 5000 }, (err, out) => {
-      if (err) return resolve(null);
-      resolve(String(out).split('\n').filter((l) => /\.jsonl$/.test(l.trim())).length);
-    });
-  });
-}
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.json': 'application/json' };
 
@@ -85,7 +77,7 @@ async function handleApi(url, res) {
     case '/api/db/searches':
       return sendJson(res, 200, {
         searches: db.searches(), ...db.stats(), dir: undefined,
-        autoShare: { enabled: AUTO_SHARE, minAgeDays: AUTO_SHARE_DAYS, last: lastShare, uncommitted: await uncommittedCommunity() },
+        autoShare: { enabled: AUTO_SHARE, minAgeDays: AUTO_SHARE_DAYS, last: lastShare, ...(await communityRepo.status()) },
       });
     case '/api/live':
       try {
@@ -214,10 +206,16 @@ const server = http.createServer((req, res) => {
 });
 
 if (require.main === module) {
-  const loadedDb = db.load(); // every *.jsonl in data/db
-  autoShare();
+  // Get everyone's latest prices from the data repo first (fast-forward only; MILES_COMMUNITY_PULL=0 skips).
+  const pulled = process.env.MILES_COMMUNITY_PULL === '0' ? Promise.resolve({ pulled: false, reason: 'off' }) : communityRepo.pull();
+  pulled.then((p) => {
+    if (!communityRepo.isClone()) console.log(`Community prices: data/community isn't a clone of ${communityRepo.DATA_REPO} (see README to join)`);
+    else if (!p.pulled && p.reason !== 'off') console.log(`Community prices: couldn't update data/community (${p.reason})`);
+  });
+  let loadedDb = db.load(); // every *.jsonl in data/db
+  pulled.then(() => { loadedDb = db.load(); autoShare(); }); // reload with pulled files, then share
   setInterval(autoShare, 6 * 3600e3).unref();
-  live.checkFastFlights().then(() => {
+  Promise.all([live.checkFastFlights(), pulled]).then(() => {
     server.listen(PORT, process.env.HOST || '127.0.0.1', () => {
       const st = live.status();
       const how = st.provider === 'serpapi' ? 'SerpApi' : st.provider === 'fast-flights' ? 'fast-flights (no SerpApi key)' : 'off';

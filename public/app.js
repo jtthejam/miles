@@ -206,6 +206,11 @@ function renderShareStatus(res) {
     ? `<b>Automatic:</b> your saved prices are anonymised into <code>data/community/</code> once they're ${a.minAgeDays} days old (checked on startup and every 6 hours).` +
       (n ? ` <b>${n} file${n === 1 ? '' : 's'}</b> waiting to be committed.` : n === 0 ? ' Nothing waiting to be committed.' : '')
     : 'Automatic sharing is off (<code>MILES_AUTO_SHARE=0</code>). Use the button below to create a share file.';
+  const repo = esc(a.repo || 'jtthejam/miles-prices');
+  $('share-how').innerHTML = a.cloned
+    ? `To send them, run <code>node scripts/share_prices.js --pr</code> (GitHub CLI) — it opens a pull request to the private repo <code>${repo}</code> — or commit them in <code>data/community/</code> and open the pull request yourself. Everyone's merged prices are pulled automatically when the app starts.`
+    : `<b>To share and see other users' prices</b>, ask for access to the private repo <code>${repo}</code>, then clone it into this folder:<br><code>git clone https://github.com/${repo}.git data/community</code>` +
+      (a.files ? `<br>Move the ${a.files} file${a.files === 1 ? '' : 's'} already in <code>data/community/</code> aside first, then copy ${a.files === 1 ? 'it' : 'them'} back into the clone.` : '');
 }
 
 async function sharePrices() {

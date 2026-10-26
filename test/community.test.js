@@ -7,7 +7,8 @@ const os = require('node:os');
 const path = require('node:path');
 
 // Checks every file committed in the real data/community folder (pull requests run this).
-const REAL = path.join(__dirname, '..', 'data', 'community');
+// MILES_COMMUNITY_CHECK_DIR lets the data repo's own check point this test at its files.
+const REAL = process.env.MILES_COMMUNITY_CHECK_DIR || path.join(__dirname, '..', 'data', 'community');
 const realFiles = (() => { try { return fs.readdirSync(REAL).filter((f) => f.endsWith('.jsonl')); } catch { return []; } })();
 const realLines = realFiles.flatMap((f) => fs.readFileSync(path.join(REAL, f), 'utf8').split('\n').filter((l) => l.trim()).map((l, i) => ({ f, i: i + 1, l })));
 
@@ -85,6 +86,12 @@ test('share writes a new file that loads as community prices and is never re-sha
   for (const r of lines) assert.equal(db.communityProblem(r), null);
   assert.equal(db.share({ minAgeDays: 2 }).count, 0);
   assert.equal(db.load().community.records, 2);
+  // Your own shared file isn't a community report.
+  assert.equal(db.communityForRange({ outbound: '2027-03-01', inbound: '2027-03-08', flex: 1 })['TK:BOD:economy'], undefined);
+  // Files committed on a pull-request branch leave the working copy: still not shared again.
+  fs.renameSync(path.join(process.env.MILES_COMMUNITY_DIR, path.basename(res.file)), path.join(tmp, 'moved.jsonl'));
+  db.load();
+  assert.equal(db.share({ minAgeDays: 2 }).count, 0);
 });
 
 test('community prices: reports counted across files; implausible prices ignored', () => {
