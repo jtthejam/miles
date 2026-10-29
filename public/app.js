@@ -136,7 +136,7 @@ async function init() {
   // Google Flights import opened the app again).
   const saveFilters = () => store.set(KEYS.filters, {
     cabin: $('cabin').value, region: $('region').value, sort: $('sort').value,
-    pricedOnly: $('priced-only').checked, roundTrip: $('roundtrip').checked,
+    pricedOnly: $('priced-only').checked, roundTrip: $('roundtrip').checked, bulkUnpriced: $('bulk-unpriced').checked,
   });
   const savedFilters = store.get(KEYS.filters, {});
   for (const id of ['cabin', 'sort']) if (savedFilters[id] && [...$(id).options].some((o) => o.value === savedFilters[id])) $(id).value = savedFilters[id];
@@ -469,6 +469,12 @@ function initDates() {
   $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); refresh(); });
   $('share-go').addEventListener('click', sharePrices);
   $('bulk-go').addEventListener('click', () => { bulkMessage = ''; runBulk(); });
+  $('bulk-unpriced').checked = store.get(KEYS.filters, {}).bulkUnpriced === true;
+  $('bulk-unpriced').addEventListener('change', () => {
+    store.set(KEYS.filters, { ...store.get(KEYS.filters, {}), bulkUnpriced: $('bulk-unpriced').checked });
+    bulkMessage = '';
+    renderBulk();
+  });
   $('region').addEventListener('change', () => { if (!bulkRunning) bulkMessage = ''; });
   $('bulk-stop').addEventListener('click', () => { bulkStop = true; $('bulk-status').textContent = 'Stopping after this search…'; });
   $('saved-searches').addEventListener('change', (e) => { const s = savedSearches[Number(e.target.value)]; if (e.target.value !== '' && s) useSavedSearch(s); });
@@ -667,8 +673,11 @@ let bulkStop = false;
 let bulkRunning = false;
 let bulkMessage = ''; // last run's summary, kept until the region changes
 
+// Every row shown, or only those still without a price (no price of yours, no saved or community
+// search for these dates and no advertised fare).
 function bulkTargets() {
-  return visibleRows();
+  const list = visibleRows();
+  return $('bulk-unpriced').checked ? list.filter((r) => r.priceSgd == null) : list;
 }
 
 function renderBulk() {
@@ -680,7 +689,8 @@ function renderBulk() {
   const all = region === 'all';
   const blocked = all && live !== 'serpapi';
   $('bulk-go').disabled = blocked || !n;
-  $('bulk-go').textContent = `↻ Search ${all ? 'all regions' : region} (${n} row${n === 1 ? '' : 's'})`;
+  const unpriced = $('bulk-unpriced').checked;
+  $('bulk-go').textContent = `↻ Search ${all ? 'all regions' : region} (${n}${unpriced ? ' unpriced' : ''} row${n === 1 ? '' : 's'})`;
   $('bulk-status').textContent = blocked
     ? 'Pick a region to search it with fast-flights; searching every region needs a SerpApi key.'
     : bulkMessage || (live === 'fast-flights' ? 'fast-flights searches one at a time, about 1 s apart.' : '');
@@ -703,7 +713,8 @@ async function runBulk() {
     : `up to ${max} fast-flights search${max === 1 ? '' : 'es'}, taking roughly ${Math.ceil(max * FF_SECONDS_PER_SEARCH / 60)} min: ` +
       `about ${FF_SECONDS_PER_SEARCH} s per search, of which ~1 s is the deliberate pause between searches (pacing) and ` +
       `~${FF_SECONDS_PER_SEARCH - 1} s is fetching and reading each Google Flights page`;
-  if (!confirm(`Search ${targets.length} row${targets.length === 1 ? '' : 's'} in ${all ? 'all regions' : region} for ${datesLabel()}?\n\nThat's ${cost}. Prices saved in the last 24 hours are reused instead of searched again.`)) return;
+  const which = $('bulk-unpriced').checked ? ' without a price' : '';
+  if (!confirm(`Search ${targets.length} row${targets.length === 1 ? '' : 's'}${which} in ${all ? 'all regions' : region} for ${datesLabel()}?\n\nThat's ${cost}. Prices saved in the last 24 hours are reused instead of searched again.`)) return;
 
   bulkRunning = true; bulkStop = false;
   $('bulk-go').disabled = true; $('bulk-stop').hidden = false;

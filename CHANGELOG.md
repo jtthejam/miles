@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.18.1 — 2026-10-29
+
+### Added
+- **Region search: "Only rows without a price"** (checkbox next to the button). It searches only rows that show no price yet: none of yours, no saved or community search for these dates, and no advertised fare. The button shows the count (e.g. "↻ Search North Asia (6 unpriced rows)"), and the setting is remembered.
+
 ## v1.18.0 — 2026-10-29
 
 ### Added
