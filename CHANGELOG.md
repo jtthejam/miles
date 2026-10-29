@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.16.1 — 2026-10-29
+
+### Changed
+- Region search with fast-flights explains its time estimate: about 2.5 s per search. That's ~1 s of deliberate pause between searches (pacing) plus ~1.5 s fetching and reading each Google Flights page. E.g. 159 searches ≈ 7 min.
+
 ## v1.16.0 — 2026-10-29
 
 ### Added

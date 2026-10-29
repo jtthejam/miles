@@ -654,6 +654,10 @@ function renderBulk() {
     : bulkMessage || (live === 'fast-flights' ? 'fast-flights searches one at a time, about 1 s apart.' : '');
 }
 
+// Estimate per fast-flights search: ~1 s pacing pause (mean of the random delay) + ~1.5 s to start the
+// helper, download the Google Flights page (about 2 MB) and read the results from it.
+const FF_SECONDS_PER_SEARCH = 2.5;
+
 async function runBulk() {
   const targets = bulkTargets();
   const region = $('region').value;
@@ -664,7 +668,9 @@ async function runBulk() {
   const provider = meta.live.provider;
   const cost = provider === 'serpapi'
     ? `up to ${max} SerpApi search${max === 1 ? '' : 'es'} (the free plan has 250 a month)`
-    : `up to ${max} fast-flights search${max === 1 ? '' : 'es'}, about 1 s apart (roughly ${Math.ceil(max * 2.5 / 60)} min)`;
+    : `up to ${max} fast-flights search${max === 1 ? '' : 'es'}, taking roughly ${Math.ceil(max * FF_SECONDS_PER_SEARCH / 60)} min: ` +
+      `about ${FF_SECONDS_PER_SEARCH} s per search, of which ~1 s is the deliberate pause between searches (pacing) and ` +
+      `~${FF_SECONDS_PER_SEARCH - 1} s is fetching and reading each Google Flights page`;
   if (!confirm(`Search ${targets.length} row${targets.length === 1 ? '' : 's'} in ${all ? 'all regions' : region} for ${datesLabel()}?\n\nThat's ${cost}. Prices saved in the last 24 hours are reused instead of searched again.`)) return;
 
   bulkRunning = true; bulkStop = false;
