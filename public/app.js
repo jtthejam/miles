@@ -438,11 +438,17 @@ function datesLabel() {
   return `${back ? shortRange(out, back) : `${shortDate(out)} (7 nights)`}${flex ? ` ± ${flex} day${flex > 1 ? 's' : ''}` : ''}`;
 }
 
+// While a year is being typed digit by digit, the browser reports 0002, 0020, 0202 before 2027.
+const typingYear = (v) => !!v && v < '1900';
+// Setting min on a date field restarts the browser's keyboard entry in it, so only change it when
+// it actually changes (it used to be reset on every keystroke, breaking typed years).
+const setMin = (el, v) => { if (el.min !== v) el.min = v; };
+
 function renderDates() {
   const out = $('out-date').value, flex = Number($('flex-days').value);
   const today = localToday();
-  $('out-date').min = today;
-  $('in-date').min = out || today;
+  setMin($('out-date'), today);
+  setMin($('in-date'), out || today);
   $('flex-days').disabled = !out;
   if (!out) $('flex-days').value = '0';
   $('dates-clear').hidden = !out && !$('in-date').value;
@@ -470,11 +476,15 @@ function initDates() {
     if ([0, 1, 2, 3].includes(saved.flex)) $('flex-days').value = String(saved.flex);
   }
   $('out-date').addEventListener('change', () => {
+    if (typingYear($('out-date').value)) return; // still typing the year
     // Keep return on or after departure.
     if ($('in-date').value && $('out-date').value && $('in-date').value < $('out-date').value) $('in-date').value = '';
     renderDates(); refresh();
   });
-  ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); refresh(); }));
+  ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => {
+    if (typingYear($(id).value)) return;
+    renderDates(); refresh();
+  }));
   $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); refresh(); });
   $('share-go').addEventListener('click', sharePrices);
   $('bulk-go').addEventListener('click', () => { bulkMessage = ''; runBulk(); });

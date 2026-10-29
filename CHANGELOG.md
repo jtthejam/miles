@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.23.1 — 2026-10-29
+
+### Fixed
+- **Typing dates with the keyboard works.** Typing a year digit by digit failed at the second digit: the browser reports partial years (0002, 0020, 0202) as dates, and the app reacted to each one by resetting the field's minimum date, which restarted the year. Partial years are now ignored and the minimum is only set when it changes.
+- **Clear dates and Add SerpApi key line up with the date fields**: same row, same height, bottoms aligned with the inputs. The date row sits on its own line under "Live prices".
+
 ## v1.23.0 — 2026-10-29
 
 ### Added

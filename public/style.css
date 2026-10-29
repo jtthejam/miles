@@ -283,9 +283,13 @@ label.cls select { position: absolute; inset: 0; width: 100%; opacity: 0; cursor
 
 /* Live prices + SerpApi key prompt */
 .live { flex-direction: column; align-items: stretch; }
-.live-row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.live-row { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: flex-end; }
+.live-row > strong, .live-row > .live-status { align-self: center; }
 .live-status { font-size: 13px; color: var(--muted); }
-.live-dates { display: inline-flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+/* Dates, flexibility, saved searches and the buttons share one line below the title. */
+.live-dates { display: flex; flex: 1 1 100%; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+.live-dates input[type="date"], .live-dates select, #dates-clear, #key-toggle { height: 38px; box-sizing: border-box; }
+#dates-clear { margin-left: 0; }
 .date-hint { margin: 6px 0 0; }
 .fare-dates { display: block; font-size: 11px; color: var(--muted); white-space: nowrap; margin-top: 2px; }
 button.small { font-size: 13px; padding: 5px 10px; margin-left: auto; }
