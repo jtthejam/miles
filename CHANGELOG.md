@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.23.0 — 2026-10-29
+
+### Added
+- **Sales calendar: EVA Air, Thai Airways and United.** Sales from other markets are shown with a dashed outline, as before.
+  - **EVA Air:** NATAS Travel fair offer (Singapore, mid–late March; **main**: up to 15% off Taipei, 12% off US West Coast, Dallas, Washington and Vancouver, 5–7% off Europe), Trip.com promo to Taiwan (Singapore, February), summer discounts (Taiwan, July), year-end 12% promo code (global, mid-December – early January).
+  - **Thai Airways:** Mid-year sale (Thailand, late May – mid June; **main**), Black Week (Europe, around Black Friday).
+  - **United:** only a US cardholder Cyber Week award sale (early December, miles). No United cash-fare sale for Singapore was found.
+
 ## v1.22.0 — 2026-10-29
 
 ### Added

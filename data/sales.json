@@ -305,11 +305,79 @@
       "market": "New Zealand",
       "basis": "8–22 Sep 2025, 40 international destinations incl. Singapore, Tokyo, New York",
       "url": "https://www.newstalkzb.co.nz/lifestyle/air-nz-adventure-beyond-sale-discounted-flights-to-new-york-tokyo-london-and-more"
+    },
+    {
+      "carrier": "BR",
+      "name": "NATAS Travel fair offer",
+      "tier": "main",
+      "start": "03-13",
+      "end": "03-31",
+      "basis": "Book 13–31 Mar 2026 (via TripZilla, Singapore bank cards), travel to 30 Mar 2027: up to 15% off Taipei, 12% off Los Angeles, San Francisco, Seattle, Dallas, Washington and Vancouver (Economy and Premium Economy), 5–7% off Europe, Chicago, Houston, New York and Toronto",
+      "url": "https://www.tripzilla.sg/promotion/11449/natas-fair-2026-eva-air",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "BR",
+      "name": "Trip.com promo to Taiwan",
+      "tier": "small",
+      "start": "02-01",
+      "end": "02-28",
+      "basis": "Up to 12% off EVA flights to Taiwan on Trip.com Singapore, plus S$50 code; book by 28 Feb 2025 (start date not stated)",
+      "url": "https://sgdtips.com/eva-air-x-trip-com-save-up-to-12-extra-s50-off-flights-to-taiwan/",
+      "market": "Singapore"
+    },
+    {
+      "carrier": "BR",
+      "name": "Summer discounts",
+      "tier": "small",
+      "start": "07-07",
+      "end": "07-25",
+      "basis": "Book 7–25 Jul 2025, up to 17% off, travel by 30 Sep (departures from Taiwan)",
+      "url": "https://www.taiwannews.com.tw/news/6150508",
+      "market": "Taiwan"
+    },
+    {
+      "carrier": "BR",
+      "name": "Year-end 12% off promo code",
+      "tier": "large",
+      "start": "12-16",
+      "end": "01-05",
+      "basis": "Posted 16 Dec 2025, book by 5 Jan 2026; 12% off to Taiwan, Japan, Korea, the US, Canada and Europe, travel Mar–Jun and Sep–Dec 2026. Code EVAGSC reported to work outside the US (EVA12DAYS for US departures)",
+      "url": "https://slickdeals.net/f/18979867-eva-air-12-off-airfares-stacks-with-chase-offer-ymmv-book-by-january-5-2026",
+      "market": "Global"
+    },
+    {
+      "carrier": "TG",
+      "name": "Mid-year sale",
+      "tier": "main",
+      "start": "05-26",
+      "end": "06-15",
+      "basis": "Late May – mid June each year; booking windows 26 May – 1 Jun and 3–15 Jun; fares from Bangkok to Asia, South Asia and Australia (also run as Mid Year Wander / Mid Year Escape in other markets, e.g. Japan from 12 Jun 2026)",
+      "url": "https://www.airtraveler.club/blog/when-airlines-have-sales/",
+      "market": "Thailand"
+    },
+    {
+      "carrier": "TG",
+      "name": "Black Week",
+      "tier": "large",
+      "start": "11-24",
+      "end": "12-01",
+      "basis": "Black Week offers on Thai's UK, Scandinavian, Benelux and French sites around Black Friday (late Nov); exact dates not published on the pages we could read",
+      "url": "https://www.thaiairways.com/en-gb/content/offers-Promotions/special-offers/black-week/",
+      "market": "Europe"
+    },
+    {
+      "carrier": "UA",
+      "name": "Cardmember Cyber Week award sale",
+      "tier": "small",
+      "start": "12-01",
+      "end": "12-05",
+      "basis": "Five days from 1 Dec 2025: award flights from 12,000–45,000 miles one way (incl. Japan, Australia, NZ) for US Chase United cardholders (miles, not cash fares)",
+      "url": "https://thepointsguy.com/deals/united-cyber-week-sale/",
+      "market": "North America"
     }
   ],
   "none": {
-    "UA": "No United sale pattern found for the Singapore market (checked 26 Oct 2026); United's published sales target US departures.",
-    "BR": "EVA Air sale windows for Singapore not researched yet (added 29 Oct 2026). EVA's site lists fares found in the last 48 hours rather than dated sales.",
-    "TG": "Thai Airways sale windows for Singapore not researched yet (added 29 Oct 2026)."
+    "UA": "No United cash-fare sale pattern found (checked 26 and 29 Oct 2026); its published sales target US departures. Only a US cardholder award sale is listed."
   }
 }
