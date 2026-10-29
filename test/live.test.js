@@ -235,11 +235,12 @@ test('connecting routes: SerpApi limits stops and keeps only offers via the row\
     assert.equal(out.offers, 2);
     assert.equal(out.otherConnections, 2);
 
-    // Nonstop rows are unchanged: no stops parameter, price_insights still used.
+    // Nonstop rows: nonstop only (stops=1), and connecting offers don't count. Every mocked offer
+    // connects, so there's no nonstop price; price_insights (900, any routing) isn't used.
     live._test.cache.clear();
     const direct = await live.lowestReturnFare({ ...q(), dest: 'IST', carrier: 'TK', cabin: 'economy' });
-    assert.equal(params.get('stops'), null);
-    assert.equal(direct.lowest, 900);
+    assert.equal(params.get('stops'), '1');
+    assert.equal(direct.lowest, null);
   } finally {
     global.fetch = realFetch;
     settings.clearSerpApiKey();

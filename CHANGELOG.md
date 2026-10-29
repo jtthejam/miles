@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.15.2 — 2026-10-29
+
+### Fixed
+- **Nonstop rows were priced with connecting itineraries** in ↻ searches. Checked against the live Google Flights page for SQ Singapore–Los Angeles (2–9 May 2027): Singapore Airlines also sells SIN–NRT–LAX, and that S$1,012 itinerary priced the nonstop row, whose miles assume the nonstop distance. The nonstop fare was S$1,020.
+  - fast-flights: only itineraries with the row's exact routing count; for nonstop rows, nonstop only.
+  - SerpApi: nonstop rows search nonstop only (`stops=1`) and keep only offers without layovers. Google's overall `price_insights` lowest, which covers any routing, is no longer used.
+  - Bookmark imports already did this (since v1.11.0).
+
+### Checked
+- The live Google Flights page (via your laptop's browser) still has the data layout fast-flights reads. So the v1.15.1 `IndexError` comes from the different page Google serves fast-flights' own HTTP client. v1.15.1's tolerant reading skips such results, and saves pages without data to `.local/ff-debug/`.
+
 ## v1.15.1 — 2026-10-29
 
 ### Fixed

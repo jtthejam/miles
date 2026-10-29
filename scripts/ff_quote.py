@@ -4,8 +4,8 @@
 Usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]
   CABIN: economy | premium      dates: YYYY-MM-DD
   CARRIERS: 2-letter IATA code(s), comma-separated for mixed-airline routes (e.g. SQ,LX)
-  VIA: connection airports, comma-separated (e.g. IST), or "-" / omitted for any. With VIA, only
-       itineraries that connect exactly there count (the row's miles assume that connection).
+  VIA: connection airports, comma-separated (e.g. IST), or "-" / omitted for nonstop. Only
+       itineraries with exactly that routing count (the row's miles assume it).
   AIRLINE_NAMES: mixed routes only, "|"-separated (e.g. "Singapore Airlines|SWISS"). Only itineraries
        using exactly these airlines count, so a SWISS-only itinerary doesn't price an SQ + SWISS row.
 Prints one JSON object: {"lowest": int|null, "average": int|null, "offers": int} or {"error": "..."}.
@@ -79,8 +79,9 @@ def main(argv):
         return ok([], 0)
 
     # The query already restricts results to the requested airline (accrual depends on the operator).
-    if via:
-        results = [r for r in results if r["path"][: len(via) + 2] == ["SIN", *via, dest]]
+    # The row's miles assume its exact routing: nonstop rows only count nonstop itineraries (e.g. SQ
+    # Los Angeles also sells SIN-NRT-LAX), connecting rows only their connection.
+    results = [r for r in results if r["path"][: len(via) + 2] == ["SIN", *via, dest]]
     if names:
         want = {n.lower() for n in names}
         results = [r for r in results if {a.lower() for a in r["airlines"]} == want]
