@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.20.0 — 2026-10-29
+
+### Added
+- **Click the map to search missing prices.** With live prices on, clicking a dashed (unpriced) route searches its fares without a price, and clicking a city searches every unpriced fare to it. It works like ↻: your dates, flexibility and Max connection apply, prices saved in the last 24 h are reused, and results are saved to the price database. A status line under the map shows progress ("Searching Portland: 1 of 2…") and the result. The tooltip says "Click to search the 2 fares without a price". One map search runs at a time. Priced routes and cities just show details as before.
+
 ## v1.19.1 — 2026-10-29
 
 ### Fixed

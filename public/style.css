@@ -151,6 +151,8 @@ i.sw.c5 { color: var(--c5); } i.sw.c6 { color: var(--c6); } i.sw.c7 { color: var
 .map-tip .tt-h { font-weight: 650; font-size: 14px; }
 .map-tip .tt-h span { font-weight: 400; color: var(--muted); font-size: 12px; margin-left: 4px; }
 .map-tip .tt-s { color: var(--muted); margin-bottom: 4px; }
+.map-tip .tt-search { margin-top: 6px; font-size: 12px; color: var(--accent, #1f6fd1); font-weight: 600; }
+.map-status { margin: 8px 0 0; font-size: 13px; }
 .map-tip table { min-width: 0; width: 100%; border-collapse: collapse; }
 .map-tip td, .map-tip th { padding: 3px 8px 3px 0; border: 0; white-space: nowrap; }
 .map-tip th { position: static; background: none; font-size: 11px; font-weight: 600; color: var(--muted); }

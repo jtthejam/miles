@@ -134,7 +134,7 @@ window.RouteMap = (() => {
       const hit = el('path', { d, class: 'route-hit', tabindex: '0', 'aria-label': `${g.rows[0].city} on ${g.rows[0].carrierName}` });
       const show = (e) => { if (dragging) return; clearActive(); vis.classList.add('active'); showTip(e, routeTip(g)); };
       hit.addEventListener('pointermove', show);
-      hit.addEventListener('click', show);
+      hit.addEventListener('click', (e) => { show(e); searchUnpriced(g.rows, `${g.rows[0].city} (${g.stops.join('–')})`); });
       hit.addEventListener('focus', show);
       hit.addEventListener('pointerleave', () => vis.classList.remove('active'));
       gRoutes.append(vis, hit);
@@ -158,7 +158,10 @@ window.RouteMap = (() => {
       const dot = el('circle', { r: 4, class: 'dest', tabindex: '0', 'aria-label': airports[code].city });
       const hitDot = el('circle', { r: 11, class: 'dot-hit' });
       const show = (e) => { if (!dragging) showTip(e, cityTip(code, list)); };
-      [dot, hitDot].forEach((n) => { n.addEventListener('pointermove', show); n.addEventListener('click', show); });
+      [dot, hitDot].forEach((n) => {
+        n.addEventListener('pointermove', show);
+        n.addEventListener('click', (e) => { show(e); searchUnpriced(list, airports[code].city); });
+      });
       dot.addEventListener('focus', show);
       gDots.append(hitDot, dot);
       dotEls.push({ code, nodes: [hitDot, dot] });
@@ -194,11 +197,46 @@ window.RouteMap = (() => {
 
   const TT_HEAD = '<tr class="tt-th"><th>Airline</th><th>Cabin</th><th class="num">Miles earned</th><th class="num">Fare</th><th class="num">mi/S$</th></tr>';
 
+  // "Click to search": shown when some fares have no price and live search is on.
+  const searchHint = (list) => {
+    const n = list.filter((r) => r.priceSgd == null).length;
+    if (!n || !onSearch) return '';
+    return `<div class="tt-search">${searching ? 'A search is running…' : `Click to search the ${n === 1 ? 'fare' : `${n} fares`} without a price`}</div>`;
+  };
+
   const routeTip = (g) => `<div class="tt-h">${esc(g.rows[0].city)} <span>${g.stops.join(' → ')}</span></div>
-    <div class="tt-s">${fmt(g.rows[0].distance)} mi each way</div><table>${TT_HEAD}${g.rows.map(rowLine).join('')}</table>`;
+    <div class="tt-s">${fmt(g.rows[0].distance)} mi each way</div><table>${TT_HEAD}${g.rows.map(rowLine).join('')}</table>${searchHint(g.rows)}`;
 
   const cityTip = (code, list) => `<div class="tt-h">${esc(airports[code].city)} <span>${code}</span></div>
-    <table>${TT_HEAD}${[...list].sort((a, b) => (b.milesPerSgd ?? -1) - (a.milesPerSgd ?? -1)).map(rowLine).join('')}</table>`;
+    <table>${TT_HEAD}${[...list].sort((a, b) => (b.milesPerSgd ?? -1) - (a.milesPerSgd ?? -1)).map(rowLine).join('')}</table>${searchHint(list)}`;
+
+  // ---------- click to search ----------
+
+  // onSearch(rows, onProgress) is set by the app when live prices are on; it searches the rows one
+  // by one, saves the prices and re-renders the map. One search at a time.
+  let onSearch = null;
+  let searching = false;
+  function setStatus(text) {
+    const s = root && root.querySelector('#map-status');
+    if (s) { s.textContent = text; s.hidden = !text; }
+  }
+  async function searchUnpriced(list, label) {
+    if (dragging || !onSearch) return;
+    const todo = list.filter((r) => r.priceSgd == null);
+    if (!todo.length) return;
+    if (searching) { setStatus('A search is already running; wait for it to finish.'); return; }
+    searching = true;
+    try {
+      const n = todo.length;
+      setStatus(`Searching ${label}: ${n} fare${n === 1 ? '' : 's'} without a price…`);
+      const out = await onSearch(todo, (i, r) => setStatus(`Searching ${label}: ${i + 1} of ${n} (${r.carrierName} · ${r.cabin === 'premium' ? 'Premium Economy' : 'Economy'})…`));
+      setStatus(`${label}: ${out.priced} of ${n} priced${out.notFound ? `, ${out.notFound} with no fares` : ''}${out.failed ? `, ${out.failed} failed (see the console)` : ''}.`);
+    } catch (e) {
+      setStatus(`${label}: search failed: ${e.message}`);
+    } finally {
+      searching = false;
+    }
+  }
 
   function showTip(e, html) {
     tip.innerHTML = html;
@@ -296,7 +334,7 @@ window.RouteMap = (() => {
 
   // ---------- init ----------
 
-  async function init(container, meta) {
+  async function init(container, meta, opts = {}) {
     root = container;
     airports = meta.airports;
     carriers = meta.carriers;
@@ -313,6 +351,7 @@ window.RouteMap = (() => {
       </div>
       <div class="map-frame"></div>
       <div class="map-tip" role="tooltip" hidden></div>
+      <p class="map-status" id="map-status" role="status" hidden></p>
       <p class="hint" id="map-hint"></p>`;
     frame = root.querySelector('.map-frame');
     tip = root.querySelector('.map-tip');
@@ -327,10 +366,12 @@ window.RouteMap = (() => {
     frame.prepend(svg);
 
     const hint = () => {
-      root.querySelector('#map-hint').textContent = kind === 'globe'
+      const click = onSearch ? ' Click a dashed route or a city to search its missing prices (your dates and Max connection apply).' : '';
+      root.querySelector('#map-hint').textContent = (kind === 'globe'
         ? 'Drag to spin · scroll or pinch to zoom · double-click to recentre. Tap a route or city for details; dashed = no price yet. Filters above apply.'
-        : 'Hover or tap a route or city for details; dashed = no price yet. Lines are great-circle paths. Filters above apply.';
+        : 'Hover or tap a route or city for details; dashed = no price yet. Lines are great-circle paths. Filters above apply.') + click;
     };
+    onSearch = opts.onSearch || null;
     root.querySelector('#map-mode').addEventListener('change', (e) => { mode = e.target.value; render(lastRows); });
     root.querySelector('#map-kind').addEventListener('change', (e) => {
       kind = e.target.value === 'flat' ? 'flat' : 'globe';

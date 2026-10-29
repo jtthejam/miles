@@ -40,7 +40,8 @@ function setView(v) {
   $('map-view').hidden = view !== 'map';
   $('plan-view').hidden = view !== 'plan';
   if (view === 'map' && !mapReady) {
-    mapReady = window.RouteMap.init($('map-view'), meta).catch((e) => {
+    // Clicking an unpriced route or city on the map searches it (when live prices are on).
+    mapReady = window.RouteMap.init($('map-view'), meta, { onSearch: meta.live.provider ? searchFromMap : null }).catch((e) => {
       $('map-view').innerHTML = `<p class="err">Map failed to load: ${esc(e.message)}</p>`;
     });
   }
@@ -716,6 +717,24 @@ function renderBulk() {
 // Estimate per fast-flights search: ~1 s pacing pause (mean of the random delay) + ~1.5 s to start the
 // helper, download the Google Flights page (about 2 MB) and read the results from it.
 const FF_SECONDS_PER_SEARCH = 2.5;
+
+// Map click: search the given unpriced rows one at a time (same as ↻), then show the new prices.
+async function searchFromMap(list, onProgress) {
+  let priced = 0, notFound = 0, failed = 0;
+  for (const [i, row] of list.entries()) {
+    onProgress(i, row);
+    try {
+      const res = await searchRow(row);
+      if (res.lowest != null) priced++; else notFound++;
+    } catch (e) {
+      failed++;
+      console.warn(`Map search: ${row.city} ${row.carrierName} ${CABIN_LABEL[row.cabin]}: ${e.message}`);
+    }
+  }
+  await refresh();
+  loadSavedSearches();
+  return { priced, notFound, failed };
+}
 
 async function runBulk() {
   const targets = bulkTargets();
