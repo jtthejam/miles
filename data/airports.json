@@ -604,5 +604,17 @@
     "region": "Europe",
     "lat": 46.2381,
     "lon": 6.109
+  },
+  "YVR": {
+    "city": "Vancouver",
+    "region": "Americas",
+    "lat": 49.1939,
+    "lon": -123.1844
+  },
+  "YYZ": {
+    "city": "Toronto",
+    "region": "Americas",
+    "lat": 43.6777,
+    "lon": -79.6248
   }
 }

@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.21.0 — 2026-10-29
+
+### Added
+- **EVA Air** (Star Alliance), 34 rows: Taipei nonstop, and via Taipei to Los Angeles, San Francisco, Seattle, New York (JFK), Chicago, Houston, Dallas/Fort Worth, Washington (Dulles), Vancouver, Toronto, London (Heathrow), Paris, Amsterdam, Vienna, Munich and Milan. Every route has Economy and Premium Economy.
+  - KrisFlyer accrual (chart dated 8 Aug 2025): Premium Economy K/L 110%, P/T 100%; Economy B/M/Y 100%, H/Q/S 50%. **V and W earn nothing.**
+  - Sale fares assumed **S** (Economy, 50%) and **T** (Premium Economy, 100%); EVA doesn't publish them. Its cheapest Economy Basic fares can book into V/W (0 miles): check the class before buying, and set it on the row.
+  - Advertised fares from EVA's Singapore site (seen 29 Oct 2026), e.g. San Francisco S$1,326 Economy / S$2,268 Premium Economy, Toronto S$1,601 / S$2,389, Taipei S$465 / S$651. Europe and a few US cabins have no advertised fare yet: use ↻, G or click them on the map.
+  - New airports: Vancouver (YVR), Toronto (YYZ). Map colour: brown.
+  - Vienna: some EVA flights stop in Bangkok; those 2-stop itineraries aren't counted by live searches.
+
 ## v1.20.0 — 2026-10-29
 
 ### Added

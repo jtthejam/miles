@@ -539,5 +539,61 @@
     },
     "noAdvertisedFare": "No Singapore-origin United fare in SGD was found published (checked 26 Oct 2026; deals found were US-origin, in USD). Price United routes with G, the refresh button or your own quote."
   },
+  "BR": {
+    "name": "EVA Air",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "M",
+            "Y"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "H",
+            "Q",
+            "S"
+          ]
+        }
+      ],
+      "premium": [
+        {
+          "pct": 110,
+          "classes": [
+            "K",
+            "L"
+          ]
+        },
+        {
+          "pct": 100,
+          "classes": [
+            "P",
+            "T"
+          ]
+        }
+      ]
+    },
+    "note": "Taipei hub: every route except Taipei itself connects there. Premium Economy is K/L (110%) or P/T (100%). Economy V and W (the cheapest fares) are not in the KrisFlyer chart and earn nothing.",
+    "saleFare": {
+      "economy": {
+        "class": "S",
+        "family": "Economy (discounted)",
+        "confidence": "assumed",
+        "basis": "EVA doesn't publish sale-fare classes; the lowest earning tier (H/Q/S, 50%) is assumed. Economy Basic can book into V or W, which earn no KrisFlyer miles: check the booking class before you buy.",
+        "url": "https://wheretocredit.com/en/BR"
+      },
+      "premium": {
+        "class": "T",
+        "family": "Premium Economy (discounted)",
+        "confidence": "assumed",
+        "basis": "EVA Premium Economy books into K, L, P or T; discounted P/T (100%) assumed for sale fares. K/L earn 110%.",
+        "url": "https://wheretocredit.com/en/BR"
+      }
+    }
+  },
   "_hubsNote": "hubs: connection airports a one-stop route on this airline may use. Rows connecting at one of them are 'flexible': searches accept any listed hub and miles follow the connection of the price found. 'match' is how Google Flights names the airport in its results. Lufthansa is left out on purpose: a different hub may be flown by Lufthansa City Airlines (no KrisFlyer miles)."
 }

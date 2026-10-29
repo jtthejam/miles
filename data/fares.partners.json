@@ -18,5 +18,22 @@
   {"carrier": "NH", "to": "LAX", "via": ["HND"], "price": {"economy": 1188, "premium": null}, "source": {"economy": "nh-lax-2026-10"}},
   {"carrier": "CA", "to": "PEK", "via": [], "price": {"economy": 425, "premium": null}, "source": {"economy": "ca-cheapflights-2026-10"}},
   {"carrier": "NZ", "to": "AKL", "via": [], "price": {"economy": 983, "premium": 2352}, "source": {"economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08"}},
-  {"carrier": "NZ", "to": "CHC", "via": [], "price": {"economy": 1288, "premium": 2355}, "source": {"economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08"}}
+  {"carrier": "NZ", "to": "CHC", "via": [], "price": {"economy": 1288, "premium": 2355}, "source": {"economy": "nz-promo-2026-08", "premium": "nz-promo-2026-08"}},
+  {"carrier": "BR", "to": "TPE", "via": [], "price": {"economy": 465, "premium": 651}, "source": {"economy": "br-site-2026-10", "premium": "br-site-2026-10"}},
+  {"carrier": "BR", "to": "LAX", "via": ["TPE"], "price": {"economy": 1388, "premium": 2378}, "source": {"economy": "br-site-2026-10", "premium": "br-site-2026-10"}},
+  {"carrier": "BR", "to": "SFO", "via": ["TPE"], "price": {"economy": 1326, "premium": 2268}, "source": {"economy": "br-site-2026-10", "premium": "br-site-2026-10"}},
+  {"carrier": "BR", "to": "SEA", "via": ["TPE"], "price": {"economy": 1317, "premium": null}, "source": {"economy": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "JFK", "via": ["TPE"], "price": {"economy": 1580, "premium": 3170}, "source": {"economy": "br-us-2026-10", "premium": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "ORD", "via": ["TPE"], "price": {"economy": 1637, "premium": null}, "source": {"economy": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "IAH", "via": ["TPE"], "price": {"economy": null, "premium": 3032}, "source": {"premium": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "DFW", "via": ["TPE"], "price": {"economy": 1602, "premium": 4088}, "source": {"economy": "br-site-2026-10", "premium": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "IAD", "via": ["TPE"], "price": {"economy": 2001, "premium": null}, "source": {"economy": "br-us-2026-10"}},
+  {"carrier": "BR", "to": "YVR", "via": ["TPE"], "price": {"economy": 1419, "premium": 2524}, "source": {"economy": "br-site-2026-10", "premium": "br-site-2026-10"}},
+  {"carrier": "BR", "to": "YYZ", "via": ["TPE"], "price": {"economy": 1601, "premium": 2389}, "source": {"economy": "br-site-2026-10", "premium": "br-pe-2026-10"}},
+  {"carrier": "BR", "to": "LHR", "via": ["TPE"], "price": {"economy": null, "premium": null}},
+  {"carrier": "BR", "to": "CDG", "via": ["TPE"], "price": {"economy": null, "premium": null}},
+  {"carrier": "BR", "to": "AMS", "via": ["TPE"], "price": {"economy": null, "premium": null}},
+  {"carrier": "BR", "to": "VIE", "via": ["TPE"], "price": {"economy": null, "premium": null}, "note": "Some EVA Vienna flights stop in Bangkok; those itineraries have 2 stops and are not counted by live searches."},
+  {"carrier": "BR", "to": "MUC", "via": ["TPE"], "price": {"economy": null, "premium": null}},
+  {"carrier": "BR", "to": "MXP", "via": ["TPE"], "price": {"economy": null, "premium": null}}
 ]
