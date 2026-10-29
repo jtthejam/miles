@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.19.1 — 2026-10-29
+
+### Fixed
+- **fast-flights now searches as Singapore** (`gl=sg`, `hl=en`), like the G links. fast-flights only sent `hl=en-GB&curr=SGD`, and for some searches Google then left every fare out of the page. Example: Air China to London, 30 Apr – 9 May 2027, 8 h max connection: all four Beijing itineraries came back "Price unavailable" (so "no fares"). The same search with `gl=sg` returns S$1,714, matching Google Flights.
+
 ## v1.19.0 — 2026-10-29
 
 ### Added

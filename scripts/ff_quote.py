@@ -74,9 +74,17 @@ def main(argv):
         seat=SEAT[cabin],
         trip="round-trip",
         passengers=Passengers(adults=1),
-        language="en-GB",
+        language="en",
         currency="SGD",
     )
+    # Ask as Singapore (gl=sg), like the app's G links. fast-flights sends only hl and curr, and
+    # without a country Google can leave fares out of the page: e.g. Air China SIN-LHR with an 8 h
+    # layover limit came back with every price missing, while the same search with gl=sg had S$1,714.
+    base_params = query.params
+    try:
+        object.__setattr__(query, "params", lambda: {**base_params(), "gl": "sg"})
+    except Exception:
+        pass
     # The exact URL fast-flights requests (its fetcher: URL + query.params()), reported in the output
     # so it can be opened in a browser to compare with what fast-flights receives.
     global REQUEST_URL
