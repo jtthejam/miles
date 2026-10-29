@@ -8,7 +8,8 @@ Usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]
        itineraries with exactly that routing count (the row's miles assume it).
   AIRLINE_NAMES: mixed routes only, "|"-separated (e.g. "Singapore Airlines|SWISS"). Only itineraries
        using exactly these airlines count, so a SWISS-only itinerary doesn't price an SQ + SWISS row.
-Prints one JSON object: {"lowest": int|null, "average": int|null, "offers": int} or {"error": "..."}.
+Prints a first line {"url": "..."} (the Google Flights URL requested), then one JSON object:
+{"lowest": int|null, "average": int|null, "offers": int, "skipped": int, "url": "..."} or {"error": "...", "url": "..."}.
 Exit code 0 on success (including "no flights"), 1 on error.
 
 fast-flights reverse-engineers Google's page format and may break without notice. Its own parser
@@ -73,6 +74,8 @@ def main(argv):
         REQUEST_URL = f"{FF_URL}?{urlencode(query.params())}"
     except Exception:
         REQUEST_URL = None
+    # Printed first, so the URL is known even if the fetch hangs or Python crashes.
+    print(json.dumps({"url": REQUEST_URL}), flush=True)
     try:
         html = fetch_flights_html(query)
     except Exception as e:  # network errors, blocks

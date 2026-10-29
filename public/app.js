@@ -622,6 +622,10 @@ $('rows').addEventListener('click', async (e) => {
     // The Google Flights URLs fast-flights requested (one per date searched), to open and compare by hand.
     const urls = res.urls || (res.byDate || []).map((d) => d.url).filter(Boolean);
     if (urls.length) console.log(`fast-flights URLs for ${row.carrierName} ${row.code} ${CABIN_LABEL[cabin]}:\n${urls.join('\n')}`);
+    for (const d of res.byDate || []) {
+      if (d.fromDb) console.log(`${d.outbound}–${d.inbound}: reused a price saved in the last 24 h (no search)`);
+      else if (d.error) console.warn(`${d.outbound}–${d.inbound}: ${d.error}`);
+    }
     if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));

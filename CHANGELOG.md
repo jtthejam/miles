@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.15.4 — 2026-10-29
+
+### Fixed
+- **Failed fast-flights searches now log their URL and the real cause.** The helper prints the Google Flights URL *before* fetching, so it's known even if the fetch hangs or Python crashes. Failures now say which happened:
+  - "fast-flights timed out after 45 s" (`MILES_FF_TIMEOUT_MS` changes the limit);
+  - "fast-flights crashed: <last line of the Python error>";
+  - or the helper's own message (e.g. Google returned a page without flight data).
+  - The browser console also shows, per date searched, the error or "reused a price saved in the last 24 h (no search)".
+- **"No fares found" results are no longer reused** for 24 hours: a ↻ searches those dates again. Only priced results are reused.
+
+### Checked
+- Live Google Flights page for SQ Singapore–New York (JFK), Premium Economy, 30 Apr – 9 May 2027 (from your laptop's browser): nonstop S$1,907 and via Frankfurt S$2,217 / S$3,964. It parses fine with fast-flights 3.1.0 and with the app's reader. So that failure happens before parsing; the new messages will show where.
+
 ## v1.15.3 — 2026-10-29
 
 ### Added

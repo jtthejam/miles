@@ -1,6 +1,6 @@
 {
   "name": "miles-maximiser",
-  "version": "1.15.3",
+  "version": "1.15.4",
   "description": "KrisFlyer miles earned per SGD for Singapore Airlines and Star Alliance Economy and Premium Economy flights from Singapore",
   "main": "server.js",
   "private": true,
