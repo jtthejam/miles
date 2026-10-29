@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.15.3 — 2026-10-29
+
+### Added
+- **fast-flights request URLs are logged**, so you can open the exact Google Flights page fast-flights asked for and compare:
+  - in the browser console after each ↻ (`fast-flights URLs for …`, one per date searched, also when the search fails);
+  - in the server terminal (`[fast-flights] <dates> <airline> <dest>: <url>`, or `FAILED … — <reason>`).
+- `scripts/ff_quote.py` output and `/api/live` responses include the URL (`url`; `byDate[].url`; `urls` on errors).
+
 ## v1.15.2 — 2026-10-29
 
 ### Fixed

@@ -619,6 +619,9 @@ $('rows').addEventListener('click', async (e) => {
     const q = new URLSearchParams({ route: row.routeId, cabin, ...dateParams() });
     if (Number(q.get('flex'))) btn.title = `Searching ${2 * q.get('flex') + 1} date options…`;
     const res = await (await fetch(`/api/live?${q}`)).json();
+    // The Google Flights URLs fast-flights requested (one per date searched), to open and compare by hand.
+    const urls = res.urls || (res.byDate || []).map((d) => d.url).filter(Boolean);
+    if (urls.length) console.log(`fast-flights URLs for ${row.carrierName} ${row.code} ${CABIN_LABEL[cabin]}:\n${urls.join('\n')}`);
     if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));

@@ -64,6 +64,15 @@ def main(argv):
         language="en-GB",
         currency="SGD",
     )
+    # The exact URL fast-flights requests (its fetcher: URL + query.params()), reported in the output
+    # so it can be opened in a browser to compare with what fast-flights receives.
+    global REQUEST_URL
+    try:
+        from fast_flights.fetcher import URL as FF_URL
+        from urllib.parse import urlencode
+        REQUEST_URL = f"{FF_URL}?{urlencode(query.params())}"
+    except Exception:
+        REQUEST_URL = None
     try:
         html = fetch_flights_html(query)
     except Exception as e:  # network errors, blocks
@@ -157,19 +166,23 @@ def save_debug(html):
         return None
 
 
+REQUEST_URL = None
+
+
 def ok(prices, skipped=0):
     out = {
         "lowest": min(prices) if prices else None,
         "average": round(sum(prices) / len(prices)) if prices else None,
         "offers": len(prices),
         "skipped": skipped,
+        "url": REQUEST_URL,
     }
     print(json.dumps(out))
     return 0
 
 
 def fail(msg):
-    print(json.dumps({"error": msg}))
+    print(json.dumps({"error": msg, "url": REQUEST_URL}))
     return 1
 
 

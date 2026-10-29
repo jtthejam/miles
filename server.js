@@ -106,7 +106,7 @@ async function handleApi(url, res) {
         });
         return sendJson(res, 200, { ...out, route: route ? route.routeId : `${carrier}:${dest}` });
       } catch (e) {
-        return sendJson(res, live.enabled() ? 502 : 503, { error: e.message });
+        return sendJson(res, live.enabled() ? 502 : 503, { error: e.message, urls: e.urls || (e.url ? [e.url] : []) });
       }
     default:
       return sendJson(res, 404, { error: 'Not found' });
