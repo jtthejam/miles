@@ -331,3 +331,7 @@ label.cls.seg .al { font-size: 10px; font-weight: 650; color: var(--muted); marg
 .fare-dates.community.prelim { color: #b06d00; }
 label.inline { flex-direction: row; align-items: center; gap: 6px; font-size: 13px; color: var(--text); }
 .share-msg { white-space: pre-wrap; font-size: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 8px 0 0; }
+
+/* Region search */
+.bulk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 8px; }
+.bulk-row button.small { margin-left: 0; }

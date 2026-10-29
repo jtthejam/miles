@@ -24,6 +24,8 @@ process.env.MILES_DB_DIR = DIR;
 process.env.MILES_COMMUNITY_DIR = path.join(tmp, 'community');
 process.env.MILES_CONFIG_DIR = path.join(tmp, '.local');
 process.env.PYTHON = fakePy;
+process.env.MILES_FF_DELAY_MEAN_MS = '0'; // no pause between fake searches (tested in delay.test.js)
+process.env.MILES_FF_DELAY_SD_MS = '0';
 delete process.env.SERPAPI_KEY;
 
 const day = 864e5;

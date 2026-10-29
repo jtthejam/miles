@@ -30,6 +30,8 @@ process.env.MILES_DB_DIR = path.join(tmp, 'db'); // never touch the real data/db
 process.env.MILES_COMMUNITY_DIR = path.join(tmp, 'community');
 process.env.MILES_DB_REUSE_HOURS = '0'; // these tests exercise the providers; reuse is tested in db.test.js
 process.env.PYTHON = fakePy;
+process.env.MILES_FF_DELAY_MEAN_MS = '0'; // no pause between fake searches (tested in delay.test.js)
+process.env.MILES_FF_DELAY_SD_MS = '0';
 delete process.env.SERPAPI_KEY;
 
 const settings = require('../lib/settings');
@@ -302,4 +304,17 @@ test('/api/live by route id passes the route\'s airlines to fast-flights', async
   assert.equal(out.lowest, 4321); // fake fast-flights answers 4321 when given SQ,LX + names
   const bad = await fetch(`${base}/api/live?route=XX:YYY&cabin=economy`);
   assert.match((await bad.json()).error, /Unknown route/);
+});
+
+test('searching every region at once needs a SerpApi key', async () => {
+  if (!server.listening) await new Promise((r) => server.listen(0, '127.0.0.1', r));
+  const base = `http://127.0.0.1:${server.address().port}`;
+  settings.clearSerpApiKey();
+  let res = await fetch(`${base}/api/live?route=TK:BOD&cabin=economy&outbound=2027-03-01&inbound=2027-03-08&batch=all`);
+  assert.equal(res.status, 403);
+  assert.match((await res.json()).error, /needs a SerpApi key/);
+  // One region with fast-flights is fine.
+  live._test.cache.clear();
+  res = await fetch(`${base}/api/live?route=TK:BOD&cabin=economy&outbound=2027-03-01&inbound=2027-03-08&batch=region`);
+  assert.equal(res.status, 200);
 });

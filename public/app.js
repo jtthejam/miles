@@ -267,6 +267,7 @@ function searchHistory(r) {
 
 function render() {
   const list = visibleRows();
+  renderBulk();
   const maxMps = Math.max(...list.map((r) => r.milesPerSgd || 0), 1);
   const trip = $('roundtrip').checked ? 'return' : 'one way';
 
@@ -451,6 +452,9 @@ function initDates() {
   ['in-date', 'flex-days'].forEach((id) => $(id).addEventListener('change', () => { renderDates(); refresh(); }));
   $('dates-clear').addEventListener('click', () => { $('out-date').value = ''; $('in-date').value = ''; renderDates(); refresh(); });
   $('share-go').addEventListener('click', sharePrices);
+  $('bulk-go').addEventListener('click', () => { bulkMessage = ''; runBulk(); });
+  $('region').addEventListener('change', () => { if (!bulkRunning) bulkMessage = ''; });
+  $('bulk-stop').addEventListener('click', () => { bulkStop = true; $('bulk-status').textContent = 'Stopping after this search…'; });
   $('saved-searches').addEventListener('change', (e) => { const s = savedSearches[Number(e.target.value)]; if (e.target.value !== '' && s) useSavedSearch(s); });
   renderDates();
 }
@@ -568,6 +572,7 @@ function renderLive() {
   $('key-toggle').textContent = st.serpApiKey ? 'Remove SerpApi key' : 'Add SerpApi key';
   if (st.serpApiKey) $('key-form').hidden = true;
   if ($('flex-days')) renderDates(); // hint mentions SerpApi quota
+  if ($('bulk-row') && rows.length) renderBulk(); // searching all regions needs a SerpApi key
 }
 
 function initLive() {
@@ -607,6 +612,91 @@ function initLive() {
   });
 }
 
+// One live search for a row (↻). Throws with the reason on failure; returns the /api/live response.
+async function searchRow(row, { batch = null } = {}) {
+  const q = new URLSearchParams({ route: row.routeId, cabin: row.cabin, ...dateParams() });
+  if (batch) q.set('batch', batch);
+  const res = await (await fetch(`/api/live?${q}`)).json();
+  const urls = res.urls || (res.byDate || []).map((d) => d.url).filter(Boolean);
+  if (urls.length) console.log(`fast-flights URLs for ${row.carrierName} ${row.code} ${CABIN_LABEL[row.cabin]}:\n${urls.join('\n')}`);
+  for (const d of res.byDate || []) {
+    if (d.fromDb) console.log(`${d.outbound}–${d.inbound}: reused a price saved in the last 24 h (no search)`);
+    else if (d.error) console.warn(`${d.outbound}–${d.inbound}: ${d.error}`);
+  }
+  if (res.error) throw new Error(res.error);
+  // The server saved this search to the price database; drop an older browser-stored live price for the row.
+  if (fareDates[row.key]) { delete overrides[row.key]; delete fareDates[row.key]; store.set(KEYS.prices, overrides); store.set(KEYS.fareDates, fareDates); }
+  return res;
+}
+
+// ---------- Search a whole region (every row shown) ----------
+
+let bulkStop = false;
+let bulkRunning = false;
+let bulkMessage = ''; // last run's summary, kept until the region changes
+
+function bulkTargets() {
+  return visibleRows();
+}
+
+function renderBulk() {
+  const live = meta.live.provider;
+  const region = $('region').value;
+  $('bulk-row').hidden = !live;
+  if (!live || bulkRunning) return;
+  const n = bulkTargets().length;
+  const all = region === 'all';
+  const blocked = all && live !== 'serpapi';
+  $('bulk-go').disabled = blocked || !n;
+  $('bulk-go').textContent = `↻ Search ${all ? 'all regions' : region} (${n} row${n === 1 ? '' : 's'})`;
+  $('bulk-status').textContent = blocked
+    ? 'Pick a region to search it with fast-flights; searching every region needs a SerpApi key.'
+    : bulkMessage || (live === 'fast-flights' ? 'fast-flights searches one at a time, about 1 s apart.' : '');
+}
+
+async function runBulk() {
+  const targets = bulkTargets();
+  const region = $('region').value;
+  const all = region === 'all';
+  const flex = Number($('flex-days').value) || 0;
+  const per = $('out-date').value ? 2 * flex + 1 : 1;
+  const max = targets.length * per;
+  const provider = meta.live.provider;
+  const cost = provider === 'serpapi'
+    ? `up to ${max} SerpApi search${max === 1 ? '' : 'es'} (the free plan has 250 a month)`
+    : `up to ${max} fast-flights search${max === 1 ? '' : 'es'}, about 1 s apart (roughly ${Math.ceil(max * 2.5 / 60)} min)`;
+  if (!confirm(`Search ${targets.length} row${targets.length === 1 ? '' : 's'} in ${all ? 'all regions' : region} for ${datesLabel()}?\n\nThat's ${cost}. Prices saved in the last 24 hours are reused instead of searched again.`)) return;
+
+  bulkRunning = true; bulkStop = false;
+  $('bulk-go').disabled = true; $('bulk-stop').hidden = false;
+  let done = 0, priced = 0, reused = 0;
+  const failed = [];
+  for (const row of targets) {
+    if (bulkStop) break;
+    $('bulk-status').textContent = `Searching ${done + 1} of ${targets.length}: ${row.city} · ${row.carrierName} · ${CABIN_LABEL[row.cabin]}…`;
+    try {
+      const res = await searchRow(row, { batch: all ? 'all' : 'region' });
+      if (res.lowest != null) priced++;
+      reused += res.reused || 0;
+    } catch (e) {
+      failed.push(`${row.city} ${row.carrierName} ${CABIN_LABEL[row.cabin]}: ${e.message}`);
+      if (/needs a SerpApi key/.test(e.message)) break;
+    }
+    done++;
+    if (done % 5 === 0) refresh(); // show prices as they come in
+  }
+  bulkRunning = false;
+  $('bulk-stop').hidden = true;
+  await refresh();
+  loadSavedSearches();
+  bulkMessage = `${bulkStop ? 'Stopped' : 'Done'}: ${done} of ${targets.length} searched, ${priced} priced` +
+    `${reused ? `, ${reused} date${reused === 1 ? '' : 's'} reused from saved prices` : ''}${failed.length ? `, ${failed.length} failed (see console)` : ''}.`;
+  $('bulk-status').textContent = bulkMessage;
+  if (failed.length) console.warn(`Region search: ${failed.length} failed\n${failed.join('\n')}`);
+  renderBulk();
+  $('bulk-go').disabled = false;
+}
+
 $('rows').addEventListener('click', async (e) => {
   const btn = e.target.closest('button.refresh');
   if (!btn) return;
@@ -616,24 +706,10 @@ $('rows').addEventListener('click', async (e) => {
   const carrier = row.carriers.join(' + ');
   btn.disabled = true; btn.textContent = '…';
   try {
-    const q = new URLSearchParams({ route: row.routeId, cabin, ...dateParams() });
-    if (Number(q.get('flex'))) btn.title = `Searching ${2 * q.get('flex') + 1} date options…`;
-    const res = await (await fetch(`/api/live?${q}`)).json();
-    // The Google Flights URLs fast-flights requested (one per date searched), to open and compare by hand.
-    const urls = res.urls || (res.byDate || []).map((d) => d.url).filter(Boolean);
-    if (urls.length) console.log(`fast-flights URLs for ${row.carrierName} ${row.code} ${CABIN_LABEL[cabin]}:\n${urls.join('\n')}`);
-    for (const d of res.byDate || []) {
-      if (d.fromDb) console.log(`${d.outbound}–${d.inbound}: reused a price saved in the last 24 h (no search)`);
-      else if (d.error) console.warn(`${d.outbound}–${d.inbound}: ${d.error}`);
-    }
-    if (res.error || res.lowest == null) throw new Error(res.error || `No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
+    if (Number($('flex-days').value)) btn.title = `Searching ${2 * $('flex-days').value + 1} date options…`;
+    const res = await searchRow(row);
+    if (res.lowest == null) throw new Error(`No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
-    if (res.failed) console.warn(`${res.failed} of ${res.searched} date searches failed`, res.byDate.filter((d) => d.error));
-    // The server saved this search to the price database; the row now shows it from there.
-    // An older price kept in this browser (pre-v1.14 live results) would hide it, so drop that.
-    if (fareDates[btn.dataset.key]) { delete overrides[btn.dataset.key]; delete fareDates[btn.dataset.key]; }
-    store.set(KEYS.prices, overrides);
-    store.set(KEYS.fareDates, fareDates);
     if (res.reused) console.info(`${res.reused} of ${res.searched} date options came from saved searches (no search spent)`);
     await refresh();
     loadSavedSearches();

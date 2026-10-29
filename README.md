@@ -105,6 +105,8 @@ A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed
 
 Each segment earns at its own airline's rate for its booking class (pick per airline in the Earn column). Searches filter to the route's airlines and check who flies each segment.
 
+**Search a region**: "↻ Search <region>" under Live prices searches every row shown (region + airline/cabin filters), saving each result. Searching all regions at once needs a SerpApi key. fast-flights searches run one at a time, about 1 s apart (normally distributed pause, mean 1 s, sd 0.25 s).
+
 ## Price database
 
 Every price found (↻ searches and Google Flights imports) is saved in `data/db/*.jsonl`, tagged with the search range, the dates priced and when it was searched. Nothing is deleted, and all files are loaded on startup. Rows show the latest saved price for your dates, with earlier searches in the tooltip. Prices older than 14 days are marked preliminary. Pick earlier date ranges from **Saved searches** under Live prices. A ↻ reuses a price saved in the last 24 hours instead of searching again. Details: [`data/db/README.md`](data/db/README.md).

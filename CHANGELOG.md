@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.16.0 — 2026-10-29
+
+### Added
+- **Search a whole region**: "↻ Search <region> (N rows)" under Live prices runs a live search for every row shown. The region filter, plus your airline, cabin and "priced only" filters, decide which rows. Each search uses your travel dates ± flexibility, and every result is saved to the price database.
+  - Asks first, with the maximum number of searches (rows × dates). With SerpApi it shows the free plan's 250-a-month quota; with fast-flights, a rough time.
+  - Progress ("Searching 3 of 20: Hong Kong · Singapore Airlines · Economy…"), a **Stop** button, and a summary (searched, priced, reused, failed; failures listed in the console). The table updates every 5 rows.
+  - Prices saved in the last 24 hours are reused, so re-running a region costs only the missing dates.
+- **All regions at once needs a SerpApi key.** Without one, pick a region. The server enforces this too (`/api/live?batch=all` returns 403 without a key).
+- **fast-flights pacing**: fast-flights searches now run one at a time, with a random pause between searches: normal distribution, mean 1 s, standard deviation 0.25 s, never negative. This covers every fast-flights search: region runs, ↻ with ± days (previously 2 at once), and SerpApi fallbacks. `MILES_FF_DELAY_MEAN_MS` and `MILES_FF_DELAY_SD_MS` change it.
+
+### Technical
+- `lib/live.js`: fast-flights queue with Box–Muller Gaussian delay (`gaussian`, `ffDelay`).
+- `public/app.js`: `searchRow()` shared by ↻ and region search.
+- 3 new tests (delay distribution, one-at-a-time with pauses, all-regions rule).
+
 ## v1.15.4 — 2026-10-29
 
 ### Fixed

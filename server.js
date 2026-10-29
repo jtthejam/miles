@@ -91,6 +91,10 @@ async function handleApi(url, res) {
         if (routeId && !route) throw new Error(`Unknown route ${routeId}`);
         if (!route && !data.carriers[carrier]) throw new Error(`Unsupported carrier ${carrier}`);
         // The route's connection and airlines come from the data, so searches match the row's miles.
+        // Searching every region at once is only allowed with a SerpApi key (fast-flights scrapes Google).
+        if (q.get('batch') === 'all' && live.status().provider !== 'serpapi') {
+          return sendJson(res, 403, { error: 'Searching every region needs a SerpApi key. Pick one region to search with fast-flights.' });
+        }
         const out = await live.lowestFareInWindow({
           route: route ? route.routeId : null, // saved to / reused from the price database
           carriers: route ? route.carriers : [carrier],
