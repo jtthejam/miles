@@ -27,8 +27,13 @@
     els = document.querySelectorAll('[aria-label^="From "]');
     for (i = 0; i < els.length; i++) {
       m = /^From\s([\d,]+)\s(.+?)\sround\strip\stotal\.\s*(?:(Nonstop)|(\d+)\sstops?)?.*?flights?\swith\s(.+?)\./.exec(els[i].getAttribute('aria-label'));
-      // [price, currency, airlines, stops]; stops is null if Google's wording changes.
-      if (m) list.push([m[1], sp(m[2]), sp(m[5]), m[3] ? 0 : m[4] ? +m[4] : null]);
+      // [price, currency, airlines, stops, connection airports]; stops is null if Google's wording changes.
+      // Connections come from "Stopover (1 of 1) is a 19 hrs stopover at Chengdu Tianfu International in Chengdu."
+      if (m) {
+        var lab = els[i].getAttribute('aria-label'), at = [], re = /(?:layover|stopover)\sat\s(.+?)\sin\s[^.]+\./gi, x;
+        while ((x = re.exec(lab))) at.push(sp(x[1]));
+        list.push([m[1], sp(m[2]), sp(m[5]), m[3] ? 0 : m[4] ? +m[4] : null, at]);
+      }
     }
   }
 

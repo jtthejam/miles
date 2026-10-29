@@ -336,3 +336,6 @@ label.inline { flex-direction: row; align-items: center; gap: 6px; font-size: 13
 /* Region search */
 .bulk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 8px; }
 .bulk-row button.small { margin-left: 0; }
+
+/* Flexible-connection rows: the connection follows the price shown */
+.flex-hub { font-size: 10px; color: var(--muted); border: 1px dashed var(--line); border-radius: 4px; padding: 0 3px; white-space: nowrap; cursor: help; }

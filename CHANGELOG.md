@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.18.0 — 2026-10-29
+
+### Added
+- **Flexible-connection rows.** One-airline, one-stop rows for **Air China** (Beijing Capital, Beijing Daxing, Chengdu Tianfu, Chengdu Shuangliu, Shanghai Pudong), **ANA** (Haneda, Narita) and **SWISS** (Zurich, Geneva) now accept any of the airline's hubs (71 rows).
+  - ↻, region search and the bookmark take the cheapest fare at any hub and record which hub it used. Miles follow that connection; the return is assumed to connect the same way.
+  - The row shows the connection priced (e.g. "SIN → TFU → LHR **priced ⇄**"). Hover for the hubs. Before any price, "or ⇄" means the default hub is assumed.
+  - Example (live, 30 Apr – 9 May 2027): Air China to London is cheapest via **Chengdu** (S$1,395–1,423, 7,191 miles at 50%), vs S$1,707 via Beijing (7,857 miles). Previously the row only accepted Beijing, so the cheapest fare showed as unavailable.
+  - **Lufthansa stays fixed** to its checked hub: a different hub may be flown by Lufthansa City Airlines, which earns no KrisFlyer miles. Turkish has only Istanbul.
+- **Bookmark imports read the connection** from Google's results ("Stopover … at Chengdu Tianfu International"). Results connecting elsewhere are skipped, on fixed rows too. Date-grid imports can't see the connection, so flexible rows assume the default hub and say so. Re-drag the bookmark to get this.
+- **"Price unavailable" explained:** when Google lists itineraries without a price, "no fares" now says how many and suggests trying again or using **G**. Google often fills prices in later.
+
+### Technical
+- `data/carriers.json`: `hubs` per airline (`code` and `match`, how Google names the airport). Routes get `flexible` and `hubs`; `"fixed": true` opts a route out. New airports: PKX, TFU, CTU, GVA.
+- Saved prices (`data/db`) and shared community prices keep `via`, the connection priced. Community files may include `via`; nothing personal.
+- `scripts/ff_quote.py` VIA takes alternatives (`PEK/TFU/PVG`) and returns the `via` used. SerpApi does the same.
+- 4 new tests.
+
 ## v1.17.0 — 2026-10-29
 
 ### Changed

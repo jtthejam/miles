@@ -34,10 +34,12 @@ def main(argv):
         return fail("usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]")
     _, dest, cabin, outbound, inbound, carrier_arg = argv[:6]
     carriers = carrier_arg.split(",")
-    via = [] if len(argv) == 6 or argv[6] in ("", "-") else argv[6].split(",")
+    # VIA alternatives separated by "/" (flexible rows: any of the airline's hubs), stops by ","
+    via_options = [[]] if len(argv) == 6 or argv[6] in ("", "-") else [v.split(",") for v in argv[6].split("/")]
+    via = via_options[0]
     names = argv[7].split("|") if len(argv) == 8 and argv[7] else []
-    if len(via) > 2 or not all(re.fullmatch(r"[A-Z]{3}", v) for v in via):
-        return fail("via must be up to 2 IATA codes")
+    if any(len(v) > 2 or len(v) != len(via) or not all(re.fullmatch(r"[A-Z]{3}", x) for x in v) for v in via_options):
+        return fail("via must be up to 2 IATA codes (alternatives with the same number of stops)")
     if not re.fullmatch(r"[A-Z]{3}", dest):
         return fail("dest must be an IATA code")
     if cabin not in SEAT:
@@ -95,12 +97,15 @@ def main(argv):
     # Los Angeles also sells SIN-NRT-LAX), connecting rows only their connection.
     want = {n.lower() for n in names}
     def fits(r):
-        return r["path"][: len(via) + 2] == ["SIN", *via, dest] and (not names or {a.lower() for a in r["airlines"]} == want)
+        return (any(r["path"][: len(v) + 2] == ["SIN", *v, dest] for v in via_options)
+                and (not names or {a.lower() for a in r["airlines"]} == want))
     others = sorted((r for r in results if not fits(r)), key=lambda r: r["price"])
     results = [r for r in results if fits(r)]
     # Itineraries Google has that don't fit this row (e.g. SWISS-only for an SQ + SWISS row), so a
     # "no fares" result can say what Google does have.
-    return ok([r["price"] for r in results], skipped, others[:3])
+    cheapest = min(results, key=lambda r: r["price"]) if results else None
+    used_via = cheapest["path"][1:cheapest["path"].index(dest)] if cheapest and dest in cheapest["path"] else None
+    return ok([r["price"] for r in results], skipped, others[:3], used_via)
 
 
 class NoFlightData(Exception):
@@ -175,12 +180,13 @@ def save_debug(html):
 REQUEST_URL = None
 
 
-def ok(prices, skipped=0, others=()):
+def ok(prices, skipped=0, others=(), via=None):
     out = {
         "lowest": min(prices) if prices else None,
         "average": round(sum(prices) / len(prices)) if prices else None,
         "offers": len(prices),
         "skipped": skipped,
+        "via": via,
         "others": [{"price": r["price"], "airlines": r["airlines"], "path": r["path"][:4]} for r in others],
         "url": REQUEST_URL,
     }

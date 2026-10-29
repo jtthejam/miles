@@ -2,7 +2,7 @@
 
 // Loads and validates all static data. Fails fast on bad references.
 const airports = require('./airports.json');
-const { _source, ...carriers } = require('./carriers.json');
+const { _source, _hubsNote, ...carriers } = require('./carriers.json');
 const sources = require('./sources.json');
 // fares.network.json: unpriced connecting routes built from verified schedules (scripts/build_network.py).
 const fares = [...require('./fares.sq.json'), ...require('./fares.partners.json'), ...require('./fares.network.json')];
@@ -44,8 +44,21 @@ for (const f of fares) {
   f.carriers = [...new Set(f.segments.map((s) => s.carrier))];
   f.mixed = f.carriers.length > 1;
   f.routeId = f.id || `${f.carriers.join('+')}:${f.to}`;
+  // Flexible connection: a one-airline, one-stop route via one of the airline's hubs may connect at any
+  // of its hubs (e.g. Air China to London via Beijing or Chengdu). Miles then follow the connection of
+  // the price found; f.via stays the default (used when no price says otherwise).
+  const hubs = (carriers[f.carrier]?.hubs || []).map((h) => h.code);
+  f.flexible = !f.mixed && f.via.length === 1 && hubs.includes(f.via[0]) && f.fixed !== true;
+  f.hubs = f.flexible ? hubs.filter((h) => h !== f.to) : [];
   if (routeIds.has(f.routeId)) throw new Error(`Duplicate route ${f.routeId}: give one an "id"`);
   routeIds.add(f.routeId);
+}
+
+for (const [code, c] of Object.entries(carriers)) {
+  for (const h of c.hubs || []) {
+    if (!airports[h.code]) throw new Error(`${code} hub ${h.code} isn't in airports.json`);
+    if (!h.match) throw new Error(`${code} hub ${h.code} needs a "match" name`);
+  }
 }
 
 for (const f of fares) {

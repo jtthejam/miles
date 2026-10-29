@@ -45,7 +45,9 @@ test('committed community files contain only anonymised, valid prices for known 
 test('anonymise: only the fields needed; search day only; no ids, times or search ranges', () => {
   const out = db.anonymise([own({})]);
   assert.equal(out.length, 1);
-  assert.deepEqual(Object.keys(out[0]).sort(), db.COMMUNITY_FIELDS.slice().sort());
+  // Exactly the shared fields, plus the connection priced ("via"), which decides miles on flexible rows.
+  assert.deepEqual(Object.keys(out[0]).filter((k) => k !== 'via').sort(), db.COMMUNITY_FIELDS.slice().sort());
+  assert.deepEqual(out[0].via, ['IST']);
   assert.match(out[0].searchedOn, /^\d{4}-\d{2}-\d{2}$/);
   const text = JSON.stringify(out);
   for (const leak of ['searchId', 'searchedAt', 'range', 'abc', 'offers', 'T0', 'Z"']) assert.ok(!text.includes(leak), `leaks ${leak}`);
@@ -74,6 +76,8 @@ test('validation rejects anything that could identify you or is malformed', () =
   assert.match(db.communityProblem(shared({ currency: 'USD' })), /SGD/);
   assert.match(db.communityProblem(shared({ inbound: '2027-02-01' })), /dates/);
   assert.equal(db.communityProblem(shared({})), null);
+  assert.equal(db.communityProblem(shared({ via: ['TFU'] })), null);
+  assert.match(db.communityProblem(shared({ via: 'TFU' })), /via/);
 });
 
 test('share writes a new file that loads as community prices and is never re-shared', () => {

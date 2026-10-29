@@ -187,6 +187,10 @@
     }
     const carrier = route.carriers[0];
     const mixed = route.carriers.length > 1;
+    // Connection airport names (from Google's "stopover at <airport>") -> IATA codes we know.
+    const hubNames = ctx.hubNames || {};
+    const codeFor = (name) => Object.keys(hubNames).find((c) => String(name).toLowerCase().includes(hubNames[c].toLowerCase())) || null;
+    const allowedVias = route.flexible ? (route.hubs || []).map((h) => [h]) : [route.via || []];
     const names = route.carriers.map((c) => ctx.carriers[c].name.toLowerCase());
 
     // Connecting routes (e.g. TK to BOD via IST): miles assume that connection.
@@ -226,13 +230,27 @@
         if (right.length < own.length) notes.push(`${own.length - right.length} with a different number of stops skipped`);
         own = right;
       }
+      // r[4] = connection airport names (newer bookmarklets): keep results connecting where this row
+      // can (flexible rows: any of the airline's hubs), and remember which hub.
+      own = own.map((r) => {
+        if (!Array.isArray(r[4]) || !r[4].length) return { r, via: null };
+        const codes = r[4].map(codeFor);
+        return { r, via: codes.every(Boolean) ? codes : undefined };
+      }).filter(({ via }) => {
+        if (via === null) return true; // nonstop, or older bookmarklet: no connection info
+        if (via === undefined) return !route.flexible && !(route.via || []).length; // unknown airport
+        return allowedVias.some((v) => v.join() === via.join());
+      }).map(({ r, via }) => Object.assign(r.slice(), { via }));
+      if (list.length && !own.length && list.some((r) => Array.isArray(r[4]) && r[4].length)) {
+        return { error: `None of the results on that page connect where this row does (${allowedVias.map((v) => v.join('–') || 'nonstop').join(' or ')}).` };
+      }
       if (cityOnly) notes.push(`${cityOnly} with Lufthansa City flights skipped (they earn no KrisFlyer miles)`);
       if (list.length && !own.length) {
         if (cityOnly === list.length) return { error: 'Every result on that page includes Lufthansa City flights, which earn no KrisFlyer miles.' };
         return { error: `None of the results on that page are ${route.carriers.map((c) => ctx.carriers[c].name).join(' + ')} flights.` };
       }
       if (!outbound || !inbound) return { error: 'Couldn\'t read the travel dates from that page.' };
-      cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]) })).filter((c) => c.price);
+      cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]), via: r.via || null })).filter((c) => c.price);
     }
     if (!cells.length) return { error: 'No prices found on that page. Wait for results to load (or open the Date grid), then click the bookmark again.' };
     // Everything the page priced, saved to the price database even if outside your current dates.
@@ -253,6 +271,7 @@
       cells = inside;
     }
 
+    if (source === 'grid' && route.flexible) notes.push(`date grid doesn't show the connection: miles assume via ${(route.via || []).join('–')}`);
     if (source === 'grid' && NO_ACCRUAL[carrier]) notes.push('date grid can include Lufthansa City flights, which earn no miles: check the flight before booking');
     // The date grid can't show who flies each flight, and for a mixed route Google often only has a
     // one-airline itinerary (e.g. SWISS all the way, not SQ then SWISS), which earns different miles.
@@ -264,7 +283,7 @@
       Math.abs(dayDiff(a.outbound, target)) - Math.abs(dayDiff(b.outbound, target)))[0];
     // The search range the page covers: its dates, ± 3 days for the 7 × 7 date grid.
     const pageRange = { outbound: outbound || best.outbound, inbound: inbound || best.inbound, flex: source === 'grid' ? 3 : 0 };
-    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, source, considered: cells.length, notes, allCells, pageRange };
+    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, via: best.via || null, source, considered: cells.length, notes, allCells, pageRange };
   }
 
   // Routes as [{ routeId, carriers, dest, via }]; also accepts the v1.11 map { "TK:BOD": ["IST"] }.

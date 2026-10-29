@@ -233,7 +233,17 @@
         "confidence": "assumed",
         "basis": "Premium Economy G/E/N all earn 100% on international flights."
       }
-    }
+    },
+    "hubs": [
+      {
+        "code": "ZRH",
+        "match": "Zurich"
+      },
+      {
+        "code": "GVA",
+        "match": "Geneva"
+      }
+    ]
   },
   "NH": {
     "name": "ANA",
@@ -293,7 +303,17 @@
         "confidence": "assumed",
         "basis": "ANA Premium Economy classes E/G both earn 125%."
       }
-    }
+    },
+    "hubs": [
+      {
+        "code": "HND",
+        "match": "Haneda"
+      },
+      {
+        "code": "NRT",
+        "match": "Narita"
+      }
+    ]
   },
   "CA": {
     "name": "Air China",
@@ -347,7 +367,29 @@
         "basis": "Air China Premium Economy books into G or E; the discounted E (100%) is assumed for sale fares. G earns 110%.",
         "url": "https://www.expertflyer.com/info-airlines/air-china-fares"
       }
-    }
+    },
+    "hubs": [
+      {
+        "code": "PEK",
+        "match": "Beijing Capital"
+      },
+      {
+        "code": "PKX",
+        "match": "Daxing"
+      },
+      {
+        "code": "TFU",
+        "match": "Tianfu"
+      },
+      {
+        "code": "CTU",
+        "match": "Shuangliu"
+      },
+      {
+        "code": "PVG",
+        "match": "Pudong"
+      }
+    ]
   },
   "NZ": {
     "name": "Air New Zealand",
@@ -496,5 +538,6 @@
       }
     },
     "noAdvertisedFare": "No Singapore-origin United fare in SGD was found published (checked 26 Oct 2026; deals found were US-origin, in USD). Price United routes with G, the refresh button or your own quote."
-  }
+  },
+  "_hubsNote": "hubs: connection airports a one-stop route on this airline may use. Rows connecting at one of them are 'flexible': searches accept any listed hub and miles follow the connection of the price found. 'match' is how Google Flights names the airport in its results. Lufthansa is left out on purpose: a different hub may be flown by Lufthansa City Airlines (no KrisFlyer miles)."
 }

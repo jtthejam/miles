@@ -59,8 +59,8 @@ const grid = [
 test('date grid import: cheapest cell, nearest to the asked date on ties', () => {
   const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), grid }, { carriers });
   assert.deepEqual(
-    { ...r, notes: undefined, allCells: undefined, pageRange: undefined },
-    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined, allCells: undefined, pageRange: undefined },
+    { ...r, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined },
+    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined },
   );
   // For the price database: every cell, tagged with the page's range (± 3 days for the grid).
   assert.equal(r.allCells.length, 6);
@@ -201,4 +201,26 @@ test('mixed-airline routes: links filter to both airlines; import finds the rout
 
   const noRoute = G.interpretImport({ href: href(G.encodeTfs({ ...bod, carriers: ['SQ', 'TK'] })), list }, { carriers: { ...cs, TK: { name: 'Turkish Airlines' } }, routes });
   assert.match(noRoute.error, /No route in the table flies SQ \+ TK to BOD/);
+});
+
+test('flexible connections: results list import keeps any of the airline\'s hubs and records which', () => {
+  const cs = { ...carriers, CA: { name: 'Air China' } };
+  const hubNames = { PEK: 'Beijing Capital', PKX: 'Daxing', TFU: 'Tianfu', CTU: 'Shuangliu', PVG: 'Pudong' };
+  const routes = [{ routeId: 'CA:LHR', carriers: ['CA'], dest: 'LHR', via: ['PEK'], flexible: true, hubs: ['PEK', 'PKX', 'TFU', 'CTU', 'PVG'] }];
+  const tfs = G.encodeTfs({ dest: 'LHR', outbound: '2027-04-30', inbound: '2027-05-09', carrier: 'CA', cabin: 'economy', maxStops: 1 });
+  // As the bookmarklet sends them from the real page (29 Oct 2026): price, currency, airlines, stops, connections
+  const list = [
+    ['1423', 'Singapore dollars', 'Air China', 1, ['Chengdu Tianfu International']],
+    ['1707', 'Singapore dollars', 'Air China', 1, ['Beijing Capital International Airport']],
+    ['1300', 'Singapore dollars', 'Air China', 1, ['Guangzhou Baiyun International Airport']], // not a listed hub
+  ];
+  const r = G.interpretImport({ href: href(tfs), list }, { carriers: cs, routes, hubNames });
+  assert.deepEqual([r.routeId, r.lowest, r.via], ['CA:LHR', 1423, ['TFU']]);
+  assert.deepEqual(r.allCells[0].via, ['TFU']);
+  // A fixed row (not flexible) keeps only its own connection.
+  const fixed = G.interpretImport({ href: href(tfs), list }, { carriers: cs, routes: [{ ...routes[0], flexible: false, hubs: [] }], hubNames });
+  assert.deepEqual([fixed.lowest, fixed.via], [1707, ['PEK']]);
+  // Date grid: connection unknown, miles assume the default hub.
+  const grid = G.interpretImport({ href: href(tfs), grid: [['1,423', 'Apr 30', 'May 9', 'SGD']] }, { carriers: cs, routes, hubNames });
+  assert.match(grid.notes.join(), /doesn't show the connection: miles assume via PEK/);
 });

@@ -100,6 +100,8 @@ async function handleApi(url, res) {
           carriers: route ? route.carriers : [carrier],
           dest: route ? route.to : dest,
           via: route ? route.via : [],
+          // Flexible rows: any of the airline's hubs fits (miles follow the one priced).
+          viaOptions: route && route.flexible ? route.hubs.map((h) => [h]) : undefined,
           segmentCarriers: route && route.mixed ? route.segments.map((s) => s.carrier) : null,
           airlineNames: route && route.mixed ? route.carriers.map((c) => data.carriers[c].name) : null,
           cabin: q.get('cabin'),
@@ -186,8 +188,10 @@ async function handleDbRecords(req, res) {
     const searchId = db.newSearchId(at);
     const list = (Array.isArray(body.prices) ? body.prices : []).slice(0, 200).map((p) => ({
       v: 1, searchId, searchedAt: at.toISOString(),
-      route: route.routeId, carriers: route.carriers, dest: route.to, via: route.via, cabin: body.cabin,
+      route: route.routeId, carriers: route.carriers, dest: route.to, cabin: body.cabin,
       range: { outbound: range.outbound, inbound: range.inbound, flex: Math.max(0, Math.min(7, Number(range.flex) || 0)) },
+      // The connection Google showed (flexible rows: one of the airline's hubs), else the row's own.
+      via: route.flexible && Array.isArray(p.via) && p.via.length === 1 && route.hubs.includes(p.via[0]) ? p.via : route.via,
       outbound: p.outbound, inbound: p.inbound, price: Number(p.price), currency: 'SGD',
       provider: 'google-flights', offers: null, source: body.source === 'grid' ? 'date grid' : 'results',
     }));

@@ -580,5 +580,29 @@
     "region": "Americas",
     "lat": 45.5887,
     "lon": -122.5969
+  },
+  "PKX": {
+    "city": "Beijing Daxing",
+    "region": "North Asia",
+    "lat": 39.5,
+    "lon": 116.4
+  },
+  "TFU": {
+    "city": "Chengdu Tianfu",
+    "region": "North Asia",
+    "lat": 30.29,
+    "lon": 104.4433
+  },
+  "CTU": {
+    "city": "Chengdu Shuangliu",
+    "region": "North Asia",
+    "lat": 30.5785,
+    "lon": 103.947
+  },
+  "GVA": {
+    "city": "Geneva",
+    "region": "Europe",
+    "lat": 46.2381,
+    "lon": 6.109
   }
 }

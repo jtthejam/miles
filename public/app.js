@@ -299,7 +299,9 @@ function render() {
     // Mixed rows show who flies each segment: SIN → ZRH (SQ) → BOD (LX).
     const route = r.mixed
       ? ['SIN', ...r.segments.map((s) => `${s.to} <span class="seg-al">${s.carrier}</span>`)].join(' → ')
-      : ['SIN', ...r.via, r.code].join(' → ');
+      : ['SIN', ...r.via, r.code].join(' → ') + (r.flexible
+        ? ` <span class="flex-hub" title="${esc(`${r.carrierName} connects in ${r.hubs.map((h) => meta.airports[h]?.city || h).join(', ')}. Miles follow the connection of the price shown${r.viaFromPrice ? '' : ` (no price yet says which, so via ${r.defaultVia.join(', ')} is assumed)`}; the return is assumed to connect the same way.`)}">${r.viaFromPrice ? 'priced' : 'or'} ⇄</span>`
+        : '');
     const gfBtn = `<a class="gf" href="${esc(gfLink(r))}" target="_blank" rel="noopener" data-key="${r.key}" title="Open ${esc(r.carrierName)} ${CABIN_LABEL[r.cabin]} to ${esc(r.city)} in Google Flights for ${esc(datesLabel())}, filtered to ${esc(r.carrierName)}. Then click your “Send to Miles Maximiser” bookmark.">G</a>`;
     const liveBtn = meta.liveEnabled ? `<button class="refresh" data-key="${r.key}" title="Fetch live lowest ${esc(r.carrierName)} fare for ${esc(datesLabel())} (${meta.live.provider})">↻</button>` : '';
     const flags = [
@@ -521,7 +523,8 @@ async function importFromHash() {
   const pending = store.get(KEYS.gfPending, null);
   const res = window.GFLink.interpretImport(payload, {
     carriers: meta.carriers,
-    routes: [...new Map(rows.map((r) => [r.routeId, { routeId: r.routeId, carriers: r.carriers, dest: r.code, via: r.via }])).values()],
+    routes: [...new Map(rows.map((r) => [r.routeId, { routeId: r.routeId, carriers: r.carriers, dest: r.code, via: r.defaultVia || r.via, flexible: r.flexible, hubs: r.hubs }])).values()],
+    hubNames: Object.fromEntries(Object.values(meta.carriers).flatMap((c) => (c.hubs || []).map((h) => [h.code, h.match]))),
     pending: pending && Date.now() - pending.at < 6 * 3600e3 ? pending : null,
     window: $('out-date').value ? { outbound: $('out-date').value, inbound: $('in-date').value, flex: $('flex-days').value } : null,
   });
@@ -743,7 +746,11 @@ $('rows').addEventListener('click', async (e) => {
   try {
     if (Number($('flex-days').value)) btn.title = `Searching ${2 * $('flex-days').value + 1} date options…`;
     const res = await searchRow(row);
-    if (res.lowest == null) throw new Error(`No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ' (nonstop)'} found for ${datesLabel()}.${othersNote(row, res.others)}`);
+    if (res.lowest == null) {
+      const where = row.flexible ? ` via ${row.hubs.join(', ')}` : row.via.length ? ` via ${row.via.join(', ')}` : ' (nonstop)';
+      const unpriced = res.unpriced ? `\n\nGoogle listed ${res.unpriced} itinerar${res.unpriced === 1 ? 'y' : 'ies'} without a price ("Price unavailable"). Prices often appear on a later try; or use G on the row.` : '';
+      throw new Error(`No ${carrier} fares${where} found for ${datesLabel()}.${unpriced}${othersNote(row, res.others)}`);
+    }
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.reused) console.info(`${res.reused} of ${res.searched} date options came from saved searches (no search spent)`);
     await refresh();

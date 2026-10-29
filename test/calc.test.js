@@ -183,3 +183,21 @@ test('route data: mixed routes validated', () => {
   assert.deepEqual(m.via, ['ZRH']);
   assert.deepEqual(m.segments.map((s) => `${s.from}-${s.to}`), ['SIN-ZRH', 'ZRH-BOD']);
 });
+
+test('flexible connections: miles follow the hub of the price shown', () => {
+  const ca = data.fares.find((f) => f.routeId === 'CA:LHR');
+  assert.ok(ca.flexible);
+  assert.deepEqual(ca.hubs, ['PEK', 'PKX', 'TFU', 'CTU', 'PVG']);
+  const base = buildRows(data).find((r) => r.key === 'CA:LHR:economy');
+  assert.deepEqual([base.via, base.viaFromPrice], [['PEK'], false]);
+  const latest = { price: 1423, via: ['TFU'], outbound: '2027-04-30', inbound: '2027-05-09', searchedAt: new Date().toISOString(), ageDays: 0 };
+  const r = buildRows(data, { searchPrices: { 'CA:LHR:economy': { latest, lowest: latest, history: [latest] } } }).find((x) => x.key === 'CA:LHR:economy');
+  assert.deepEqual([r.via, r.viaFromPrice, r.priceSgd], [['TFU'], true, 1423]);
+  assert.deepEqual(r.segments.map((s) => `${s.from}-${s.to}`), ['SIN-TFU', 'TFU-LHR']);
+  assert.ok(r.distance < base.distance); // Chengdu is the shorter way round
+  // A hub not on the list is ignored (miles stay via the default).
+  const odd = buildRows(data, { searchPrices: { 'CA:LHR:economy': { latest: { ...latest, via: ['CAN'] }, lowest: latest, history: [] } } }).find((x) => x.key === 'CA:LHR:economy');
+  assert.deepEqual(odd.via, ['PEK']);
+  // Lufthansa rows are never flexible (another hub may be Lufthansa City Airlines: no miles).
+  assert.ok(!data.fares.some((f) => f.carrier === 'LH' && f.flexible));
+});

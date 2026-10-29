@@ -337,3 +337,21 @@ test('searching every region at once needs a SerpApi key', async () => {
   res = await fetch(`${base}/api/live?route=TK:BOD&cabin=economy&outbound=2027-03-01&inbound=2027-03-08&batch=region`);
   assert.equal(res.status, 200);
 });
+
+test('flexible rows: SerpApi accepts any hub and reports which one priced', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  try {
+    global.fetch = async () => ({ ok: true, json: async () => ({ other_flights: [
+      { price: 1707, layovers: [{ id: 'PEK' }], flights: [{ flight_number: 'CA 976' }, { flight_number: 'CA 855' }] },
+      { price: 1423, layovers: [{ id: 'TFU' }], flights: [{ flight_number: 'CA 404' }, { flight_number: 'CA 423' }] },
+      { price: 999, layovers: [{ id: 'CAN' }], flights: [{ flight_number: 'CA 1' }, { flight_number: 'CA 2' }] },
+    ] }) });
+    live._test.cache.clear();
+    const out = await live.lowestReturnFare({ carrier: 'CA', dest: 'LHR', cabin: 'economy', outbound: '2027-04-30', inbound: '2027-05-09', via: ['PEK'], viaOptions: [['PEK'], ['TFU'], ['PVG']] });
+    assert.deepEqual([out.lowest, out.via], [1423, ['TFU']]);
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
