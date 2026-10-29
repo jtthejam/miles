@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.22.0 — 2026-10-29
+
+### Added
+- **Thai Airways** (Star Alliance), 13 Economy rows: Bangkok nonstop, and via Bangkok to London, Paris, Frankfurt, Munich, Zurich, Milan, Amsterdam (resumed July 2026), Brussels, Copenhagen, Stockholm, Oslo and Istanbul. **No Premium Economy:** Thai's new Premium Economy cabin starts mid-2027.
+  - KrisFlyer accrual: B/H/M/Q/U/Y 100%, K/T/S 50%. V and W aren't in the chart and earn nothing (shown as 0% in the class picker).
+  - **Thai's cheapest fares earn no KrisFlyer miles.** Thai's fare families are Saver (W), Standard (V/S/K), Flexi (T/Q/H) and Full Flexi (M/B/Y), so advertised fares (Saver, W) show **0 miles**. Pick the class you'd actually book on the row: Standard S/K earn 50% (London: 6,831 mi, 4.16 mi/S$ at S$1,643), Flexi Q/H 100%. A Standard or Flexi fare costs more than the advertised price: update the price too.
+  - "From" fares on Thai's Singapore route pages (seen 29 Oct 2026): Bangkok S$428, Paris S$1,548, Frankfurt S$1,628, London S$1,643, Amsterdam S$1,738. Other cities have no advertised fare.
+  - Map colour: purple.
+
+### Technical
+- An accrual tier can have `"pct": 0` (classes that earn nothing), so a stated sale class like Thai's W can be modelled.
+
 ## v1.21.0 — 2026-10-29
 
 ### Added

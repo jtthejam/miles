@@ -8,7 +8,7 @@ window.RouteMap = (() => {
   // Miles per SGD bins → rainbow: red <2, orange 2–4, yellow 4–6, green 6–8, blue 8–10, purple 10+ (v0..v5)
   const BINS = [2, 4, 6, 8, 10];
   // Carrier colours: categorical slots in fixed order, keyed by carrier code (never by rank).
-  const CARRIER_ORDER = ['SQ', 'TK', 'LH', 'LX', 'NH', 'CA', 'NZ', 'UA', 'BR'];
+  const CARRIER_ORDER = ['SQ', 'TK', 'LH', 'LX', 'NH', 'CA', 'NZ', 'UA', 'BR', 'TG'];
 
   let W = 960, H = 560;
   let kind = 'globe';

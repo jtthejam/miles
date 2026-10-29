@@ -46,5 +46,9 @@
   "br-pe-2026-10": {
     "label": "EVA Air SG Premium Economy fares (seen 29 Oct 2026)",
     "url": "https://flights.evaair.com/en-sg/premium-economy-class-flights"
+  },
+  "tg-site-2026-10": {
+    "label": "Thai Airways SG route pages, 'from' fares (seen 29 Oct 2026)",
+    "url": "https://www.thaiairways.com/flights/en-sg/flights-from-singapore"
   }
 }

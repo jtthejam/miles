@@ -595,5 +595,49 @@
       }
     }
   },
+  "TG": {
+    "name": "Thai Airways",
+    "accrual": {
+      "economy": [
+        {
+          "pct": 100,
+          "classes": [
+            "B",
+            "H",
+            "M",
+            "Q",
+            "U",
+            "Y"
+          ]
+        },
+        {
+          "pct": 50,
+          "classes": [
+            "K",
+            "T",
+            "S"
+          ]
+        },
+        {
+          "pct": 0,
+          "classes": [
+            "V",
+            "W"
+          ]
+        }
+      ],
+      "premium": []
+    },
+    "note": "Bangkok hub: every route except Bangkok itself connects there. No Premium Economy until mid-2027 (new 777 cabins). Saver (W) and Standard V fares are not in the KrisFlyer chart and earn nothing; Standard S/K and Flexi T earn 50%.",
+    "saleFare": {
+      "economy": {
+        "class": "W",
+        "family": "Economy Saver",
+        "confidence": "stated",
+        "basis": "Thai's cheapest fare family, Saver, books into W (Standard: V/S/K; Flexi: T/Q/H; Full Flexi: M/B/Y). W earns no KrisFlyer miles: pick S or K (Standard, 50%) or Q/H (Flexi, 100%) on the row if that's what you book.",
+        "url": "https://ropnewsletter.thaiairways.com/octdec2025/basic/en/royal-orchid-plus-program-updates"
+      }
+    }
+  },
   "_hubsNote": "hubs: connection airports a one-stop route on this airline may use. Rows connecting at one of them are 'flexible': searches accept any listed hub and miles follow the connection of the price found. 'match' is how Google Flights names the airport in its results. Lufthansa is left out on purpose: a different hub may be flown by Lufthansa City Airlines (no KrisFlyer miles)."
 }

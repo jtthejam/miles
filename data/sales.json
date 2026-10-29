@@ -36,6 +36,10 @@
     "BR": {
       "light": "#00703c",
       "dark": "#5cc28c"
+    },
+    "TG": {
+      "light": "#5c2d91",
+      "dark": "#c39be6"
     }
   },
   "fairs": [
@@ -305,6 +309,7 @@
   ],
   "none": {
     "UA": "No United sale pattern found for the Singapore market (checked 26 Oct 2026); United's published sales target US departures.",
-    "BR": "EVA Air sale windows for Singapore not researched yet (added 29 Oct 2026). EVA's site lists fares found in the last 48 hours rather than dated sales."
+    "BR": "EVA Air sale windows for Singapore not researched yet (added 29 Oct 2026). EVA's site lists fares found in the last 48 hours rather than dated sales.",
+    "TG": "Thai Airways sale windows for Singapore not researched yet (added 29 Oct 2026)."
   }
 }

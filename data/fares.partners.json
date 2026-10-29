@@ -35,5 +35,18 @@
   {"carrier": "BR", "to": "AMS", "via": ["TPE"], "price": {"economy": null, "premium": null}},
   {"carrier": "BR", "to": "VIE", "via": ["TPE"], "price": {"economy": null, "premium": null}, "note": "Some EVA Vienna flights stop in Bangkok; those itineraries have 2 stops and are not counted by live searches."},
   {"carrier": "BR", "to": "MUC", "via": ["TPE"], "price": {"economy": null, "premium": null}},
-  {"carrier": "BR", "to": "MXP", "via": ["TPE"], "price": {"economy": null, "premium": null}}
+  {"carrier": "BR", "to": "MXP", "via": ["TPE"], "price": {"economy": null, "premium": null}},
+  {"carrier": "TG", "to": "BKK", "via": [], "cabins": ["economy"], "price": {"economy": 428}, "source": {"economy": "tg-site-2026-10"}},
+  {"carrier": "TG", "to": "LHR", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": 1643}, "source": {"economy": "tg-site-2026-10"}},
+  {"carrier": "TG", "to": "CDG", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": 1548}, "source": {"economy": "tg-site-2026-10"}},
+  {"carrier": "TG", "to": "FRA", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": 1628}, "source": {"economy": "tg-site-2026-10"}},
+  {"carrier": "TG", "to": "MUC", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "ZRH", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "MXP", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "AMS", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": 1738}, "source": {"economy": "tg-site-2026-10"}, "note": "Amsterdam resumed 1 July 2026."},
+  {"carrier": "TG", "to": "BRU", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "CPH", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "ARN", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "OSL", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}},
+  {"carrier": "TG", "to": "IST", "via": ["BKK"], "cabins": ["economy"], "price": {"economy": null}}
 ]

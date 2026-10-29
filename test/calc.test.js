@@ -59,8 +59,17 @@ test('every airline has at least one route with a price', () => {
   for (const code of Object.keys(C)) {
     // An airline may be exempt only with a stated reason (no advertised Singapore fare found).
     if (C[code].noAdvertisedFare) continue;
-    const priced = rows.filter((r) => r.carrier === code && r.priceSgd > 0 && r.miles > 0);
+    // Or its cheapest fare is stated to earn nothing (Thai Saver, W): it still needs a price, and
+    // picking an earning class on the row must earn miles.
+    const zeroSale = ['economy', 'premium'].some((cab) => C[code].saleFare?.[cab]?.confidence === 'stated' &&
+      C[code].accrual[cab].find((t) => t.classes.includes(C[code].saleFare[cab].class))?.pct === 0);
+    const priced = rows.filter((r) => r.carrier === code && r.priceSgd > 0 && (zeroSale || r.miles > 0));
     assert.ok(priced.length > 0, `${code} has no priced, earning route`);
+    if (zeroSale) {
+      const earning = C[code].accrual.economy.find((t) => t.pct > 0).classes[0];
+      const r = buildRows(data, { classOverrides: { [priced[0].key]: earning } }).find((x) => x.key === priced[0].key);
+      assert.ok(r.miles > 0, `${code}: class ${earning} should earn`);
+    }
   }
 });
 
