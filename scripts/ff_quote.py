@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Live fare lookup via fast-flights (unofficial Google Flights scraper). Used when no SerpApi key is set.
 
-Usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]
+Usage: ff_quote.py [--max-layover MINUTES] DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]
+  --max-layover: longest connection allowed (minutes; 0 or omitted = any). Also sent to Google.
   CABIN: economy | premium      dates: YYYY-MM-DD
   CARRIERS: 2-letter IATA code(s), comma-separated for mixed-airline routes (e.g. SQ,LX)
   VIA: connection airports, comma-separated (e.g. IST), or "-" / omitted for nonstop. Only
@@ -30,6 +31,13 @@ SEAT = {"economy": "economy", "premium": "premium-economy"}
 
 
 def main(argv):
+    max_layover = None
+    if len(argv) > 2 and argv[1] == "--max-layover":
+        try:
+            max_layover = int(argv[2]) or None
+        except ValueError:
+            return fail("--max-layover must be minutes")
+        argv = [argv[0], *argv[3:]]
     if len(argv) not in (6, 7, 8):
         return fail("usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]")
     _, dest, cabin, outbound, inbound, carrier_arg = argv[:6]
@@ -57,9 +65,11 @@ def main(argv):
     query = create_query(
         flights=[
             FlightQuery(date=outbound, from_airport="SIN", to_airport=dest, airlines=carriers,
-                        max_stops=len(via) if via else None),
+                        max_stops=len(via) if via else None,
+                        max_layover_minutes=max_layover if via else None),
             FlightQuery(date=inbound, from_airport=dest, to_airport="SIN", airlines=carriers,
-                        max_stops=len(via) if via else None),
+                        max_stops=len(via) if via else None,
+                        max_layover_minutes=max_layover if via else None),
         ],
         seat=SEAT[cabin],
         trip="round-trip",
@@ -98,14 +108,15 @@ def main(argv):
     want = {n.lower() for n in names}
     def fits(r):
         return (any(r["path"][: len(v) + 2] == ["SIN", *v, dest] for v in via_options)
-                and (not names or {a.lower() for a in r["airlines"]} == want))
+                and (not names or {a.lower() for a in r["airlines"]} == want)
+                and (max_layover is None or r["layover"] is None or r["layover"] <= max_layover))
     others = sorted((r for r in results if not fits(r)), key=lambda r: r["price"])
     results = [r for r in results if fits(r)]
     # Itineraries Google has that don't fit this row (e.g. SWISS-only for an SQ + SWISS row), so a
     # "no fares" result can say what Google does have.
     cheapest = min(results, key=lambda r: r["price"]) if results else None
     used_via = cheapest["path"][1:cheapest["path"].index(dest)] if cheapest and dest in cheapest["path"] else None
-    return ok([r["price"] for r in results], skipped, others[:3], used_via)
+    return ok([r["price"] for r in results], skipped, others[:3], used_via, cheapest["layover"] if cheapest else None)
 
 
 class NoFlightData(Exception):
@@ -158,9 +169,28 @@ def read_results(html):
             if not all(isinstance(c, str) for c in path):
                 skipped += 1
                 continue
-            results.append({"price": price, "path": path,
+            results.append({"price": price, "path": path, "layover": longest_connection(segs),
                             "airlines": [a for a in airlines if isinstance(a, str)] if isinstance(airlines, list) else []})
     return results, skipped
+
+
+def longest_connection(segs):
+    """Longest connection in minutes on the way out (0 = nonstop, None = unknown).
+
+    Each segment has local departure/arrival date ([y, m, d], index 20/21) and time ([h, m], 8/10);
+    a connection is next departure - previous arrival, both local at the connecting airport.
+    """
+    from datetime import datetime
+    def at(d, hm):
+        if not (isinstance(d, list) and len(d) == 3):
+            raise ValueError
+        h = (hm or [None, None]) + [None, None]
+        return datetime(d[0], d[1], d[2], h[0] or 0, h[1] or 0)
+    try:
+        gaps = [(at(dig(b, 20), dig(b, 8)) - at(dig(a, 21), dig(a, 10))).total_seconds() / 60 for a, b in zip(segs, segs[1:])]
+    except (ValueError, TypeError):
+        return None
+    return int(max(gaps)) if gaps else 0
 
 
 def save_debug(html):
@@ -180,14 +210,15 @@ def save_debug(html):
 REQUEST_URL = None
 
 
-def ok(prices, skipped=0, others=(), via=None):
+def ok(prices, skipped=0, others=(), via=None, layover=None):
     out = {
         "lowest": min(prices) if prices else None,
         "average": round(sum(prices) / len(prices)) if prices else None,
         "offers": len(prices),
         "skipped": skipped,
         "via": via,
-        "others": [{"price": r["price"], "airlines": r["airlines"], "path": r["path"][:4]} for r in others],
+        "layoverMin": layover,  # longest connection of the cheapest itinerary (0 = nonstop)
+        "others": [{"price": r["price"], "airlines": r["airlines"], "path": r["path"][:4], "layoverMin": r["layover"]} for r in others],
         "url": REQUEST_URL,
     }
     print(json.dumps(out))

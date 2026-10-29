@@ -12,6 +12,8 @@ const fakePy = path.join(tmp, 'fake-python');
 fs.writeFileSync(fakePy, `#!/bin/sh
 # "python -c 'import fast_flights'" succeeds; "python ff_quote.py DEST CABIN OUT IN CARRIER" prints a quote.
 if [ "$1" = "-c" ]; then exit 0; fi
+# "Max connection": the limit comes first ("--max-layover 240"); echo it back as the itinerary's connection.
+if [ "$2" = "--max-layover" ]; then echo '{"lowest": 777, "average": 800, "offers": 2, "via": ["PEK"], "layoverMin": '"$(($3 - 175))"'}'; exit 0; fi
 if [ "$2" = "XXX" ]; then echo '{"error": "fast-flights failed: blocked"}'; exit 1; fi
 # Mixed route: carriers "SQ,LX" (6th), connection (7th), airline names (8th).
 if [ "$6" = "SQ,LX" ] && [ "$7" = "ZRH" ] && [ "$8" = "Singapore Airlines|SWISS" ]; then echo '{"lowest": 4321, "average": 4321, "offers": 1}'; exit 0; fi
@@ -354,4 +356,35 @@ test('flexible rows: SerpApi accepts any hub and reports which one priced', asyn
     global.fetch = realFetch;
     settings.clearSerpApiKey();
   }
+});
+
+test('Max connection: SerpApi skips offers with a longer connection and reports the one priced', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  try {
+    global.fetch = async () => ({ ok: true, json: async () => ({ other_flights: [
+      { price: 1707, layovers: [{ id: 'PEK', duration: 65 }], flights: [{ flight_number: 'CA 976' }, { flight_number: 'CA 855' }] },
+      { price: 1423, layovers: [{ id: 'TFU', duration: 1145, overnight: true }], flights: [{ flight_number: 'CA 404' }, { flight_number: 'CA 423' }] },
+    ] }) });
+    const base = { carrier: 'CA', dest: 'LHR', cabin: 'economy', outbound: '2027-04-30', inbound: '2027-05-09', via: ['PEK'], viaOptions: [['PEK'], ['TFU']] };
+    live._test.cache.clear();
+    let out = await live.lowestReturnFare({ ...base, maxLayover: 240 });
+    assert.deepEqual([out.lowest, out.via, out.layoverMin], [1707, ['PEK'], 65]);
+    assert.deepEqual(out.others.map((o) => [o.price, o.layoverMin]), [[1423, 1145]]);
+    out = await live.lowestReturnFare(base); // any: a separate cache entry
+    assert.deepEqual([out.lowest, out.layoverMin], [1423, 1145]);
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
+
+test('Max connection: fast-flights gets the limit; the record keeps the connection and limit', async () => {
+  const db = require('../lib/db');
+  live._test.cache.clear();
+  const out = await live.lowestFareInWindow({ route: 'CA:LHR', carrier: 'CA', dest: 'LHR', cabin: 'economy', outbound: '2027-04-30', inbound: '2027-05-09',
+    via: ['PEK'], viaOptions: [['PEK'], ['TFU']], maxLayover: '240' });
+  assert.deepEqual([out.lowest, out.layoverMin], [777, 65]);
+  const rec = db._test.all().filter((r) => r.searchId === out.searchId)[0];
+  assert.deepEqual([rec.layoverMin, rec.maxLayover, rec.via], [65, 240, ['PEK']]);
 });

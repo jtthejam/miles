@@ -95,7 +95,7 @@ The server can't fetch the date grid itself: Google requires a per-request BotGu
 
 ## Connecting routes
 
-A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed per segment flown. Live prices, **G** links and bookmark imports stick to that connection (airline filter + stop limit, and layover checks where the source reports them). Add `"cabins": ["economy"]` when the connecting flight has no Premium Economy.
+A route's `via` (e.g. `"via": ["IST"]`) is part of its miles: distance is summed per segment flown. Live prices, **G** links and bookmark imports stick to that connection (airline filter + stop limit, and layover checks where the source reports them). **Max connection** (default 4 h) leaves out itineraries with a longer layover or stopover, in searches, G links and saved prices. Add `"cabins": ["economy"]` when the connecting flight has no Premium Economy.
 
 **Mixed airlines**: list segments instead of carrier/via:
 

@@ -135,15 +135,18 @@ async function init() {
   // Filters are remembered in this browser (they used to reset when the page reloaded, e.g. after a
   // Google Flights import opened the app again).
   const saveFilters = () => store.set(KEYS.filters, {
-    cabin: $('cabin').value, region: $('region').value, sort: $('sort').value,
+    cabin: $('cabin').value, region: $('region').value, sort: $('sort').value, maxLayover: $('max-layover').value,
     pricedOnly: $('priced-only').checked, roundTrip: $('roundtrip').checked, bulkUnpriced: $('bulk-unpriced').checked,
   });
   const savedFilters = store.get(KEYS.filters, {});
   for (const id of ['cabin', 'sort']) if (savedFilters[id] && [...$(id).options].some((o) => o.value === savedFilters[id])) $(id).value = savedFilters[id];
+  if (typeof savedFilters.maxLayover === 'string' && [...$('max-layover').options].some((o) => o.value === savedFilters.maxLayover)) $('max-layover').value = savedFilters.maxLayover;
   if (typeof savedFilters.pricedOnly === 'boolean') $('priced-only').checked = savedFilters.pricedOnly;
   if (typeof savedFilters.roundTrip === 'boolean') $('roundtrip').checked = savedFilters.roundTrip;
   ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', () => { saveFilters(); render(); }));
   $('roundtrip').addEventListener('change', () => { saveFilters(); refresh(); });
+  // Saved prices carry their longest connection, so changing the limit re-filters them without searching.
+  $('max-layover').addEventListener('change', () => { saveFilters(); refresh(); });
   $('reset').addEventListener('click', () => {
     overrides = {}; classOverrides = {}; fareDates = {};
     store.set(KEYS.prices, overrides); store.set(KEYS.classes, classOverrides); store.set(KEYS.fareDates, fareDates);
@@ -311,6 +314,9 @@ function render() {
       r.priceFrom === 'community' && r.community.latest.preliminary ? `Preliminary community price: searched ${ago(r.community.latest.ageDays)}` : '',
       r.priceFrom === 'community' && r.community.latest.reports < 2 ? 'Community price from one report: check it' : '',
     ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
+    // Longest connection of the itinerary priced (saved searches and community prices that know it).
+    const pl = r.priceFrom === 'search' ? r.search.latest : r.priceFrom === 'community' ? r.community.latest : null;
+    const conn = pl && pl.layoverMin > 0 ? `<span class="conn${maxLayover() && pl.layoverMin > maxLayover() ? ' long' : ''}" title="Longest connection on the way out, for the price shown">${hrsMin(pl.layoverMin)} connection</span>` : '';
     const fd = r.overridden ? fareDates[r.key] : null;
     const sl = r.priceFrom === 'search' ? r.search.latest : null;
     const cl = r.priceFrom === 'community' ? r.community.latest : null;
@@ -324,7 +330,7 @@ function render() {
     ].filter(Boolean).join('\n');
     return `
       <tr class="${r.priceSgd == null ? 'unpriced' : ''}">
-        <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span></td>
+        <td>${esc(r.city)}<span class="code">${r.code}</span><span class="route">${route}</span>${conn}</td>
         <td class="carrier">${r.mixed ? r.carriers.map((c) => esc(meta.carriers[c].name)).join('<br>+ ') : esc(r.carrierName)}${flags}</td>
         <td><span class="pill ${r.cabin}">${CABIN_LABEL[r.cabin]}</span></td>
         <td class="num">${fmt(r.distance)} mi</td>
@@ -416,8 +422,10 @@ const shortRange = (a, b) => `${shortDate(a)} – ${shortDate(b)}`;
 const localToday = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 10); };
 
 // Only send what the user chose; the server fills in defaults (≈60 days out, 7 nights).
+// Also carries "Max connection" (minutes), which applies wherever dates do.
 function dateParams() {
   const p = { flex: $('flex-days').value };
+  if ($('max-layover').value) p.maxLayover = $('max-layover').value;
   if ($('out-date').value) p.outbound = $('out-date').value;
   if ($('in-date').value) p.inbound = $('in-date').value;
   return p;
@@ -492,7 +500,11 @@ function linkDates() {
 }
 
 // Connecting rows limit stops to the route's connections, which (with the airline filter) pins the hub.
-const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carriers: r.carriers, cabin: r.cabin, maxStops: r.via && r.via.length ? r.via.length : null, ...linkDates() });
+const maxLayover = () => Number($('max-layover').value) || null;
+const hrsMin = (m) => (m < 60 ? `${m} min` : `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ''}`);
+// Connecting rows also set Google's layover-duration filter to "Max connection".
+const gfLink = (r) => window.GFLink.linkFor({ dest: r.code, carriers: r.carriers, cabin: r.cabin, maxStops: r.via && r.via.length ? r.via.length : null,
+  maxLayover: r.via && r.via.length ? maxLayover() : null, ...linkDates() });
 
 $('rows').addEventListener('click', (e) => {
   const a = e.target.closest('a.gf');
@@ -533,6 +545,7 @@ async function importFromHash() {
     hubNames: Object.fromEntries(Object.values(meta.carriers).flatMap((c) => (c.hubs || []).map((h) => [h.code, h.match]))),
     pending: pending && Date.now() - pending.at < 6 * 3600e3 ? pending : null,
     window: $('out-date').value ? { outbound: $('out-date').value, inbound: $('in-date').value, flex: $('flex-days').value } : null,
+    maxLayover: maxLayover(),
   });
   if (res.error) { gfMessage(esc(res.error), 'err'); return; }
 
@@ -548,7 +561,7 @@ async function importFromHash() {
   try {
     const r2 = await fetch('/api/db/records', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ route: res.routeId, cabin: res.cabin, source: res.source, range: res.pageRange, prices: res.allCells }),
+      body: JSON.stringify({ route: res.routeId, cabin: res.cabin, source: res.source, range: res.pageRange, prices: res.allCells, maxLayover: res.maxLayover }),
     });
     savedToDb = r2.ok;
   } catch { savedToDb = false; }
@@ -662,9 +675,13 @@ function othersNote(row, others) {
     const match = rows.find((r) => r.cabin === row.cabin && r.key !== row.key &&
       ['SIN', ...r.via, r.code].join('–') === path &&
       r.carriers.map((c) => meta.carriers[c].name).sort().join('|') === [...o.airlines].sort().join('|'));
-    return `  ${names}${path ? ` (${path})` : ''}: S$${fmt(o.price)}${match ? ` — that's the ${match.carrierName} row` : ''}`;
+    const long = o.layoverMin > 0 && maxLayover() && o.layoverMin > maxLayover();
+    const conn = o.layoverMin > 0 ? `, ${hrsMin(o.layoverMin)} connection${long ? ', over your limit' : ''}` : '';
+    return `  ${names}${path ? ` (${path}${conn})` : ''}: S$${fmt(o.price)}${match ? ` — that's the ${match.carrierName} row` : ''}`;
   });
-  return `\n\nGoogle Flights only has itineraries this row's miles don't apply to:\n${lines.join('\n')}`;
+  const anyLong = others.some((o) => o.layoverMin > 0 && maxLayover() && o.layoverMin > maxLayover());
+  return `\n\nGoogle Flights only has itineraries this row doesn't fit (airlines, routing${maxLayover() ? ' or connection time' : ''}):\n${lines.join('\n')}` +
+    (anyLong ? `\n\nRaise "Max connection" (now ${hrsMin(maxLayover())}) to count long connections.` : '');
 }
 
 // ---------- Search a whole region (every row shown) ----------

@@ -27,8 +27,8 @@ test('links encode exactly like fast-flights', () => {
 test('decodes our links and Google\'s rewritten ones', () => {
   assert.deepEqual(G.decodeTfs(FF_SQ_PREMIUM), {
     legs: [
-      { date: '2026-12-01', maxStops: null, airlines: ['SQ'], from: 'SIN', to: 'LHR' },
-      { date: '2026-12-08', maxStops: null, airlines: ['SQ'], from: 'LHR', to: 'SIN' },
+      { date: '2026-12-01', maxStops: null, airlines: ['SQ'], from: 'SIN', to: 'LHR', maxLayover: null },
+      { date: '2026-12-08', maxStops: null, airlines: ['SQ'], from: 'LHR', to: 'SIN', maxLayover: null },
     ],
     seat: 2,
     trip: 1,
@@ -59,8 +59,8 @@ const grid = [
 test('date grid import: cheapest cell, nearest to the asked date on ties', () => {
   const r = G.interpretImport({ href: href(FF_SQ_PREMIUM), grid }, { carriers });
   assert.deepEqual(
-    { ...r, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined },
-    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined },
+    { ...r, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined, layoverMin: undefined, maxLayover: undefined },
+    { routeId: 'SQ:LHR', carrier: 'SQ', carriers: ['SQ'], dest: 'LHR', cabin: 'premium', outbound: '2026-12-01', inbound: '2026-12-07', lowest: 1384, source: 'grid', considered: 6, notes: undefined, allCells: undefined, pageRange: undefined, via: undefined, layoverMin: undefined, maxLayover: undefined },
   );
   // For the price database: every cell, tagged with the page's range (± 3 days for the grid).
   assert.equal(r.allCells.length, 6);
@@ -223,4 +223,31 @@ test('flexible connections: results list import keeps any of the airline\'s hubs
   // Date grid: connection unknown, miles assume the default hub.
   const grid = G.interpretImport({ href: href(tfs), grid: [['1,423', 'Apr 30', 'May 9', 'SGD']] }, { carriers: cs, routes, hubNames });
   assert.match(grid.notes.join(), /doesn't show the connection: miles assume via PEK/);
+});
+
+// fast-flights 3.1.0: FlightQuery(..., airlines=["CA"], max_stops=1, max_layover_minutes=240) for SIN⇄LHR 2027-04-30/05-09.
+const FF_CA_MAX_LAYOVER = 'GiQSCjIwMjctMDQtMzAoATICQ0FqBRIDU0lOcgUSA0xIUpAB8AEaJBIKMjAyNy0wNS0wOSgBMgJDQWoFEgNMSFJyBRIDU0lOkAHwAUIBAUgBmAEB';
+
+test('Max connection: links set Google\'s layover-duration filter like fast-flights', () => {
+  const t = G.encodeTfs({ dest: 'LHR', outbound: '2027-04-30', inbound: '2027-05-09', carrier: 'CA', cabin: 'economy', maxStops: 1, maxLayover: 240 });
+  assert.equal(t, FF_CA_MAX_LAYOVER);
+  assert.deepEqual(G.decodeTfs(t).legs.map((l) => l.maxLayover), [240, 240]);
+});
+
+test('Max connection: results over the limit are skipped, with the reason when nothing is left', () => {
+  const ca = { CA: { name: 'Air China', hubs: [] } };
+  const routes = [{ routeId: 'CA:LHR', carriers: ['CA'], dest: 'LHR', via: ['PEK'], flexible: true, hubs: ['PEK', 'TFU'] }];
+  const hubNames = { PEK: 'Beijing Capital', TFU: 'Chengdu Tianfu' };
+  const h = href(G.encodeTfs({ dest: 'LHR', outbound: '2027-04-30', inbound: '2027-05-09', carrier: 'CA', cabin: 'economy', maxStops: 1 }));
+  const list = [
+    ['1423', 'Singapore dollars', 'Air China', 1, ['Chengdu Tianfu International Airport'], 1145],
+    ['1707', 'Singapore dollars', 'Air China', 1, ['Beijing Capital International Airport'], 65],
+  ];
+  let r = G.interpretImport({ href: h, list }, { carriers: ca, routes, hubNames, maxLayover: 240 });
+  assert.deepEqual([r.lowest, r.via, r.layoverMin, r.maxLayover], [1707, ['PEK'], 65, 240]);
+  assert.ok(r.notes.some((n) => /1 with a connection over 4 h skipped/.test(n)));
+  r = G.interpretImport({ href: h, list }, { carriers: ca, routes, hubNames });
+  assert.deepEqual([r.lowest, r.via, r.layoverMin], [1423, ['TFU'], 1145]);
+  r = G.interpretImport({ href: h, list: [list[0]] }, { carriers: ca, routes, hubNames, maxLayover: 240 });
+  assert.match(r.error, /over your 4 h limit \(cheapest: S\$1423 with a 19.1 h connection\)/);
 });

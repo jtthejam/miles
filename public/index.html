@@ -40,6 +40,15 @@
         <option value="priceSgd">Price (lowest first)</option>
       </select>
     </label>
+    <label title="Leave out itineraries with a longer connection (layover or stopover), e.g. a 19 h stopover in Chengdu. Applies to searches, Google Flights links and saved prices.">Max connection
+      <select id="max-layover">
+        <option value="">Any</option>
+        <option value="240" selected>4 h</option>
+        <option value="480">8 h</option>
+        <option value="720">12 h</option>
+        <option value="1440">24 h</option>
+      </select>
+    </label>
     <label class="check"><input type="checkbox" id="roundtrip" checked> Round trip</label>
     <label class="check"><input type="checkbox" id="priced-only"> Priced only</label>
     <button type="button" id="reset" class="ghost">Reset my edits</button>

@@ -75,7 +75,8 @@
   // Round trip SIN ⇄ dest on one airline (accrual depends on the operating carrier), 1 adult.
   // maxStops pins connecting routes: with a one-airline filter, "TK, at most 1 stop" to BOD can only be via IST.
   // carriers: every airline on a mixed route (Google keeps itineraries using only those airlines).
-  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, carriers, cabin, maxStops = null }) {
+  // maxLayover: longest connection in minutes (Google's "Connecting airports → Layover duration").
+  function encodeTfs({ origin = 'SIN', dest, outbound, inbound, carrier, carriers, cabin, maxStops = null, maxLayover = null }) {
     if (!SEAT[cabin]) throw new Error('cabin must be economy or premium');
     const airlines = carriers || (carrier ? [carrier] : []);
     const leg = (date, from, to) => [
@@ -84,6 +85,7 @@
       ...airlines.flatMap((c) => strField(6, c)),
       ...bytesField(13, strField(2, from)),
       ...bytesField(14, strField(2, to)),
+      ...(maxLayover ? intField(18, maxLayover) : []),
     ];
     const bytes = [
       ...bytesField(3, leg(outbound, origin, dest)),
@@ -111,6 +113,7 @@
         airlines: (l[6] || []).map(text),
         from: airport(l[13] && l[13][0]),
         to: airport(l[14] && l[14][0]),
+        maxLayover: l[18] ? l[18][0] : null,
       };
     });
     return { legs, seat: msg[9] ? msg[9][0] : null, trip: msg[19] ? msg[19][0] : null };
@@ -133,11 +136,13 @@
   const amount = (s) => Number(String(s).replace(/[^\d]/g, '')) || null;
 
   // Work out which route the page is for, and its prices.
-  //   payload: { href, grid: [[price, "Nov 28", "Dec 5", currency]], list: [[price, currencyName, airlinesText, stops]] }
+  //   payload: { href, grid: [[price, "Nov 28", "Dec 5", currency]],
+  //              list: [[price, currencyName, airlinesText, stops, connectionNames, longestConnectionMinutes]] }
   //   ctx: { carriers: {SQ: {name}},
   //          routes: [{ routeId, carriers, dest, via }] (or legacy { "TK:BOD": ["IST"] }),
   //          pending: { routeId, dest, cabin } | null  (row whose G link was opened last),
-  //          window: { outbound, inbound, flex } | null }
+  //          window: { outbound, inbound, flex } | null,
+  //          maxLayover: minutes | null  ("Max connection": longer connections are skipped) }
   // Returns { routeId, carrier, carriers, dest, cabin, outbound, inbound, lowest, source, considered, notes } or { error }.
   function interpretImport(payload, ctx) {
     const notes = [];
@@ -198,6 +203,10 @@
     if (via.length && legs.length && legs.some((l) => l.maxStops == null || l.maxStops > via.length)) {
       notes.push(`Google's stops filter is off, so prices may include connections other than ${via.join(', ')}`);
     }
+    // "Max connection": the app's limit, and the one set on the page (our links set it).
+    const maxLayover = ctx.maxLayover > 0 ? ctx.maxLayover : null;
+    const pageLimit = legs.length && legs.every((l) => l.maxLayover) ? Math.max(...legs.map((l) => l.maxLayover)) : null;
+    const hrs = (m) => `${Math.round(m / 6) / 10} h`;
     const outbound = out.date || null, inbound = back.date || null;
     const anchorOut = outbound || iso(Date.now()), anchorIn = inbound || anchorOut;
 
@@ -240,7 +249,17 @@
         if (via === null) return true; // nonstop, or older bookmarklet: no connection info
         if (via === undefined) return !route.flexible && !(route.via || []).length; // unknown airport
         return allowedVias.some((v) => v.join() === via.join());
-      }).map(({ r, via }) => Object.assign(r.slice(), { via }));
+      }).map(({ r, via }) => Object.assign(r.slice(), { via, layoverMin: typeof r[5] === 'number' ? r[5] : null }));
+      // r[5] = longest connection in minutes (newer bookmarklets): skip ones over the limit.
+      if (maxLayover) {
+        const long = own.filter((r) => r.layoverMin != null && r.layoverMin > maxLayover);
+        if (long.length && long.length === own.length) {
+          const c = long.slice().sort((a, b) => amount(a[0]) - amount(b[0]))[0];
+          return { error: `Every matching result has a connection over your ${hrs(maxLayover)} limit (cheapest: S$${amount(c[0])} with a ${hrs(c.layoverMin)} connection). Raise "Max connection" to keep it.` };
+        }
+        if (long.length) notes.push(`${long.length} with a connection over ${hrs(maxLayover)} skipped`);
+        own = own.filter((r) => !long.includes(r));
+      }
       if (list.length && !own.length && list.some((r) => Array.isArray(r[4]) && r[4].length)) {
         return { error: `None of the results on that page connect where this row does (${allowedVias.map((v) => v.join('–') || 'nonstop').join(' or ')}).` };
       }
@@ -250,7 +269,7 @@
         return { error: `None of the results on that page are ${route.carriers.map((c) => ctx.carriers[c].name).join(' + ')} flights.` };
       }
       if (!outbound || !inbound) return { error: 'Couldn\'t read the travel dates from that page.' };
-      cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]), via: r.via || null })).filter((c) => c.price);
+      cells = own.map((r) => ({ outbound, inbound, price: amount(r[0]), via: r.via || null, layoverMin: r.layoverMin })).filter((c) => c.price);
     }
     if (!cells.length) return { error: 'No prices found on that page. Wait for results to load (or open the Date grid), then click the bookmark again.' };
     // Everything the page priced, saved to the price database even if outside your current dates.
@@ -271,6 +290,9 @@
       cells = inside;
     }
 
+    if (source === 'grid' && via.length && maxLayover && !(pageLimit && pageLimit <= maxLayover)) {
+      notes.push(`date grid doesn't show connection times: prices may include connections over ${hrs(maxLayover)}`);
+    }
     if (source === 'grid' && route.flexible) notes.push(`date grid doesn't show the connection: miles assume via ${(route.via || []).join('–')}`);
     if (source === 'grid' && NO_ACCRUAL[carrier]) notes.push('date grid can include Lufthansa City flights, which earn no miles: check the flight before booking');
     // The date grid can't show who flies each flight, and for a mixed route Google often only has a
@@ -283,7 +305,8 @@
       Math.abs(dayDiff(a.outbound, target)) - Math.abs(dayDiff(b.outbound, target)))[0];
     // The search range the page covers: its dates, ± 3 days for the 7 × 7 date grid.
     const pageRange = { outbound: outbound || best.outbound, inbound: inbound || best.inbound, flex: source === 'grid' ? 3 : 0 };
-    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, via: best.via || null, source, considered: cells.length, notes, allCells, pageRange };
+    return { routeId: route.routeId, carrier, carriers: route.carriers, dest, cabin, outbound: best.outbound, inbound: best.inbound, lowest: best.price, via: best.via || null,
+      layoverMin: best.layoverMin ?? null, maxLayover: source === 'grid' ? pageLimit : maxLayover || pageLimit, source, considered: cells.length, notes, allCells, pageRange };
   }
 
   // Routes as [{ routeId, carriers, dest, via }]; also accepts the v1.11 map { "TK:BOD": ["IST"] }.

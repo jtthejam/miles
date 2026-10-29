@@ -43,10 +43,12 @@ test('committed community files contain only anonymised, valid prices for known 
 });
 
 test('anonymise: only the fields needed; search day only; no ids, times or search ranges', () => {
-  const out = db.anonymise([own({})]);
+  const out = db.anonymise([own({ layoverMin: 95, maxLayover: 240 })]);
+  assert.equal(out[0].layoverMin, 95); // the connection time is shared, the search's limit isn't
+  assert.ok(!('maxLayover' in out[0]));
   assert.equal(out.length, 1);
   // Exactly the shared fields, plus the connection priced ("via"), which decides miles on flexible rows.
-  assert.deepEqual(Object.keys(out[0]).filter((k) => k !== 'via').sort(), db.COMMUNITY_FIELDS.slice().sort());
+  assert.deepEqual(Object.keys(out[0]).filter((k) => !db.COMMUNITY_OPTIONAL.includes(k)).sort(), db.COMMUNITY_FIELDS.slice().sort());
   assert.deepEqual(out[0].via, ['IST']);
   assert.match(out[0].searchedOn, /^\d{4}-\d{2}-\d{2}$/);
   const text = JSON.stringify(out);
@@ -78,6 +80,8 @@ test('validation rejects anything that could identify you or is malformed', () =
   assert.equal(db.communityProblem(shared({})), null);
   assert.equal(db.communityProblem(shared({ via: ['TFU'] })), null);
   assert.match(db.communityProblem(shared({ via: 'TFU' })), /via/);
+  assert.equal(db.communityProblem(shared({ layoverMin: 1145 })), null);
+  assert.match(db.communityProblem(shared({ layoverMin: 1.5 })), /layoverMin/);
 });
 
 test('share writes a new file that loads as community prices and is never re-shared', () => {

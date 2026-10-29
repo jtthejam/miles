@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.19.0 — 2026-10-29
+
+### Added
+- **"Max connection" filter** (next to Sort; **default 4 h**; Any, 4 h, 8 h, 12 h, 24 h; remembered). Leaves out itineraries whose longest connection (layover or stopover) is longer, e.g. Air China to London via Chengdu with a 19 h stopover.
+  - **↻ and region search** (fast-flights and SerpApi) take the cheapest itinerary within the limit. Example (30 Apr – 9 May 2027): Air China London is S$1,707 via Beijing (1 h 5 min) at 4 h, S$1,423 via Chengdu at "Any".
+  - **"No fares"** lists what was left out with its connection time, e.g. "Air China (SIN–TFU–LHR, 19 h 5 min connection, over your limit): S$1,423", and suggests raising the limit.
+  - **G links** on connecting rows set Google's layover-duration filter to the same limit.
+  - **Saved prices** now record the itinerary's longest connection, so changing the limit re-filters them without searching again. Prices saved before v1.19 have no connection time and still show.
+  - **Rows show the connection time** of the price shown (red when over the limit).
+  - **Bookmark imports** read connection times from Google's results and skip ones over the limit. Re-drag the bookmark to get this. The date grid can't show connection times; the import says so unless the page has Google's layover filter set (G links set it).
+- Community prices can carry the connection time (`layoverMin`); the search's limit is not shared.
+
+### Technical
+- `scripts/ff_quote.py --max-layover MINUTES`: sent to Google as `max_layover_minutes` (tfs leg field 18) and checked per itinerary from segment times; prints `layoverMin`.
+- Records: optional `layoverMin` (minutes; 0 = nonstop) and `maxLayover` (the search's limit). A saved price is reused only if its search was at least as wide and its itinerary fits.
+- `maxLayover` query parameter on `/api/routes` and `/api/live`; `maxLayover`/`layoverMin` on `POST /api/db/records`.
+
 ## v1.18.1 — 2026-10-29
 
 ### Added

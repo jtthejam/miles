@@ -68,8 +68,9 @@ async function handleApi(url, res) {
         rows: buildRows(data, {
           classOverrides: parseJson(q.get('classes')),
           priceOverrides: parseJson(q.get('overrides')),
-          searchPrices: range ? db.pricesForRange(range) : {},
-          communityPrices: range ? db.communityForRange(range) : {},
+          // "Max connection" (minutes): saved prices with a longer connection are left out.
+          searchPrices: range ? db.pricesForRange({ ...range, maxLayover: q.get('maxLayover') }) : {},
+          communityPrices: range ? db.communityForRange({ ...range, maxLayover: q.get('maxLayover') }) : {},
           roundTrip: q.get('roundTrip') !== 'false',
         }),
       });
@@ -109,6 +110,8 @@ async function handleApi(url, res) {
           outbound: q.get('outbound') || undefined,
           inbound: q.get('inbound') || undefined,
           flex: q.get('flex') || 0,
+          // Longest connection allowed, in minutes (empty = any).
+          maxLayover: q.get('maxLayover') || null,
         });
         return sendJson(res, 200, { ...out, route: route ? route.routeId : `${carrier}:${dest}` });
       } catch (e) {
@@ -194,6 +197,9 @@ async function handleDbRecords(req, res) {
       via: route.flexible && Array.isArray(p.via) && p.via.length === 1 && route.hubs.includes(p.via[0]) ? p.via : route.via,
       outbound: p.outbound, inbound: p.inbound, price: Number(p.price), currency: 'SGD',
       provider: 'google-flights', offers: null, source: body.source === 'grid' ? 'date grid' : 'results',
+      // Longest connection of the itinerary priced (results list only) and the page's limit, if any.
+      ...(Number.isInteger(p.layoverMin) && p.layoverMin >= 0 ? { layoverMin: p.layoverMin } : {}),
+      ...(db.limitOf(body.maxLayover) ? { maxLayover: db.limitOf(body.maxLayover) } : {}),
     }));
     const saved = db.save(list);
     if (!saved.length) throw new Error('No valid prices to save');

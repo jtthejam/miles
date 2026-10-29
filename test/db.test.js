@@ -144,3 +144,24 @@ test('a range searched only long ago still shows its price, flagged preliminary'
   // A newer search for a date pair replaces the older result for that pair, but both stay in history.
   assert.ok(p.history.length >= 2);
 });
+
+test('Max connection: saved prices re-filter by their longest connection, without searching', () => {
+  const r = { outbound: '2027-06-01', inbound: '2027-06-08', flex: 0 };
+  const base = { route: 'CA:LHR', carriers: ['CA'], dest: 'LHR', cabin: 'economy', range: r, outbound: r.outbound, inbound: r.inbound, provider: 'fast-flights' };
+  db.save([
+    rec({ ...base, searchId: 'any', via: ['TFU'], price: 1423, layoverMin: 1145 }), // searched with no limit
+    rec({ ...base, searchId: 'lim', via: ['PEK'], price: 1707, layoverMin: 65, maxLayover: 240 }),
+  ]);
+  const at = (m) => db.pricesForRange({ ...r, maxLayover: m })['CA:LHR:economy'];
+  assert.deepEqual([at(240).latest.price, at(240).latest.layoverMin], [1707, 65]);
+  assert.equal(at(null).latest.price, 1707); // newest per date pair: the 4 h search replaced it
+  assert.ok(at(null).history.some((h) => h.price === 1423)); // still kept as reference
+  assert.equal(at(60), undefined); // nothing within 1 h
+  // Reuse: a 4 h search can't stand in for "any" (it never looked at longer connections)…
+  assert.equal(db.reusable({ route: 'CA:LHR', cabin: 'economy', outbound: r.outbound, inbound: r.inbound }).searchId, 'any');
+  assert.equal(db.reusable({ route: 'CA:LHR', cabin: 'economy', outbound: r.outbound, inbound: r.inbound, maxLayover: 240 }).searchId, 'lim');
+  // …and a 19 h stopover can't stand in for 4 h; a "no limit" search with a short connection can.
+  db.save([rec({ ...base, searchId: 'any2', via: ['PEK'], price: 1800, layoverMin: 100 })]);
+  assert.equal(db.reusable({ route: 'CA:LHR', cabin: 'economy', outbound: r.outbound, inbound: r.inbound, maxLayover: 240 }).searchId, 'any2');
+  assert.equal(db.valid(rec({ layoverMin: -1 })), false);
+});
