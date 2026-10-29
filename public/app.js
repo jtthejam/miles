@@ -314,7 +314,9 @@ function render() {
       r.priceFrom === 'search' && r.search.latest.preliminary ? `Preliminary price: searched ${ago(r.search.latest.ageDays)}` : '',
       r.priceFrom === 'community' && r.community.latest.preliminary ? `Preliminary community price: searched ${ago(r.community.latest.ageDays)}` : '',
       r.priceFrom === 'community' && r.community.latest.reports < 2 ? 'Community price from one report: check it' : '',
-    ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('');
+    ].filter(Boolean).map((f) => `<span class="flag">${esc(f)}</span>`).join('') +
+      // Premium Economy ticket with an Economy flight: those miles are an estimate (50% assumed).
+      (r.mixedCabin ? `<span class="flag mixed-cabin" title="${esc(r.cabinNote)}">Economy on ${esc(r.segments.filter((s) => s.cabin === 'economy').map((s) => `${s.from}–${s.to}`).join(', '))}: 50% assumed</span>` : '');
     // Longest connection of the itinerary priced (saved searches and community prices that know it).
     const pl = r.priceFrom === 'search' ? r.search.latest : r.priceFrom === 'community' ? r.community.latest : null;
     const conn = pl && pl.layoverMin > 0 ? `<span class="conn${maxLayover() && pl.layoverMin > maxLayover() ? ' long' : ''}" title="Longest connection on the way out, for the price shown">${hrsMin(pl.layoverMin)} connection</span>` : '';
@@ -378,13 +380,17 @@ function earnCell(r) {
 function earnCellMixed(r) {
   const pickers = r.carriers.map((code) => {
     const car = meta.carriers[code];
-    const sf = car.saleFare[r.cabin];
     const c = r.classes[code];
+    const cab = c.cabin || r.cabin; // mixed cabin: an airline flying only the Economy part books Economy
+    const econPart = r.mixedCabin && cab === 'economy';
+    const sf = econPart
+      ? { family: 'Economy on a Premium Economy ticket', confidence: 'assumed', basis: 'class not published; 50% assumed' }
+      : car.saleFare[cab];
     const changed = c.bookingClass !== c.saleClass;
     const mark = changed ? '' : sf.confidence === 'stated' ? '✓' : '≈';
     const legs = r.segments.filter((s) => s.carrier === code).map((s) => `${s.from}–${s.to}`).join(', ');
-    const tip = `${car.name} (${legs}): ${changed ? `your class ${c.bookingClass}; sale fares book into ${c.saleClass}` : `sale fare class ${c.saleClass} (${sf.family}), ${sf.confidence === 'stated' ? 'published by the airline' : 'assumed, not published'}`}. Earns ${c.pct}%.`;
-    const opts = car.accrual[r.cabin].flatMap((t) => t.classes.map((k) => ({ k, pct: t.pct, only: t.onlyTo })))
+    const tip = `${car.name} (${legs}${econPart ? ', in Economy' : ''}): ${changed ? `your class ${c.bookingClass}; ${econPart ? 'assumed' : 'sale fares book into'} ${c.saleClass}` : econPart ? `Economy class not published: ${c.saleClass} (50%) assumed` : `sale fare class ${c.saleClass} (${sf.family}), ${sf.confidence === 'stated' ? 'published by the airline' : 'assumed, not published'}`}. Earns ${c.pct}%.`;
+    const opts = car.accrual[cab].flatMap((t) => t.classes.map((k) => ({ k, pct: t.pct, only: t.onlyTo })))
       .sort((a, b) => b.pct - a.pct || a.k.localeCompare(b.k))
       .map(({ k, pct, only }) => `<option value="${k}" ${k === c.bookingClass ? 'selected' : ''}>${k} · ${pct}%${only ? ` (${only.join('/')} only)` : ''}${k === c.saleClass ? ' — sale' : ''}</option>`)
       .join('');

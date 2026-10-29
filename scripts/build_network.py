@@ -17,8 +17,10 @@ Rules (one route per airline combination per city, only where every segment was 
     NH      SIN-HND|NRT-city           ANA nonstop from Tokyo (Haneda preferred)
     NH+UA   SIN-HND|NRT (NH), Tokyo-hub[-city] (UA)   cities ANA doesn't fly to; shortest United path
     NZ      SIN-AKL-city               Air New Zealand from Auckland
-  Cabins: Premium Economy only where every segment is long-haul with Premium Economy confirmed;
-  otherwise Economy only.
+  Cabins: Premium Economy on every segment where that is confirmed. Otherwise, when every airline on
+  the route has Premium Economy, a Premium Economy row with "mixedCabin": the flight from Singapore in
+  Premium Economy and the onward flight(s) in Economy (their class isn't published: 50% assumed).
+  Airlines without Premium Economy (Turkish) stay Economy only.
 """
 import json
 import math
@@ -45,7 +47,7 @@ lx_lh = json.loads((RES / "lx_lh.json").read_text())
 nh_ua = json.loads((RES / "nh_ua.json").read_text())
 sq_nz = json.loads((RES / "sq_nz.json").read_text())
 
-EUROPE = "LHR MAN BHX BER HAM MUC CDG MRS LYS FCO MXP NAP MAD BCN VLC DUB LIS AMS BRU LUX VIE CPH OSL ARN HEL KEF WAW PRG BTS BUD LJU ZAG SJJ BEG TGD SKP TIA PRN ATH SOF OTP RMO TLL RIX VNO MLA LCA ESB".split()
+EUROPE = "GVA LHR MAN BHX BER HAM MUC CDG MRS LYS FCO MXP NAP MAD BCN VLC DUB LIS AMS BRU LUX VIE CPH OSL ARN HEL KEF WAW PRG BTS BUD LJU ZAG SJJ BEG TGD SKP TIA PRN ATH SOF OTP RMO TLL RIX VNO MLA LCA ESB".split()
 USA = "JFK EWR LAX SFO ORD SEA IAH IAD BOS DFW MIA DEN HNL ATL LAS MCO PHX SAN PHL MSP PDX".split()
 
 
@@ -58,6 +60,23 @@ def dist(a, b):
 
 
 routes, skipped = [], []
+carriers = json.loads((ROOT / "data/carriers.json").read_text())
+HAS_PE = {c for c, v in carriers.items() if isinstance(v, dict) and v.get("accrual", {}).get("premium")}
+
+
+def cabins(r, carriers_on_route, legs, premium, economy_legs=None):
+    """Premium Economy everywhere (premium), or PE from Singapore then Economy onward (mixedCabin).
+    economy_legs: which segments have no Premium Economy (default: every one after the first)."""
+    if economy_legs == []:
+        premium = True
+    if premium:
+        r["price"] = {"economy": None, "premium": None}
+    elif legs > 1 and all(c in HAS_PE for c in carriers_on_route):
+        r["mixedCabin"] = economy_legs or list(range(1, legs))  # segment indexes flown in Economy on a PE ticket
+        r["price"] = {"economy": None, "premium": None}
+    else:
+        r["cabins"] = ["economy"]
+        r["price"] = {"economy": None}
 
 
 def add(route, why=""):
@@ -71,9 +90,7 @@ def add(route, why=""):
 
 def single(carrier, to, via, premium=False, seasonal=False, note=""):
     r = {"carrier": carrier, "to": to, "via": via}
-    if not premium:
-        r["cabins"] = ["economy"]
-    r["price"] = {"economy": None, **({"premium": None} if premium else {})}
+    cabins(r, [carrier], len(via) + 1, premium)
     if seasonal:
         r["seasonal"] = True
     if note:
@@ -81,11 +98,9 @@ def single(carrier, to, via, premium=False, seasonal=False, note=""):
     add(r)
 
 
-def mixed(segs, premium=False, seasonal=False, note=""):
+def mixed(segs, premium=False, seasonal=False, note="", economy_legs=None):
     r = {"to": segs[-1][1], "segments": [{"carrier": c, "to": t} for c, t in segs]}
-    if not premium:
-        r["cabins"] = ["economy"]
-    r["price"] = {"economy": None, **({"premium": None} if premium else {})}
+    cabins(r, [c for c, _ in segs], len(segs), premium, economy_legs)
     if seasonal:
         r["seasonal"] = True
     if note:
@@ -154,7 +169,8 @@ for city in EUROPE + USA:
         if best:
             path = best[1]
             segs = [("NH", path[0])] + [("UA", p) for p in path[1:]]
-            mixed(segs)
+            # United's Tokyo flights are widebodies with Premium Plus; its US domestic flights have none.
+            mixed(segs, economy_legs=list(range(2, len(segs))))
     # Air New Zealand via Auckland
     nz = sq_nz["NZ"].get(city)
     if ok(nz):

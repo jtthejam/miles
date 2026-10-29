@@ -418,6 +418,12 @@
    "seasonal": false,
    "note": "Not listed as a TK destination",
    "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
+  },
+  "GVA": {
+   "served": true,
+   "seasonal": false,
+   "note": "Added 29 Oct 2026: Turkish serves Geneva from Istanbul Airport (several daily)",
+   "source": "https://en.wikipedia.org/wiki/List_of_Turkish_Airlines_destinations"
   }
  },
  "CA": {
@@ -838,6 +844,12 @@
    "served": false,
    "seasonal": false,
    "note": "Not a CA destination",
+   "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
+  },
+  "GVA": {
+   "served": false,
+   "seasonal": false,
+   "note": "Added 29 Oct 2026: no Air China Geneva service",
    "source": "https://en.wikipedia.org/wiki/List_of_Air_China_destinations"
   }
  }

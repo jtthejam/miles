@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.24.0 — 2026-10-29
+
+### Added
+- **Premium Economy with an Economy connection** (205 new rows). Where the flight from Singapore has Premium Economy but the onward flight doesn't (e.g. SWISS Singapore–Zurich in Premium Economy, Zurich–Bordeaux in Economy), there's now a Premium Economy row. Covers SWISS, Singapore Airlines + SWISS, Lufthansa, Singapore Airlines + Lufthansa and Air China to Europe; United via San Francisco; ANA, ANA + United and Air New Zealand to the US; SWISS to US cities without confirmed Premium Economy.
+  - The Economy flight's booking class isn't published, so it's assumed to earn **50%**. The row is flagged "Economy on ZRH–BOD: 50% assumed" (hover for details), and the map tooltip shows "Prem Eco + Eco*".
+  - Same airline on both flights: its class picker sets the Premium Economy flight; the Economy flight stays at 50%. Different airlines (e.g. Singapore Airlines + SWISS): the airline flying only the Economy part gets an Economy class picker (50% class assumed), so you can set the class you actually book.
+  - Where Premium Economy isn't confirmed on a long flight (e.g. some ANA 787 and SWISS A330 routes), that flight is counted as Economy (conservative). United's Tokyo flights count as Premium Plus; only its US domestic flights are Economy.
+  - Turkish and Thai have no Premium Economy, so their routes stay Economy only.
+- **Geneva:** SWISS via Zurich, Singapore Airlines + SWISS, Lufthansa via Frankfurt (Lufthansa-operated flights; Munich–Geneva is SWISS-operated), Singapore Airlines + Lufthansa, and Turkish via Istanbul.
+- **Altay (AAT) and Ürümqi (URC), Xinjiang:** Air China only, via Beijing (or Chengdu, as a flexible connection), Economy and Premium Economy (Economy on the domestic flight).
+
+### Technical
+- Routes: `"mixedCabin": [segment indexes]`. Rows: `mixedCabin`, `cabinNote`; segments carry `cabin` and `assumed`; per-airline `classes[c].cabin`.
+- `scripts/build_network.py` emits `mixedCabin` instead of Economy-only when every airline on the route has Premium Economy.
+
 ## v1.23.1 — 2026-10-29
 
 ### Fixed

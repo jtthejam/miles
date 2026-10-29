@@ -70,6 +70,16 @@ for (const f of fares) {
       if (!carriers[c].accrual[cab]?.length) throw new Error(`${f.routeId} lists cabin ${cab} that ${c} doesn't have`);
     }
   }
+  // mixedCabin: segment indexes flown in Economy on a Premium Economy ticket (no PE on that flight).
+  if (f.mixedCabin) {
+    const n = f.segments.length;
+    if (!Array.isArray(f.mixedCabin) || !f.mixedCabin.length || f.mixedCabin.length >= n ||
+        !f.mixedCabin.every((i) => Number.isInteger(i) && i >= 0 && i < n)) throw new Error(`${f.routeId}: bad mixedCabin`);
+    if (f.cabins && !f.cabins.includes('premium')) throw new Error(`${f.routeId}: mixedCabin needs the premium cabin`);
+    f.segments.forEach((s, i) => {
+      if (!f.mixedCabin.includes(i) && !carriers[s.carrier].accrual.premium?.length) throw new Error(`${f.routeId}: ${s.carrier} has no Premium Economy`);
+    });
+  }
   if (f.via.includes(f.to) || f.via.includes('SIN')) throw new Error(`Bad connection on ${f.carrier}:${f.to}`);
   if (f.mixed && f.class) throw new Error(`${f.routeId}: set classes per segment ("class" on each segment) for mixed routes`);
   for (const seg of f.segments) {

@@ -430,6 +430,12 @@
    "seasonal": false,
    "note": "No SWISS ZRH service listed",
    "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
+  },
+  "GVA": {
+   "served": true,
+   "seasonal": false,
+   "note": "Added 29 Oct 2026: SWISS Zurich-Geneva shuttle",
+   "source": "https://en.wikipedia.org/wiki/Zurich_Airport"
   }
  },
  "LH": {
@@ -1410,6 +1416,20 @@
     "operator": "none",
     "note": "Not in LH/VL/EN lists at this hub",
     "source": ""
+   }
+  },
+  "GVA": {
+   "MUC": {
+    "served": true,
+    "operator": "LX",
+    "note": "Added 29 Oct 2026: Geneva-Munich is operated by SWISS",
+    "source": "https://swiss.newsmarket.com/english/press-releases/swiss-verbindet-genf-mit-m-nchen-und-frankfurt/s/3ec83adb-e9b4-4992-ac37-11dc2598b264"
+   },
+   "FRA": {
+    "served": true,
+    "operator": "LH",
+    "note": "Added 29 Oct 2026: Lufthansa mainline 4 daily (LH1212/1216/1220/1222) plus 1 Air Dolomiti; book the LH flights",
+    "source": "https://www.flightsfrom.com/FRA-GVA"
    }
   }
  }

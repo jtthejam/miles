@@ -161,9 +161,10 @@ test('sales calendar data is complete', () => {
   assert.ok(cal.sales.every((s) => s.url.startsWith('https://')));
 });
 
-test('Bordeaux connecting routes: distance per segment, Economy only on SWISS', () => {
+test('Bordeaux connecting routes: distance per segment; SWISS Premium Economy only as mixed cabin', () => {
   const rows = buildRows(data).filter((r) => r.code === 'BOD' && !r.mixed);
-  assert.deepEqual(rows.map((r) => [r.key, r.via.join()]).sort(), [['LX:BOD:economy', 'ZRH'], ['TK:BOD:economy', 'IST']]);
+  assert.deepEqual(rows.map((r) => [r.key, r.via.join()]).sort(), [['LX:BOD:economy', 'ZRH'], ['LX:BOD:premium', 'ZRH'], ['TK:BOD:economy', 'IST']]);
+  assert.ok(rows.find((r) => r.key === 'LX:BOD:premium').mixedCabin);
   for (const r of rows) {
     const direct = buildRows(data).find((x) => x.carrier === r.carrier && x.code === r.via[0] && x.cabin === 'economy');
     assert.ok(r.distance > direct.distance, `${r.key} counts both segments`);
@@ -182,7 +183,7 @@ test('mixed-airline route: each segment earns at its own airline\'s class rate',
   assert.equal(y.bookingClass, 'K+Y');
   assert.ok(y.classOverridden);
   // Mixed rows only exist in cabins every airline sells (and the route allows).
-  assert.ok(!buildRows(data).some((r) => r.key === 'SQ+LX:BOD:premium'));
+  assert.ok(!buildRows(data).some((r) => r.key === 'TK:BOD:premium'));
 });
 
 test('route data: mixed routes validated', () => {
@@ -209,4 +210,33 @@ test('flexible connections: miles follow the hub of the price shown', () => {
   assert.deepEqual(odd.via, ['PEK']);
   // Lufthansa rows are never flexible (another hub may be Lufthansa City Airlines: no miles).
   assert.ok(!data.fares.some((f) => f.carrier === 'LH' && f.flexible));
+});
+
+test('mixed cabin: Premium Economy from Singapore, Economy onward at an assumed 50%', () => {
+  const rows = buildRows(data);
+  // One airline: SWISS PE to Zurich (N, 100%), Zurich-Bordeaux in Economy, class unknown: 50%.
+  const lx = rows.find((r) => r.key === 'LX:BOD:premium');
+  assert.deepEqual(lx.segments.map((s) => [s.from, s.to, s.cabin, s.bookingClass, s.pct, !!s.assumed]),
+    [['SIN', 'ZRH', 'premium', 'N', 100, false], ['ZRH', 'BOD', 'economy', '?', 50, true]]);
+  assert.equal(lx.miles, lx.segments.reduce((a, s) => a + s.miles, 0));
+  assert.match(lx.cabinNote, /ZRH–BOD in Economy.*50% assumed/);
+  assert.equal(lx.bookingClass, 'N');
+  // Two airlines: SWISS only flies the Economy part, so its class picker is Economy (50% class assumed).
+  const mix = rows.find((r) => r.key === 'SQ+LX:BOD:premium');
+  assert.deepEqual(mix.classes.LX, { saleClass: 'Q', bookingClass: 'Q', pct: 50, cabin: 'economy' });
+  assert.equal(mix.classes.SQ.cabin, 'premium');
+  const y = buildRows(data, { classOverrides: { 'SQ+LX:BOD:premium|LX': 'Y' } }).find((r) => r.key === 'SQ+LX:BOD:premium');
+  assert.deepEqual(y.segments.map((s) => s.pct), [100, 100]);
+  // Economy rows of the same route are unchanged; airlines without PE get no PE row.
+  assert.ok(!rows.find((r) => r.key === 'LX:BOD:economy').mixedCabin);
+  assert.ok(!rows.some((r) => r.key === 'TK:GVA:premium'));
+  // United's Tokyo flight has Premium Plus; only its US domestic flight is Economy.
+  const bos = rows.find((r) => r.key === 'NH+UA:BOS:premium');
+  assert.deepEqual(bos.segments.map((s) => s.cabin), ['premium', 'premium', 'economy']);
+});
+
+test('Geneva, Altay and Urumqi routes', () => {
+  const ids = new Set(buildRows(data).map((r) => r.key));
+  for (const k of ['LX:GVA:economy', 'SQ+LX:GVA:premium', 'LH:GVA:economy', 'SQ+LH:GVA:economy', 'TK:GVA:economy', 'CA:AAT:economy', 'CA:AAT:premium', 'CA:URC:economy']) assert.ok(ids.has(k), k);
+  assert.ok(![...ids].some((k) => /:(AAT|URC):/.test(k) && !k.startsWith('CA:')), 'Altay and Urumqi only via Air China');
 });

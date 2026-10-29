@@ -191,7 +191,7 @@ window.RouteMap = (() => {
   // ---------- tooltips ----------
 
   const rowLine = (r) => `
-    <tr><td>${esc(r.carrierName)}</td><td>${r.cabin === 'premium' ? 'Prem Eco' : 'Economy'} · ${r.bookingClass}</td>
+    <tr><td>${esc(r.carrierName)}</td><td${r.mixedCabin ? ` title="${esc(r.cabinNote)}"` : ''}>${r.cabin === 'premium' ? (r.mixedCabin ? 'Prem Eco + Eco*' : 'Prem Eco') : 'Economy'} · ${r.bookingClass}</td>
     <td class="num">${fmt(r.miles)}</td><td class="num">${r.priceSgd != null ? 'S$' + fmt(r.priceSgd) : '—'}</td>
     <td class="num"><b>${r.milesPerSgd ?? '—'}</b></td></tr>`;
 

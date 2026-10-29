@@ -89,6 +89,7 @@ details.tiers summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .route { display: block; font-size: 12px; color: var(--muted); }
 .carrier { font-size: 13px; }
 .flag { font-size: 11px; color: #b06d00; display: block; white-space: normal; max-width: 190px; }
+.flag.mixed-cabin { cursor: help; text-decoration: underline dotted; }
 .price::placeholder { color: var(--muted); }
 tr.unpriced td { color: var(--muted); }
 

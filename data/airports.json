@@ -616,5 +616,17 @@
     "region": "Americas",
     "lat": 43.6777,
     "lon": -79.6248
+  },
+  "URC": {
+    "city": "Ürümqi",
+    "region": "North Asia",
+    "lat": 43.9071,
+    "lon": 87.4742
+  },
+  "AAT": {
+    "city": "Altay",
+    "region": "North Asia",
+    "lat": 47.7499,
+    "lon": 88.0858
   }
 }
