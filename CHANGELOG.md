@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.17.0 — 2026-10-29
+
+### Changed
+- **Map colours (Miles per SGD)** are now a rainbow: red < 2, orange 2–4, yellow 4–6, green 6–8, blue 8–10, purple 10+ (on the 3D globe and the flat map; separate light and dark shades). Previously a 5-step blue scale from 4 to 10.
+- **Filters are remembered** in this browser: region, cabin, sort, "priced only" and "round trip". They used to reset whenever the page reloaded, e.g. when a Google Flights import opened the app again.
+
+### Fixed
+- **Mixed-airline rows (e.g. Singapore Airlines → Zurich + SWISS → Bordeaux):**
+  - Checked live (1–8 Dec 2026): Google Flights has no Singapore Airlines + SWISS itinerary for these dates, only SWISS all the way (S$1,451). So fast-flights correctly found no fare for the row.
+  - **Date-grid imports were wrong for mixed rows.** The grid can't show who flies each flight, so it saved the SWISS-only price to the SQ + SWISS row, with the wrong miles. Date-grid imports are now refused for mixed rows, with a pointer to the results list, which shows each itinerary's airlines.
+  - **"No fares" now says what Google does have**, for both fast-flights and SerpApi. For example: "Google Flights only has itineraries this row's miles don't apply to: SWISS (SIN–ZRH–BOD): S$1,451 — that's the SWISS row". Nonstop rows get the same treatment, e.g. only via-Narita itineraries.
+
+### Technical
+- `scripts/ff_quote.py` and `/api/live` return `others` (up to 3 cheapest itineraries that don't fit the row: price, airlines, routing).
+
 ## v1.16.1 — 2026-10-29
 
 ### Changed

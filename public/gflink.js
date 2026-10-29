@@ -254,7 +254,11 @@
     }
 
     if (source === 'grid' && NO_ACCRUAL[carrier]) notes.push('date grid can include Lufthansa City flights, which earn no miles: check the flight before booking');
-    if (source === 'grid' && mixed) notes.push(`date grid doesn't show who flies each flight: check it's ${route.carriers.map((c) => ctx.carriers[c].name).join(' then ')} before booking`);
+    // The date grid can't show who flies each flight, and for a mixed route Google often only has a
+    // one-airline itinerary (e.g. SWISS all the way, not SQ then SWISS), which earns different miles.
+    if (source === 'grid' && mixed) {
+      return { error: `The date grid can't show who flies each flight, so it can't confirm ${route.carriers.map((c) => ctx.carriers[c].name).join(' then ')}. Close the date grid and click the bookmark on the results list (pick dates there), which shows each itinerary's airlines.` };
+    }
     const target = w && w.outbound ? w.outbound : anchorOut;
     const best = cells.slice().sort((a, b) => a.price - b.price ||
       Math.abs(dayDiff(a.outbound, target)) - Math.abs(dayDiff(b.outbound, target)))[0];

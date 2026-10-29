@@ -93,11 +93,14 @@ def main(argv):
     # The query already restricts results to the requested airline (accrual depends on the operator).
     # The row's miles assume its exact routing: nonstop rows only count nonstop itineraries (e.g. SQ
     # Los Angeles also sells SIN-NRT-LAX), connecting rows only their connection.
-    results = [r for r in results if r["path"][: len(via) + 2] == ["SIN", *via, dest]]
-    if names:
-        want = {n.lower() for n in names}
-        results = [r for r in results if {a.lower() for a in r["airlines"]} == want]
-    return ok([r["price"] for r in results], skipped)
+    want = {n.lower() for n in names}
+    def fits(r):
+        return r["path"][: len(via) + 2] == ["SIN", *via, dest] and (not names or {a.lower() for a in r["airlines"]} == want)
+    others = sorted((r for r in results if not fits(r)), key=lambda r: r["price"])
+    results = [r for r in results if fits(r)]
+    # Itineraries Google has that don't fit this row (e.g. SWISS-only for an SQ + SWISS row), so a
+    # "no fares" result can say what Google does have.
+    return ok([r["price"] for r in results], skipped, others[:3])
 
 
 class NoFlightData(Exception):
@@ -172,12 +175,13 @@ def save_debug(html):
 REQUEST_URL = None
 
 
-def ok(prices, skipped=0):
+def ok(prices, skipped=0, others=()):
     out = {
         "lowest": min(prices) if prices else None,
         "average": round(sum(prices) / len(prices)) if prices else None,
         "offers": len(prices),
         "skipped": skipped,
+        "others": [{"price": r["price"], "airlines": r["airlines"], "path": r["path"][:4]} for r in others],
         "url": REQUEST_URL,
     }
     print(json.dumps(out))

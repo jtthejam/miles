@@ -4,7 +4,7 @@ const $ = (id) => document.getElementById(id);
 const fmt = (n) => n.toLocaleString('en-SG');
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const CABIN_LABEL = { economy: 'Economy', premium: 'Premium Eco' };
-const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed', dates: 'mm-dates-v1', fareDates: 'mm-fare-dates-v1', gfPending: 'mm-gf-pending-v1' };
+const KEYS = { prices: 'mm-price-overrides-v2', classes: 'mm-classes-v1', carriers: 'mm-carriers-v1', view: 'mm-view-v1', plan: 'mm-plan-v2', keyPrompt: 'mm-key-prompt-dismissed', dates: 'mm-dates-v1', fareDates: 'mm-fare-dates-v1', gfPending: 'mm-gf-pending-v1', filters: 'mm-filters-v1' };
 
 let meta = null;
 let rows = [];
@@ -132,8 +132,18 @@ async function init() {
     $('saved-searches').value = '0';
   }
 
-  ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', render));
-  $('roundtrip').addEventListener('change', refresh);
+  // Filters are remembered in this browser (they used to reset when the page reloaded, e.g. after a
+  // Google Flights import opened the app again).
+  const saveFilters = () => store.set(KEYS.filters, {
+    cabin: $('cabin').value, region: $('region').value, sort: $('sort').value,
+    pricedOnly: $('priced-only').checked, roundTrip: $('roundtrip').checked,
+  });
+  const savedFilters = store.get(KEYS.filters, {});
+  for (const id of ['cabin', 'sort']) if (savedFilters[id] && [...$(id).options].some((o) => o.value === savedFilters[id])) $(id).value = savedFilters[id];
+  if (typeof savedFilters.pricedOnly === 'boolean') $('priced-only').checked = savedFilters.pricedOnly;
+  if (typeof savedFilters.roundTrip === 'boolean') $('roundtrip').checked = savedFilters.roundTrip;
+  ['cabin', 'region', 'sort', 'priced-only'].forEach((id) => $(id).addEventListener('change', () => { saveFilters(); render(); }));
+  $('roundtrip').addEventListener('change', () => { saveFilters(); refresh(); });
   $('reset').addEventListener('click', () => {
     overrides = {}; classOverrides = {}; fareDates = {};
     store.set(KEYS.prices, overrides); store.set(KEYS.classes, classOverrides); store.set(KEYS.fareDates, fareDates);
@@ -153,6 +163,10 @@ async function init() {
 
   await refresh();
   [...new Set(rows.map((r) => r.region))].sort().forEach((r) => $('region').add(new Option(r, r)));
+  if (savedFilters.region && [...$('region').options].some((o) => o.value === savedFilters.region)) {
+    $('region').value = savedFilters.region; // options exist only after the first load
+    render();
+  }
   setView(view);
   window.name = 'miles-maximiser'; // lets the bookmarklet reuse this tab when it can
   initBookmarklet();
@@ -629,6 +643,21 @@ async function searchRow(row, { batch = null } = {}) {
   return res;
 }
 
+// "Google Flights only has: SWISS (SIN–ZRH–BOD) S$1,451 — that's the SWISS row." Explains a search that
+// found itineraries, just not ones this row's miles apply to (other airlines or routing).
+function othersNote(row, others) {
+  if (!others || !others.length) return '';
+  const lines = others.map((o) => {
+    const names = (o.airlines || []).join(' + ') || 'other airlines';
+    const path = (o.path || []).filter(Boolean).join('–');
+    const match = rows.find((r) => r.cabin === row.cabin && r.key !== row.key &&
+      ['SIN', ...r.via, r.code].join('–') === path &&
+      r.carriers.map((c) => meta.carriers[c].name).sort().join('|') === [...o.airlines].sort().join('|'));
+    return `  ${names}${path ? ` (${path})` : ''}: S$${fmt(o.price)}${match ? ` — that's the ${match.carrierName} row` : ''}`;
+  });
+  return `\n\nGoogle Flights only has itineraries this row's miles don't apply to:\n${lines.join('\n')}`;
+}
+
 // ---------- Search a whole region (every row shown) ----------
 
 let bulkStop = false;
@@ -714,7 +743,7 @@ $('rows').addEventListener('click', async (e) => {
   try {
     if (Number($('flex-days').value)) btn.title = `Searching ${2 * $('flex-days').value + 1} date options…`;
     const res = await searchRow(row);
-    if (res.lowest == null) throw new Error(`No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ''} found for ${datesLabel()}`);
+    if (res.lowest == null) throw new Error(`No ${carrier} fares${row.via.length ? ` via ${row.via.join(', ')}` : ' (nonstop)'} found for ${datesLabel()}.${othersNote(row, res.others)}`);
     if (res.fallbackReason) console.warn(`SerpApi failed (${res.fallbackReason}); used fast-flights`);
     if (res.reused) console.info(`${res.reused} of ${res.searched} date options came from saved searches (no search spent)`);
     await refresh();

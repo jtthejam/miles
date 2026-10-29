@@ -195,8 +195,9 @@ test('mixed-airline routes: links filter to both airlines; import finds the rout
   const single = G.interpretImport({ href: href(G.encodeTfs({ ...bod, carrier: 'LX' })), list }, { carriers: cs, routes });
   assert.deepEqual([single.routeId, single.lowest], ['LX:BOD', 900]);
 
+  // Date grid can't show the airlines per flight: refused for mixed routes (use the results list).
   const grid = G.interpretImport({ href: href(mixedTfs), grid: [['1,111', 'Dec 1', 'Dec 8', 'SGD']] }, { carriers: cs, routes });
-  assert.match(grid.notes.join(), /doesn't show who flies each flight: check it's Singapore Airlines then SWISS/);
+  assert.match(grid.error, /date grid can't show who flies each flight.*Singapore Airlines then SWISS.*results list/);
 
   const noRoute = G.interpretImport({ href: href(G.encodeTfs({ ...bod, carriers: ['SQ', 'TK'] })), list }, { carriers: { ...cs, TK: { name: 'Turkish Airlines' } }, routes });
   assert.match(noRoute.error, /No route in the table flies SQ \+ TK to BOD/);

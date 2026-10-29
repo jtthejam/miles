@@ -5,7 +5,8 @@
 window.RouteMap = (() => {
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const SIN_ROT = [-103.9915, -20]; // globe start: Singapore centred, tilted to show the north
-  const BINS = [4, 6, 8, 10]; // miles per SGD bins → ordinal blue ramp v0..v4
+  // Miles per SGD bins → rainbow: red <2, orange 2–4, yellow 4–6, green 6–8, blue 8–10, purple 10+ (v0..v5)
+  const BINS = [2, 4, 6, 8, 10];
   // Carrier colours: categorical slots in fixed order, keyed by carrier code (never by rank).
   const CARRIER_ORDER = ['SQ', 'TK', 'LH', 'LX', 'NH', 'CA', 'NZ', 'UA'];
 
@@ -29,7 +30,7 @@ window.RouteMap = (() => {
   };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const fmt = (n) => n.toLocaleString('en-SG');
-  const binOf = (v) => BINS.filter((b) => v >= b).length; // 0..4
+  const binOf = (v) => BINS.filter((b) => v >= b).length; // 0..5
   const coord = (code) => [airports[code].lon, airports[code].lat];
 
   // ---------- projection ----------

@@ -249,6 +249,25 @@ test('connecting routes: SerpApi limits stops and keeps only offers via the row\
   }
 });
 
+test('mixed route with no fitting offers: SerpApi reports what Google has instead', async () => {
+  settings.saveSerpApiKey(KEY);
+  const realFetch = global.fetch;
+  try {
+    global.fetch = async () => ({ ok: true, json: async () => ({
+      other_flights: [{ price: 1451, layovers: [{ id: 'ZRH' }], flights: [
+        { flight_number: 'LX 177', airline: 'SWISS', departure_airport: { id: 'SIN' }, arrival_airport: { id: 'ZRH' } },
+        { flight_number: 'LX 550', airline: 'SWISS', departure_airport: { id: 'ZRH' }, arrival_airport: { id: 'BOD' } }] }],
+    }) });
+    live._test.cache.clear();
+    const out = await live.lowestFareInWindow({ route: 'SQ+LX:BOD', carriers: ['SQ', 'LX'], dest: 'BOD', via: ['ZRH'], segmentCarriers: ['SQ', 'LX'], cabin: 'economy', outbound: '2027-03-01', inbound: '2027-03-08' });
+    assert.equal(out.lowest, null);
+    assert.deepEqual(out.others.map((o) => [o.price, o.airlines.join(), o.path.join('-')]), [[1451, 'SWISS', 'SIN-ZRH-BOD']]);
+  } finally {
+    global.fetch = realFetch;
+    settings.clearSerpApiKey();
+  }
+});
+
 test('connecting routes: fast-flights gets the connection; cache keeps routes apart', async () => {
   live._test.cache.clear();
   const viaIst = await live.lowestReturnFare({ ...q(), dest: 'BOD', carrier: 'TK', cabin: 'economy', via: ['IST'] });
