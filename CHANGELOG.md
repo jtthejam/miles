@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.15.1 — 2026-10-29
+
+### Fixed
+- **fast-flights: "IndexError: list index out of range"** (↻ returned 502). fast-flights 3.1.0's parser gives up on the whole Google Flights page if any one result has an unexpected shape, e.g. a result without a price, a missing "other flights" list, or no airline metadata block. Reproduced on test pages: 3.1.0 fails with exactly this error.
+  - `scripts/ff_quote.py` now fetches the page with fast-flights but reads the results itself, one at a time. Unreadable results are skipped and counted (`skipped` in the output) instead of failing the search.
+  - It also reads Google's "best flights" list, which fast-flights 3.1.0 ignored, so cheaper top results are no longer missed.
+  - If Google returns a page with no flight data at all (consent or verification page, or a format change), the error says so and suggests **G**. The page is saved to `.local/ff-debug/` (last 5 kept) for diagnosis.
+
 ## v1.15.0 — 2026-10-27
 
 ### Added

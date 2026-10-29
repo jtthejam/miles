@@ -11,11 +11,19 @@ Usage: ff_quote.py DEST CABIN OUTBOUND INBOUND CARRIERS [VIA [AIRLINE_NAMES]]
 Prints one JSON object: {"lowest": int|null, "average": int|null, "offers": int} or {"error": "..."}.
 Exit code 0 on success (including "no flights"), 1 on error.
 
-fast-flights reverse-engineers Google's page format and may break without notice.
+fast-flights reverse-engineers Google's page format and may break without notice. Its own parser
+(3.1.0) abandons the whole page if any one result has an unexpected shape (e.g. a result without a
+price), so this script fetches the page with fast-flights and reads the results itself, one at a
+time: unreadable results are skipped and counted ("skipped" in the output). If Google returns a page
+without flight data (consent or verification page, or a format change), the page is saved to
+.local/ff-debug/ for diagnosis.
 """
 import json
+import os
 import re
 import sys
+import time
+from pathlib import Path
 
 SEAT = {"economy": "economy", "premium": "premium-economy"}
 
@@ -39,7 +47,7 @@ def main(argv):
         return fail("carrier must be a 2-letter airline code")
 
     try:
-        from fast_flights import FlightQuery, FlightsNotFound, Passengers, create_query, get_flights
+        from fast_flights import FlightQuery, Passengers, create_query, fetch_flights_html
     except ImportError:
         return fail("fast-flights not installed (pip install fast-flights)")
 
@@ -57,42 +65,103 @@ def main(argv):
         currency="SGD",
     )
     try:
-        results = get_flights(query)
-    except FlightsNotFound:
-        return ok([])
-    except Exception as e:  # network errors, Google format changes, blocks
-        return fail(f"fast-flights failed: {type(e).__name__}: {e}"[:300])
+        html = fetch_flights_html(query)
+    except Exception as e:  # network errors, blocks
+        return fail(f"fast-flights couldn't reach Google Flights: {type(e).__name__}: {e}"[:300])
+
+    try:
+        results, skipped = read_results(html)
+    except NoFlightData as e:
+        saved = save_debug(html)
+        return fail(f"Google Flights returned a page without flight data ({e}). "
+                    f"Use G on the row instead{f'; page saved to {saved}' if saved else ''}."[:400])
+    if results is None:  # Google reported no flights for this search
+        return ok([], 0)
 
     # The query already restricts results to the requested airline (accrual depends on the operator).
     if via:
-        results = [f for f in results if connects(f, ["SIN", *via, dest])]
+        results = [r for r in results if r["path"][: len(via) + 2] == ["SIN", *via, dest]]
     if names:
         want = {n.lower() for n in names}
-        results = [f for f in results if {str(a).lower() for a in (getattr(f, "airlines", None) or [])} == want]
-    prices = [f.price for f in results if isinstance(getattr(f, "price", None), int) and f.price > 0]
-    return ok(prices)
+        results = [r for r in results if {a.lower() for a in r["airlines"]} == want]
+    return ok([r["price"] for r in results], skipped)
 
 
-def connects(result, path):
-    """True if the itinerary flies exactly SIN -> via... -> dest on the way out.
+class NoFlightData(Exception):
+    pass
 
-    Checks the start of the segment list, so it works whether or not return segments are included.
+
+def dig(obj, *path):
+    """obj[a][b]... or None if any step is missing (Google's arrays have optional tails)."""
+    for k in path:
+        try:
+            obj = obj[k]
+        except (IndexError, KeyError, TypeError):
+            return None
+    return obj
+
+
+def read_results(html):
+    """Results from Google Flights' embedded data block (script.ds:1), one at a time.
+
+    Returns (results, skipped) where each result is {"price", "airlines", "path"}, or (None, 0) when
+    Google says there are no flights. Raises NoFlightData if the page has no readable data block.
     """
-    segs = getattr(result, "flights", None) or []
-    if not segs:
-        return False
+    from selectolax.lexbor import LexborHTMLParser  # installed with fast-flights
+
+    script = LexborHTMLParser(html).css_first(r"script.ds\:1")
+    if script is None:
+        raise NoFlightData("no results data on the page")
+    js = script.text()
+    if "data:" not in js:
+        raise NoFlightData("results data has an unexpected format")
+    data = js.split("data:", 1)[1].rsplit(",", 1)[0]
+    if data.endswith("errorHasStatus: true"):
+        return None, 0
     try:
-        flown = [segs[0].from_airport.code] + [s.to_airport.code for s in segs]
-    except AttributeError:
-        return False
-    return flown[: len(path)] == path
+        payload = json.loads(data)
+    except ValueError:
+        raise NoFlightData("results data isn't valid JSON")
+
+    results, skipped = [], 0
+    # payload[2]: "best" flights, payload[3]: other flights (fast-flights 3.1.0 only reads [3]).
+    for block in (dig(payload, 2, 0), dig(payload, 3, 0)):
+        for k in block if isinstance(block, list) else []:
+            price = dig(k, 1, 0, 1)
+            airlines = dig(k, 0, 1)
+            segs = dig(k, 0, 2)
+            if not (isinstance(price, int) and price > 0 and isinstance(segs, list) and segs):
+                skipped += 1  # e.g. a result without a price
+                continue
+            path = [dig(segs, 0, 3)] + [dig(s, 6) for s in segs]
+            if not all(isinstance(c, str) for c in path):
+                skipped += 1
+                continue
+            results.append({"price": price, "path": path,
+                            "airlines": [a for a in airlines if isinstance(a, str)] if isinstance(airlines, list) else []})
+    return results, skipped
 
 
-def ok(prices):
+def save_debug(html):
+    """Keep the page (last 5) so a format change can be diagnosed. Returns the path or None."""
+    try:
+        d = Path(__file__).resolve().parent.parent / ".local" / "ff-debug"
+        d.mkdir(parents=True, exist_ok=True)
+        f = d / f"page-{time.strftime('%Y%m%d-%H%M%S')}.html"
+        f.write_text(html, encoding="utf-8")
+        for old in sorted(d.glob("page-*.html"))[:-5]:
+            old.unlink()
+        return os.path.relpath(f, Path(__file__).resolve().parent.parent)
+    except OSError:
+        return None
+
+
+def ok(prices, skipped=0):
     out = {
         "lowest": min(prices) if prices else None,
         "average": round(sum(prices) / len(prices)) if prices else None,
         "offers": len(prices),
+        "skipped": skipped,
     }
     print(json.dumps(out))
     return 0
